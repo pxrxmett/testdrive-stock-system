@@ -1,0 +1,50 @@
+/* Custom Styles - Minimal Professional */
+body {
+  font-family: 'Sarabun', 'Kanit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Sidebar Styles */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  color: #374151;
+  text-decoration: none;
+  transition: all 0.2s;
+  border-right: 4px solid transparent;
+}
+
+.sidebar-item:hover {
+  background-color: #f9fafb;
+  color: #111827;
+  text-decoration: none;
+}
+
+.sidebar-item.nuxt-link-active,
+.sidebar-item.active {
+  background-color: #fef2f2 !important;
+  color: #dc2626 !important;
+  border-right-color: #dc2626;
+  font-weight: 500;
+}
+
+/* Minimal Borders - Subtle but Clear */
+.card {
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Table Structure */
+.overflow-hidden {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.divide-y > :not([hidden]) ~ :not([hidden]) {
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Clean hover states */
+.table-row:hover {
+  background-color: #f8fafc;
+}

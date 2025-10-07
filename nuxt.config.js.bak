@@ -1,0 +1,17 @@
+export default {
+  mode: 'universal',
+  head: {
+    title: 'Test Drive & Stock System',
+    htmlAttrs: { lang: 'th' },
+    meta: [
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+    ]
+  },
+  css: [],
+  plugins: [],
+  components: true,
+  buildModules: [],
+  modules: [],
+  build: {}
+}
