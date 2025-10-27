@@ -77,70 +77,44 @@ export const actions = {
     try {
       commit('setLoading', true)
       commit('setError', null)
-      
+
       // เรียก API จริง
-      // const response = await this.$api.testDrives.getAll()
-      // Mock data สำหรับ development
-      const mockResponse = {
-        data: [
-          {
-            id: "TD241216001",
-            customerName: "คุณสมชาย โอดี",
-            phone: "081-234-5678",
-            email: "somchai@email.com",
-            vehicleModel: "D-MAX Blue Power 1.9 Ddi Z Hi-Lander",
-            timeSlot: "09:00",
-            date: "16 ธ.ค. 2567",
-            duration: "60 นาที",
-            salesRep: "คุณสมชาย โอดี",
-            customerType: "VIP",
-            location: "ชั้น 1 โชว์รูม",            status: "scheduled"
-          },
-          {
-            id: "TD241216002",
-            customerName: "คุณสมฤดี ปันปี",
-            phone: "089-876-5432",
-            email: "somrudee@email.com",
-            vehicleModel: "MU-X Blue Power 3.0 Ddi Supreme",
-            timeSlot: "10:30",
-            date: "16 ธ.ค. 2567",
-            duration: "90 นาที",
-            salesRep: "คุณสมฤดี ปันปี",
-            customerType: "Standard",
-            location: "ลานทดสอบ",            status: "in-progress"
-          }
-        ]
-      }
-      const response = mockResponse      
+      const response = await this.$api.testDrives.getAll()
+
       // แปลงข้อมูลจาก API ให้ตรงกับ frontend
-      const queues = response.data.map(item => ({
+      // Note: ตรวจสอบว่า API response มีโครงสร้างแบบไหน
+      // อาจจะเป็น response.data หรือ response โดยตรง
+      const apiData = Array.isArray(response) ? response : (response.data || [])
+
+      const queues = apiData.map(item => ({
         id: item.id,
-        customerName: item.customerName,
-        phone: item.phone,
+        customerName: item.customer_name || item.customerName,
+        phone: item.customer_phone || item.phone,
         email: item.email,
-        carModel: item.vehicleModel,
-        timeSlot: item.timeSlot,
-        date: item.date,
+        carModel: item.vehicleModel || item.vehicle?.model || 'N/A',
+        timeSlot: item.start_time ? new Date(item.start_time).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) : item.timeSlot,
+        date: item.start_time ? new Date(item.start_time).toISOString().split('T')[0] : item.date,
         duration: item.duration,
         status: item.status,
         priority: item.priority || 'medium',
-        location: item.location,
-        salesRep: item.salesRep,
+        location: item.test_route || item.location || 'N/A',
+        salesRep: item.staff_name || item.salesRep || 'N/A',
         leadSource: item.leadSource,
         expectedRevenue: item.expectedRevenue,
-        customerType: item.customerType,
+        customerType: item.customerType || 'Standard',
         notes: item.notes,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt
+        createdAt: item.created_at || item.createdAt,
+        updatedAt: item.updated_at || item.updatedAt
       }))
-      
+
       commit('setQueues', queues)
     } catch (error) {
       console.error('Error fetching queues:', error)
-      commit('setError', 'ไม่สามารถดึงข้อมูลได้ กำลังใช้ข้อมูลตัวอย่าง')
-      
-      // ถ้า API ไม่พร้อม ใช้ mock data
-      await this.dispatch('dashboard/loadMockData')
+      const errorMessage = error.response?.data?.message || error.message || 'ไม่สามารถดึงข้อมูลได้'
+      commit('setError', `เกิดข้อผิดพลาด: ${errorMessage}`)
+
+      // ไม่ต้องใช้ mock data แล้ว - แสดง error ให้ user เห็นแทน
+      commit('setQueues', [])
     } finally {
       commit('setLoading', false)
     }
@@ -279,55 +253,10 @@ export const actions = {
     } finally {
       commit('setLoading', false)
     }
-  },
-
-  // Fallback mock data
-  async loadMockData({ commit }) {
-    const mockData = [
-      {
-        id: 'TD241216001',
-        customerName: 'คุณสมชาย โอดี',
-        phone: '081-234-5678',
-        email: 'somchai.o@gmail.com',
-        carModel: 'D-MAX Blue Power 1.9 Ddi Z Hi-Lander',
-        timeSlot: '09:00',
-        date: '2024-12-16',
-        duration: 60,
-        status: 'in-progress',
-        priority: 'high',
-        location: 'สาขาเซ็นทรัล บางนา',
-        salesRep: 'คุณจิรายุ ธนาสมบัติ',
-        leadSource: 'เว็บไซต์',
-        expectedRevenue: 850000,
-        customerType: 'VIP',
-        notes: 'ลูกค้า VIP ต้องการทดสอบในสนามทดสอบพิเศษ',
-        createdAt: '2024-12-15T10:30:00.000Z',
-        updatedAt: '2024-12-15T14:20:00.000Z'
-      },
-      {
-        id: 'TD241216002',
-        customerName: 'คุณสมหญิง ปั่นมี',
-        phone: '089-876-5432',
-        email: 'somying.p@company.co.th',
-        carModel: 'MU-X Blue Power 3.0 Ddi Supreme',
-        timeSlot: '10:30',
-        date: '2024-12-16',
-        duration: 90,
-        status: 'scheduled',
-        priority: 'medium',
-        location: 'สาขาอีสท์วิลล์',
-        salesRep: 'คุณสุดา กิตติขุน',
-        leadSource: 'โซเชียลมีเดีย',
-        expectedRevenue: 1200000,
-        customerType: 'ครอบครัว',
-        notes: 'ต้องการนำครอบครัวมาทดสอบด้วย',
-        createdAt: '2024-12-14T09:15:00.000Z',
-        updatedAt: '2024-12-14T09:15:00.000Z'
-      }
-    ]
-    
-    commit('setQueues', mockData)
   }
+
+  // loadMockData ถูกลบออกแล้ว - ใช้ API จริงทั้งหมด
+  // หาก API error จะแสดง error message แทนการใช้ mock data
 }
 
 export const getters = {
