@@ -501,86 +501,14 @@ export default {
         notificationsEnabled: true
       },
       eventStats: {
-        total: 6,
-        active: 2,
-        bookedVehicles: 8,
-        upcoming: 2
+        total: 0,
+        active: 0,
+        bookedVehicles: 0,
+        upcoming: 0
       },
-      events: [
-        {
-          id: 'EVT001',
-          name: 'Motor Expo 2024',
-          location: 'อิมแพ็ค เมืองทองธานี',
-          startDate: '2024-12-01',
-          endDate: '2024-12-10',
-          status: 'กำลังดำเนินการ',
-          type: 'งานแสดงรถ',
-          bookedVehicles: ['กข-1234', 'คง-5678', 'จฉ-9999'],
-          autoReturnEnabled: true,
-          createdAt: '2024-11-20'
-        },
-        {
-          id: 'EVT002',
-          name: 'Test Drive Event (เลยกำหนด)',
-          location: 'เซ็นทรัลเวิลด์',
-          startDate: '2024-09-16',
-          endDate: '2024-09-20',
-          status: 'เลยกำหนด',
-          type: 'ทดลองขับ',
-          bookedVehicles: ['ฆง-7777', 'จจ-8888'],
-          autoReturnEnabled: true,
-          createdAt: '2024-09-15'
-        },
-        {
-          id: 'EVT003',
-          name: 'ISUZU D-MAX Launch Event',
-          location: 'ศูนย์การค้าสยามพารากอน',
-          startDate: '2024-12-15',
-          endDate: '2024-12-16',
-          status: 'วางแผน',
-          type: 'การตลาด',
-          bookedVehicles: [],
-          autoReturnEnabled: true,
-          createdAt: '2024-11-25'
-        },
-        {
-          id: 'EVT004',
-          name: 'Corporate Fleet Delivery',
-          location: 'บริษัทลูกค้า',
-          startDate: '2024-11-30',
-          endDate: '2024-11-30',
-          status: 'เตรียมการ',
-          type: 'ส่งมอบรถ',
-          bookedVehicles: ['กข-1234', 'คง-5678'],
-          autoReturnEnabled: false, // Manual return for delivery
-          createdAt: '2024-11-28'
-        },
-        {
-          id: 'EVT005',
-          name: 'Big Motor Sale (เลยกำหนด)',
-          location: 'ไบเทค บางนา',
-          startDate: '2024-10-15',
-          endDate: '2024-10-20',
-          status: 'เลยกำหนด',
-          type: 'งานแสดงรถ',
-          bookedVehicles: ['จฉ-9999'],
-          autoReturnEnabled: true,
-          createdAt: '2024-10-10'
-        },
-        {
-          id: 'EVT006',
-          name: 'Quick Emergency Event',
-          location: 'ลูกค้าด่วน',
-          startDate: '2024-11-28',
-          endDate: '2024-11-28',
-          status: 'เสร็จสิ้น',
-          type: 'ฉุกเฉิน',
-          bookedVehicles: [],
-          autoReturnEnabled: true,
-          autoReturnedAt: '2024-11-29T00:00:00Z',
-          createdAt: '2024-11-28'
-        }
-      ],
+      events: [],
+      loading: false,
+      error: null,
       autoReturnTimer: null,
       notificationTimer: null
     }
@@ -626,6 +554,103 @@ export default {
   },
   
   methods: {
+    // API Integration Methods
+    async fetchEvents() {
+      try {
+        this.loading = true
+        this.error = null
+
+        const response = await this.$api.events.getAll()
+        const apiData = Array.isArray(response) ? response : (response.data || [])
+
+        // Map API data to frontend format
+        this.events = apiData.map(event => ({
+          id: event.id,
+          name: event.name,
+          location: event.location,
+          startDate: event.start_date || event.startDate,
+          endDate: event.end_date || event.endDate,
+          status: this.mapAPIStatus(event.status),
+          type: this.mapAPIType(event.type),
+          bookedVehicles: Array.isArray(event.booked_vehicles || event.bookedVehicles)
+            ? (event.booked_vehicles || event.bookedVehicles).map(v => v.plateNumber || v.plate_number || v)
+            : [],
+          autoReturnEnabled: event.auto_return_enabled !== false,
+          autoReturnedAt: event.auto_returned_at || event.autoReturnedAt,
+          createdAt: event.created_at || event.createdAt
+        }))
+
+        await this.fetchEventStats()
+      } catch (error) {
+        console.error('Error fetching events:', error)
+        this.error = error.response?.data?.message || error.message || 'ไม่สามารถดึงข้อมูลอีเวนต์ได้'
+        this.$toast?.error(`เกิดข้อผิดพลาด: ${this.error}`)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async fetchEventStats() {
+      try {
+        const response = await this.$api.events.getStats()
+        const stats = response.data || response
+
+        this.eventStats = {
+          total: stats.total || this.events.length,
+          active: stats.active || this.events.filter(e => e.status === 'กำลังดำเนินการ').length,
+          bookedVehicles: stats.bookedVehicles || this.events.reduce((sum, e) => sum + e.bookedVehicles.length, 0),
+          upcoming: stats.upcoming || this.events.filter(e => e.status === 'วางแผน' || e.status === 'เตรียมการ').length
+        }
+      } catch (error) {
+        // Fallback to calculating from events array
+        this.updateEventStats()
+      }
+    },
+
+    mapAPIStatus(apiStatus) {
+      const statusMap = {
+        'planning': 'วางแผน',
+        'preparing': 'เตรียมการ',
+        'in_progress': 'กำลังดำเนินการ',
+        'completed': 'เสร็จสิ้น',
+        'overdue': 'เลยกำหนด'
+      }
+      return statusMap[apiStatus] || apiStatus
+    },
+
+    mapAPIType(apiType) {
+      const typeMap = {
+        'car_show': 'งานแสดงรถ',
+        'test_drive': 'ทดลองขับ',
+        'marketing': 'การตลาด',
+        'delivery': 'ส่งมอบรถ',
+        'emergency': 'ฉุกเฉิน'
+      }
+      return typeMap[apiType] || apiType
+    },
+
+    mapStatusToAPI(frontendStatus) {
+      const statusMap = {
+        'วางแผน': 'planning',
+        'เตรียมการ': 'preparing',
+        'กำลังดำเนินการ': 'in_progress',
+        'เสร็จสิ้น': 'completed',
+        'เลยกำหนด': 'overdue'
+      }
+      return statusMap[frontendStatus] || frontendStatus
+    },
+
+    mapTypeToAPI(frontendType) {
+      const typeMap = {
+        'งานแสดงรถ': 'car_show',
+        'ทดลองขับ': 'test_drive',
+        'การตลาด': 'marketing',
+        'ส่งมอบรถ': 'delivery',
+        'ฉุกเฉิน': 'emergency'
+      }
+      return typeMap[frontendType] || frontendType
+    },
+
     // Event Status Management
     getEventStatus(event) {
       if (this.isEventOverdue(event)) {
@@ -666,83 +691,84 @@ export default {
     },
     
     // Quick Actions
-    quickCreateEvent() {
+    async quickCreateEvent() {
       const eventName = prompt('ชื่ออีเวนต์ฉุกเฉิน:')
       if (!eventName) return
-      
-      const newEvent = {
-        id: 'EVT' + (Date.now().toString().slice(-3)),
-        name: eventName,
-        location: 'ระบุสถานที่',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        status: 'กำลังดำเนินการ',
-        type: 'ฉุกเฉิน',
-        bookedVehicles: [],
-        autoReturnEnabled: true,
-        createdAt: new Date().toISOString()
+
+      try {
+        const eventData = {
+          name: eventName,
+          location: 'ระบุสถานที่',
+          start_date: new Date().toISOString().split('T')[0],
+          end_date: new Date().toISOString().split('T')[0],
+          status: 'in_progress',
+          type: 'emergency',
+          auto_return_enabled: true
+        }
+
+        const response = await this.$api.events.create(eventData)
+        await this.fetchEvents() // Refresh events list
+        this.$toast?.success(`สร้างอีเวนต์ฉุกเฉิน "${eventName}" เรียบร้อยแล้ว`)
+      } catch (error) {
+        console.error('Error creating quick event:', error)
+        this.$toast?.error('ไม่สามารถสร้างอีเวนต์ได้')
       }
-      
-      this.events.unshift(newEvent)
-      this.updateEventStats()
-      this.$toast?.success(`สร้างอีเวนต์ฉุกเฉิน "${eventName}" เรียบร้อยแล้ว`)
     },
     
-    quickReturnVehicles(event) {
+    async quickReturnVehicles(event) {
       if (event.bookedVehicles.length === 0) {
         this.$toast?.info('ไม่มีรถที่ต้องคืน')
         return
       }
-      
+
       if (confirm(`คืนรถ ${event.bookedVehicles.length} คัน จากอีเวนต์ "${event.name}" หรือไม่?`)) {
-        const returnedVehicles = [...event.bookedVehicles]
-        event.bookedVehicles = []
-        event.status = 'เสร็จสิ้น'
-        event.autoReturnedAt = new Date().toISOString()
-        
-        this.updateEventStats()
-        this.$toast?.success(`คืนรถ ${returnedVehicles.length} คัน เรียบร้อยแล้ว`)
-        
-        // Emit to parent for stock management integration
-        this.$emit('vehicles-returned', {
-          eventId: event.id,
-          vehicleIds: returnedVehicles,
-          returnedAt: event.autoReturnedAt
-        })
+        try {
+          const returnedCount = event.bookedVehicles.length
+          await this.$api.events.returnVehicles(event.id)
+          await this.fetchEvents() // Refresh events list
+          this.$toast?.success(`คืนรถ ${returnedCount} คัน เรียบร้อยแล้ว`)
+
+          // Emit to parent for stock management integration
+          this.$emit('vehicles-returned', {
+            eventId: event.id,
+            returnedAt: new Date().toISOString()
+          })
+        } catch (error) {
+          console.error('Error returning vehicles:', error)
+          this.$toast?.error('ไม่สามารถคืนรถได้')
+        }
       }
     },
     
-    extendEvent(event) {
+    async extendEvent(event) {
       const days = prompt('ขยายอีเวนต์เป็นกี่วัน:', '3')
       if (!days || isNaN(days)) return
-      
-      const currentEndDate = new Date(event.endDate)
-      const newEndDate = new Date(currentEndDate.getTime() + (parseInt(days) * 24 * 60 * 60 * 1000))
-      
-      event.endDate = newEndDate.toISOString().split('T')[0]
-      event.status = 'กำลังดำเนินการ'
-      
-      this.$toast?.success(`ขยายอีเวนต์ "${event.name}" เป็น ${days} วัน`)
+
+      try {
+        await this.$api.events.extendEvent(event.id, parseInt(days))
+        await this.fetchEvents() // Refresh events list
+        this.$toast?.success(`ขยายอีเวนต์ "${event.name}" เป็น ${days} วัน`)
+      } catch (error) {
+        console.error('Error extending event:', error)
+        this.$toast?.error('ไม่สามารถขยายอีเวนต์ได้')
+      }
     },
     
-    returnAllOverdueVehicles() {
+    async returnAllOverdueVehicles() {
       if (!confirm(`คืนรถจากอีเวนต์ที่เลยกำหนดทั้งหมด ${this.overdueEvents.length} อีเวนต์ หรือไม่?`)) {
         return
       }
-      
-      let totalReturned = 0
-      this.overdueEvents.forEach(event => {
-        if (event.bookedVehicles.length > 0) {
-          totalReturned += event.bookedVehicles.length
-          event.bookedVehicles = []
-          event.status = 'เสร็จสิ้น'
-          event.autoReturnedAt = new Date().toISOString()
-        }
-      })
-      
-      this.updateEventStats()
-      this.showOverdueModal = false
-      this.$toast?.success(`คืนรถทั้งหมด ${totalReturned} คัน เรียบร้อยแล้ว`)
+
+      try {
+        const totalVehicles = this.getTotalOverdueVehicles()
+        await this.$api.events.autoReturnOverdue()
+        await this.fetchEvents() // Refresh events list
+        this.showOverdueModal = false
+        this.$toast?.success(`คืนรถทั้งหมด ${totalVehicles} คัน เรียบร้อยแล้ว`)
+      } catch (error) {
+        console.error('Error returning overdue vehicles:', error)
+        this.$toast?.error('ไม่สามารถคืนรถได้')
+      }
     },
     
     getTotalOverdueVehicles() {
@@ -889,7 +915,8 @@ export default {
     }
   },
   
-  mounted() {
+  async mounted() {
+    await this.fetchEvents()
     this.initSmartReturnSystem()
   },
   
