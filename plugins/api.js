@@ -9,7 +9,7 @@ export default function ({ $axios, app }, inject) {
     }
   })
   // Set baseURL to something different
-  api.setBaseURL(process.env.apiUrl || 'http://localhost:3001/api')
+  api.setBaseURL(process.env.apiUrl || 'http://localhost:3000/api')
   // Request interceptor
   api.onRequest(config => {
     console.log('Making request to ' + config.url)
