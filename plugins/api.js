@@ -102,28 +102,29 @@ export default function ({ $axios, app }, inject) {
       return api.$delete(`/events/${id}`)
     },
 
-    getStats() {
-      return api.$get('/events/stats')
+    // Vehicle management for events
+    assignVehicle(eventId, vehicleData) {
+      return api.$post(`/events/${eventId}/vehicles`, vehicleData)
     },
 
-    getOverdue() {
-      return api.$get('/events/overdue')
+    getVehicles(eventId) {
+      return api.$get(`/events/${eventId}/vehicles`)
     },
 
-    bookVehicles(eventId, vehicleIds) {
-      return api.$post(`/events/${eventId}/book-vehicles`, { vehicle_ids: vehicleIds })
+    assignVehiclesBatch(eventId, vehicleIds) {
+      return api.$post(`/events/${eventId}/vehicles/batch`, { vehicleIds })
     },
 
-    returnVehicles(eventId, vehicleIds = null) {
-      return api.$post(`/events/${eventId}/return-vehicles`, vehicleIds ? { vehicle_ids: vehicleIds } : {})
+    unassignVehicle(eventId, vehicleId) {
+      return api.$delete(`/events/${eventId}/vehicles/${vehicleId}`)
     },
 
-    extendEvent(eventId, days) {
-      return api.$patch(`/events/${eventId}/extend`, { extend_days: days })
+    updateStatus(eventId, status) {
+      return api.$patch(`/events/${eventId}/status`, { status })
     },
 
-    autoReturnOverdue() {
-      return api.$post('/events/auto-return')
+    getCalendarView(params = {}) {
+      return api.$get('/events/calendar/view', { params })
     }
   }
 
