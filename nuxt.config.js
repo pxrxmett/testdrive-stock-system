@@ -58,5 +58,9 @@ export default {
     host: process.env.HOST || 'localhost'
   },
 
+  router: {
+    middleware: ['auth']
+  },
+
   build: {}
 }

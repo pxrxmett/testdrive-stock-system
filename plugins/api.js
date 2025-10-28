@@ -16,16 +16,12 @@ export default function ({ $axios, app }, inject) {
     // Add auth token if available
     const token = app.$cookies.get('auth-token')
 
-    // TEMPORARY: Skip auth for development (remove in production!)
-    // Comment out the if block below to enable auth
-    /*
     if (token) {
       config.headers.common['Authorization'] = `Bearer ${token}`
+      console.log('✅ Auth token added to request')
+    } else {
+      console.log('ℹ️ No auth token found')
     }
-    */
-
-    // TODO: Implement proper authentication
-    console.warn('⚠️ Authentication disabled for development')
   })
   // Response interceptor
   api.onError(error => {
