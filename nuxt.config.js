@@ -29,7 +29,8 @@ export default {
   ],
 
   plugins: [
-    '~/plugins/api.js'
+    '~/plugins/api.js',
+    '~/plugins/auth-init.js'
   ],
 
   components: true,
