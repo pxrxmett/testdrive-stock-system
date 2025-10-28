@@ -45,8 +45,16 @@ export const actions = {
         password: credentials.password
       })
 
-      // Save token
+      // Validate response has token
       const token = response.access_token || response.token
+
+      if (!token) {
+        console.error('Login response missing token:', response)
+        throw new Error('Backend ไม่ส่ง access token กลับมา')
+      }
+
+      console.log('✅ Token received:', token.substring(0, 20) + '...')
+
       commit('setToken', token)
 
       // Save to cookie (7 days)
@@ -54,6 +62,8 @@ export const actions = {
         path: '/',
         maxAge: 60 * 60 * 24 * 7 // 7 days
       })
+
+      console.log('✅ Token saved to cookie')
 
       // Get user info
       const user = response.user || await this.$axios.$get('/auth/me', {
@@ -63,6 +73,7 @@ export const actions = {
       })
 
       commit('setUser', user)
+      console.log('✅ User authenticated:', user.username)
 
       return { success: true }
     } catch (error) {
