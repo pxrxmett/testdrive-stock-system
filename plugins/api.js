@@ -15,8 +15,12 @@ export default function ({ $axios, app }, inject) {
     console.log('Making request to ' + config.url)
     // Add auth token if available
     const token = app.$cookies.get('auth-token')
+
     if (token) {
       config.headers.common['Authorization'] = `Bearer ${token}`
+      console.log('✅ Auth token added to request')
+    } else {
+      console.log('ℹ️ No auth token found')
     }
   })
   // Response interceptor
