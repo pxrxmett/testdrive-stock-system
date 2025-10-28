@@ -514,80 +514,14 @@ export default {
       showUploadModal: false,
       viewMode: 'cards', // 'cards' or 'list'
       stats: {
-        total: 4,
-        available: 2,
-        inUse: 1,
-        eventLocked: 1
+        total: 0,
+        available: 0,
+        inUse: 0,
+        eventLocked: 0
       },
-      vehicles: [
-        {
-          id: 'ST001',
-          plateNumber: 'กข-1234',
-          model: 'D-MAX Blue Power 1.9 Ddi Z Hi-Lander',
-          category: 'กระบะ',
-          type: 'น้ำมัน',
-          color: 'ขาวมุกนวล',
-          year: '2024',
-          vin: 'MRIDMB93PL7000001',
-          chassisNumber: 'MRIDMB93PL7000001',
-          engineNumber: '4JJ1-TC001',
-          motorNumber: '',
-          status: 'พร้อมใช้',
-          eventStatus: null,
-          eventDetails: null
-        },
-        {
-          id: 'ST002',
-          plateNumber: 'คง-5678',
-          model: 'MU-X Blue Power 3.0 Ddi Supreme',
-          category: 'SUV',
-          type: 'น้ำมัน',
-          color: 'ขาวมิสทิกไวท์',
-          year: '2024',
-          vin: 'MRIDMX93PL7000002',
-          chassisNumber: 'MRIDMX93PL7000002',
-          engineNumber: '4JJ1-TCX002',
-          motorNumber: '',
-          status: 'ล็อกสำหรับอีเวนต์',
-          eventStatus: 'ใช้ในอีเวนต์',
-          eventDetails: {
-            eventName: 'Motor Expo 2024',
-            location: 'อิมแพ็ค เมืองทองธานี'
-          }
-        },
-        {
-          id: 'ST003',
-          plateNumber: 'จฉ-9999',
-          model: 'D-MAX EV Concept',
-          category: 'กระบะ',
-          type: 'ไฟฟ้า',
-          color: 'เทาแพลทินัม',
-          year: '2024',
-          vin: 'MRIDMEV23PL7000003',
-          chassisNumber: 'MRIDMEV23PL7000003',
-          engineNumber: '',
-          motorNumber: 'EM2024-001',
-          status: 'บำรุงรักษา',
-          eventStatus: null,
-          eventDetails: null
-        },
-        {
-          id: 'ST004',
-          plateNumber: 'ฆง-7777',
-          model: 'MU-X EV Supreme',
-          category: 'SUV',
-          type: 'ไฟฟ้า',
-          color: 'น้ำเงินเมทัลลิค',
-          year: '2024',
-          vin: 'MRIDMXEV23PL7000004',
-          chassisNumber: 'MRIDMXEV23PL7000004',
-          engineNumber: '',
-          motorNumber: 'EM2024-004',
-          status: 'ใช้งาน',
-          eventStatus: null,
-          eventDetails: null
-        }
-      ]
+      vehicles: [],
+      loading: false,
+      error: null
     }
   },
   
@@ -623,6 +557,86 @@ export default {
   },
   
   methods: {
+    // API Integration Methods
+    async fetchVehicles() {
+      try {
+        this.loading = true
+        this.error = null
+
+        const response = await this.$api.stock.getVehicles()
+        const apiData = Array.isArray(response) ? response : (response.data || [])
+
+        // Map API data to frontend format
+        this.vehicles = apiData.map(vehicle => ({
+          id: vehicle.id,
+          plateNumber: vehicle.plate_number || vehicle.plateNumber,
+          model: vehicle.model,
+          category: vehicle.category || vehicle.type,
+          type: vehicle.fuel_type || vehicle.fuelType || vehicle.type,
+          color: vehicle.color,
+          year: vehicle.year || vehicle.model_year,
+          vin: vehicle.vin,
+          chassisNumber: vehicle.chassis_number || vehicle.chassisNumber || vehicle.vin,
+          engineNumber: vehicle.engine_number || vehicle.engineNumber || '',
+          motorNumber: vehicle.motor_number || vehicle.motorNumber || '',
+          status: this.mapAPIStatus(vehicle.status),
+          eventStatus: vehicle.event_status || vehicle.eventStatus,
+          eventDetails: vehicle.event_details || vehicle.eventDetails
+        }))
+
+        this.updateStats()
+      } catch (error) {
+        console.error('Error fetching vehicles:', error)
+        this.error = error.response?.data?.message || error.message || 'ไม่สามารถดึงข้อมูลรถได้'
+        this.$toast?.error(`เกิดข้อผิดพลาด: ${this.error}`)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    updateStats() {
+      this.stats = {
+        total: this.vehicles.length,
+        available: this.vehicles.filter(v => v.status === 'พร้อมใช้').length,
+        inUse: this.vehicles.filter(v => v.status === 'ใช้งาน').length,
+        eventLocked: this.vehicles.filter(v => v.status === 'ล็อกสำหรับอีเวนต์').length
+      }
+    },
+
+    mapAPIStatus(apiStatus) {
+      const statusMap = {
+        'available': 'พร้อมใช้',
+        'in_use': 'ใช้งาน',
+        'maintenance': 'บำรุงรักษา',
+        'locked_for_event': 'ล็อกสำหรับอีเวนต์',
+        'unavailable': 'ไม่พร้อมใช้'
+      }
+      return statusMap[apiStatus] || apiStatus
+    },
+
+    mapStatusToAPI(frontendStatus) {
+      const statusMap = {
+        'พร้อมใช้': 'available',
+        'ใช้งาน': 'in_use',
+        'บำรุงรักษา': 'maintenance',
+        'ล็อกสำหรับอีเวนต์': 'locked_for_event',
+        'ไม่พร้อมใช้': 'unavailable'
+      }
+      return statusMap[frontendStatus] || frontendStatus
+    },
+
+    async updateVehicleStatus(vehicleId, newStatus) {
+      try {
+        const apiStatus = this.mapStatusToAPI(newStatus)
+        await this.$api.stock.updateStatus(vehicleId, apiStatus)
+        await this.fetchVehicles() // Refresh vehicle list
+        this.$toast?.success('อัปเดตสถานะรถเรียบร้อยแล้ว')
+      } catch (error) {
+        console.error('Error updating vehicle status:', error)
+        this.$toast?.error('ไม่สามารถอัปเดตสถานะได้')
+      }
+    },
+
     getStatusClass(status) {
       switch (status) {
         case 'พร้อมใช้': return 'text-green-700 bg-green-50 border-green-200'
@@ -685,7 +699,11 @@ export default {
       this.stats.eventLocked = this.vehicles.filter(v => v.status === 'ล็อกสำหรับอีเวนต์').length
     }
   },
-  
+
+  async mounted() {
+    await this.fetchVehicles()
+  },
+
   head() {
     return {
       title: 'จัดการสต็อกรถยนต์ - ISUZU Enterprise System'

@@ -43,7 +43,7 @@ export default {
   ],
 
   axios: {
-    baseURL: process.env.API_URL || 'http://localhost:3001/api'
+    baseURL: process.env.API_URL || 'http://localhost:3000/api'
   },
 
   pwa: {
