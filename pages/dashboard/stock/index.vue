@@ -17,24 +17,24 @@
           </div>
           
           <div class="flex items-center space-x-3">
-            <button 
-              @click="showUploadModal = true" 
+            <button
+              @click="$router.push('/dashboard/stock/upload')"
               class="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
-              <span class="text-sm font-medium">อัพโหลด Excel</span>
+              <span class="text-sm font-medium">📤 อัพโหลดไฟล์</span>
             </button>
-            
-            <button 
-              @click="showAddModal = true" 
+
+            <button
+              @click="$router.push('/dashboard/stock/create')"
               class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
-              <span class="text-sm font-medium">เพิ่มรถใหม่</span>
+              <span class="text-sm font-medium">+ เพิ่มรถใหม่</span>
             </button>
           </div>
         </div>
@@ -360,17 +360,23 @@
                   </div>
 
                   <div class="min-w-0 flex-1">
-                    <div class="flex items-center space-x-3">
-                      <span class="font-semibold text-blue-600">{{ vehicle.plateNumber }}</span>
-                      <span class="text-sm text-gray-500">{{ vehicle?.id || 'N/A' }}</span>
+                    <!-- Model (License Plate) -->
+                    <div class="text-base font-bold text-gray-900">
+                      {{ vehicle.model }} <span class="text-blue-600">({{ vehicle.plateNumber || vehicle.plate_number || 'N/A' }})</span>
                     </div>
-                    <div class="text-sm font-medium text-gray-900 truncate">{{ vehicle.model }}</div>
-                    <div class="flex items-center space-x-2 mt-1">
-                      <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded">{{ vehicle.category }}</span>
-                      <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded">{{ vehicle.year }}</span>
-                      <span :class="vehicle.type === 'ไฟฟ้า' ? 'bg-blue-100 text-blue-800' : 'bg-orange-100 text-orange-800'" 
-                            class="text-xs px-2 py-0.5 rounded">
-                        {{ vehicle.type === 'ไฟฟ้า' ? 'EV' : 'ICE' }}
+                    <!-- Color | Year | Status -->
+                    <div class="flex items-center space-x-3 mt-1 text-sm text-gray-600">
+                      <span class="flex items-center">
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16z" clip-rule="evenodd"/>
+                        </svg>
+                        {{ vehicle.color || 'N/A' }}
+                      </span>
+                      <span>|</span>
+                      <span>{{ vehicle.year || 'N/A' }}</span>
+                      <span>|</span>
+                      <span :class="getStatusClass(vehicle.status)" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium">
+                        {{ vehicle.status || 'N/A' }}
                       </span>
                     </div>
                   </div>
