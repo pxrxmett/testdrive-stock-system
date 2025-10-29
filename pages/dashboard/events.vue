@@ -819,18 +819,34 @@ export default {
     // Quick Actions
     async createEvent() {
       try {
+        // Validate dates are in ISO 8601 format (YYYY-MM-DD)
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+        if (!dateRegex.test(this.newEvent.startDate) || !dateRegex.test(this.newEvent.endDate)) {
+          console.error('❌ Invalid date format:', {
+            startDate: this.newEvent.startDate,
+            endDate: this.newEvent.endDate
+          })
+          this.$toast?.error('รูปแบบวันที่ไม่ถูกต้อง กรุณาเลือกวันที่ใหม่')
+          return
+        }
+
         // Map frontend data to API format
         const eventData = {
           name: this.newEvent.name,
           location: this.newEvent.location,
-          start_date: this.newEvent.startDate,
-          end_date: this.newEvent.endDate,
+          start_date: this.newEvent.startDate, // Already in YYYY-MM-DD format
+          end_date: this.newEvent.endDate,     // Already in YYYY-MM-DD format
           status: this.mapStatusToAPI(this.newEvent.status),
           type: this.mapTypeToAPI(this.newEvent.type),
           auto_return_enabled: this.newEvent.autoReturnEnabled
         }
 
-        await this.$api.events.create(eventData)
+        // Log request data for debugging
+        console.log('📤 Creating event with data:', JSON.stringify(eventData, null, 2))
+
+        const response = await this.$api.events.create(eventData)
+        console.log('✅ Event created successfully:', response)
+
         await this.fetchEvents() // Refresh events list
         this.$toast?.success(`สร้างอีเวนต์ "${this.newEvent.name}" เรียบร้อยแล้ว`)
 
@@ -846,8 +862,20 @@ export default {
         }
         this.showEventModal = false
       } catch (error) {
-        console.error('Error creating event:', error)
-        this.$toast?.error('ไม่สามารถสร้างอีเวนต์ได้')
+        console.error('❌ Error creating event:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status,
+          formData: this.newEvent
+        })
+
+        // Display detailed error message from backend
+        const errorMessage = error.response?.data?.message
+          || error.response?.data?.error
+          || error.message
+          || 'ไม่สามารถสร้างอีเวนต์ได้'
+
+        this.$toast?.error(`เกิดข้อผิดพลาด: ${errorMessage}`)
       }
     },
 

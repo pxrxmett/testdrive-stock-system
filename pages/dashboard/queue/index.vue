@@ -3,15 +3,56 @@
     <!-- Page Header -->
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">จัดการคิวทดลองขับ</h1>
+        <h1 class="text-2xl font-bold text-gray-900">
+          คิวทดลองขับ - {{ pageTitle }}
+        </h1>
         <p class="text-gray-600">จัดการและติดตามคิวทดลองขับรถยนต์</p>
       </div>
-      <button 
+      <button
         @click="handleAddQueue"
         class="btn-primary flex items-center space-x-2"
       >
         <Icon name="plus" icon-class="w-4 h-4" />
         <span>เพิ่มคิวใหม่</span>
+      </button>
+    </div>
+
+    <!-- Date Filter Buttons -->
+    <div class="flex items-center space-x-3">
+      <button
+        @click="setDateFilter('today')"
+        :class="[
+          'px-4 py-2 rounded-lg font-medium text-sm transition-colors',
+          dateFilter === 'today' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+        ]"
+      >
+        วันนี้
+      </button>
+      <button
+        @click="setDateFilter('tomorrow')"
+        :class="[
+          'px-4 py-2 rounded-lg font-medium text-sm transition-colors',
+          dateFilter === 'tomorrow' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+        ]"
+      >
+        พรุ่งนี้
+      </button>
+      <div class="flex items-center space-x-2">
+        <input
+          v-model="customDate"
+          type="date"
+          @change="setDateFilter('custom')"
+          class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+      </div>
+      <button
+        @click="setDateFilter('all')"
+        :class="[
+          'px-4 py-2 rounded-lg font-medium text-sm transition-colors',
+          dateFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+        ]"
+      >
+        ดูทั้งหมด
       </button>
     </div>
 
@@ -88,19 +129,9 @@
           </svg>
           <span>จัดกลุ่มตามพนักงาน</span>
         </button>
-        <button
-          @click="currentView = 'calendar'"
-          :class="[
-            'px-4 py-2 rounded-md font-medium text-sm transition-colors flex items-center space-x-2',
-            currentView === 'calendar' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'
-          ]"
-        >
-          <Icon name="calendar" icon-class="w-4 h-4" />
-          <span>ปฏิทิน</span>
-        </button>
       </div>
-      <div v-if="displayFilteredQueues.length > 0" class="text-sm text-gray-600">
-        แสดงผลลัพธ์ {{ displayFilteredQueues.length }} รายการ
+      <div v-if="paginatedQueues.length > 0" class="text-sm text-gray-600">
+        แสดง {{ ((currentPage - 1) * pageSize) + 1 }}-{{ Math.min(currentPage * pageSize, totalQueues) }} จาก {{ totalQueues }} คิว
       </div>
     </div>
 
@@ -111,14 +142,49 @@
       <p class="text-gray-500">ลองเปลี่ยนเงื่อนไขการค้นหาหรือล้างตัวกรอง</p>
     </div>
 
-    <!-- List View (Original) -->
+    <!-- List View with Pagination -->
     <div v-else-if="currentView === 'list'">
       <QueueTable
-        :queues="displayFilteredQueues"
+        :queues="paginatedQueues"
         @view="handleView"
         @edit="handleEdit"
         @delete="handleDelete"
       />
+
+      <!-- Pagination Controls -->
+      <div v-if="totalPages > 1" class="flex items-center justify-between mt-6 p-4 bg-white rounded-lg border border-gray-200">
+        <button
+          @click="prevPage"
+          :disabled="currentPage === 1"
+          class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          ← ก่อนหน้า
+        </button>
+
+        <div class="flex items-center space-x-2">
+          <button
+            v-for="page in visiblePages"
+            :key="page"
+            @click="goToPage(page)"
+            :class="[
+              'px-3 py-1 rounded text-sm font-medium transition-colors',
+              currentPage === page
+                ? 'bg-blue-600 text-white'
+                : 'text-gray-700 hover:bg-gray-100'
+            ]"
+          >
+            {{ page }}
+          </button>
+        </div>
+
+        <button
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
+          class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          ถัดไป →
+        </button>
+      </div>
     </div>
 
     <!-- Group by Sales View -->
@@ -134,11 +200,6 @@
         @queue-confirm="confirmQueue($event)"
         @queue-cancel="handleDelete($event.id)"
       />
-    </div>
-
-    <!-- Calendar View -->
-    <div v-else-if="currentView === 'calendar'" class="card p-6">
-      <p class="text-center text-gray-600">Calendar View - Coming Soon</p>
     </div>
 
     <!-- Export/Action Bar -->
@@ -181,9 +242,13 @@ export default {
   data() {
     return {
       selectedRows: [],
-      currentView: 'list', // 'list', 'group', 'calendar'
+      currentView: 'list', // 'list', 'group'
       customFilters: {},
-      salesList: []
+      salesList: [],
+      dateFilter: 'today', // 'today', 'tomorrow', 'custom', 'all'
+      customDate: '',
+      currentPage: 1,
+      pageSize: 20
     }
   },
   computed: {
@@ -220,7 +285,87 @@ export default {
         }
       }
 
+      // Apply date filter
+      if (this.dateFilter === 'today') {
+        const today = new Date().toISOString().split('T')[0]
+        filtered = filtered.filter(q => {
+          const queueDate = q.appointmentDate || q.appointment_date
+          if (!queueDate) return false
+          const dateStr = new Date(queueDate).toISOString().split('T')[0]
+          return dateStr === today
+        })
+      } else if (this.dateFilter === 'tomorrow') {
+        const tomorrow = new Date()
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        const tomorrowStr = tomorrow.toISOString().split('T')[0]
+        filtered = filtered.filter(q => {
+          const queueDate = q.appointmentDate || q.appointment_date
+          if (!queueDate) return false
+          const dateStr = new Date(queueDate).toISOString().split('T')[0]
+          return dateStr === tomorrowStr
+        })
+      } else if (this.dateFilter === 'custom' && this.customDate) {
+        filtered = filtered.filter(q => {
+          const queueDate = q.appointmentDate || q.appointment_date
+          if (!queueDate) return false
+          const dateStr = new Date(queueDate).toISOString().split('T')[0]
+          return dateStr === this.customDate
+        })
+      }
+      // 'all' shows everything - no date filter
+
       return filtered
+    },
+    pageTitle() {
+      const today = new Date()
+      const options = { day: 'numeric', month: 'short', year: 'numeric' }
+
+      if (this.dateFilter === 'today') {
+        return `วันนี้ (${today.toLocaleDateString('th-TH', options)})`
+      } else if (this.dateFilter === 'tomorrow') {
+        const tomorrow = new Date()
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        return `พรุ่งนี้ (${tomorrow.toLocaleDateString('th-TH', options)})`
+      } else if (this.dateFilter === 'custom' && this.customDate) {
+        const customDateObj = new Date(this.customDate)
+        return customDateObj.toLocaleDateString('th-TH', options)
+      } else {
+        return 'ทั้งหมด'
+      }
+    },
+    totalQueues() {
+      return this.displayFilteredQueues.length
+    },
+    totalPages() {
+      return Math.ceil(this.totalQueues / this.pageSize)
+    },
+    paginatedQueues() {
+      const start = (this.currentPage - 1) * this.pageSize
+      const end = start + this.pageSize
+      return this.displayFilteredQueues.slice(start, end)
+    },
+    visiblePages() {
+      const pages = []
+      const total = this.totalPages
+      const current = this.currentPage
+
+      // Show 5 pages at a time centered on current page
+      let start = Math.max(1, current - 2)
+      let end = Math.min(total, current + 2)
+
+      // Adjust if at beginning or end
+      if (current <= 3) {
+        end = Math.min(5, total)
+      }
+      if (current >= total - 2) {
+        start = Math.max(1, total - 4)
+      }
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i)
+      }
+
+      return pages
     },
     groupedBySales() {
       const groups = new Map()
@@ -315,6 +460,25 @@ export default {
     exportToPDF() {
       // ส่งออกเป็น PDF
       console.log('Exporting to PDF...')
+    },
+    // Date Filter Methods
+    setDateFilter(filter) {
+      this.dateFilter = filter
+      this.currentPage = 1 // Reset to first page when filter changes
+    },
+    // Pagination Methods
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--
+      }
+    },
+    goToPage(page) {
+      this.currentPage = page
     }
   }
 }
