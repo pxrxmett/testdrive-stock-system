@@ -24,8 +24,14 @@
       </div>
     </div>
 
+    <!-- Loading State -->
+    <div v-if="loading" class="card p-8 text-center">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+      <p class="text-gray-600">กำลังโหลดข้อมูลปฏิทิน...</p>
+    </div>
+
     <!-- Quick Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div v-else class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div class="card p-4">
         <div class="flex items-center justify-between">
           <div>
@@ -68,14 +74,15 @@
     </div>
 
     <!-- Calendar Component -->
-    <Calendar 
+    <Calendar
+      v-if="!loading"
       :appointments="appointments"
       @date-selected="handleDateSelected"
       @appointment-selected="handleAppointmentSelected"
     />
 
     <!-- Today's Schedule -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div v-if="!loading" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Today's Appointments -->
       <div class="card p-6">
         <div class="flex items-center justify-between mb-4">
@@ -161,7 +168,7 @@
     </div>
 
     <!-- Weekly Overview -->
-    <div class="card p-6">
+    <div v-if="!loading" class="card p-6">
       <h3 class="text-lg font-semibold text-gray-900 mb-4">ภาพรวมสัปดาห์นี้</h3>
       <div class="grid grid-cols-7 gap-4">
         <div 
@@ -211,17 +218,41 @@ export default {
     return {
       selectedDate: null,
       selectedAppointment: null,
-      showModal: false
+      showModal: false,
+      loading: false,
+      queues: []
     }
   },
   computed: {
-    ...mapState('dashboard', ['queues']),
-    
     appointments() {
-      return this.queues.map(queue => ({
-        ...queue,
-        date: queue.date
-      }))
+      // Map queues to appointment format with proper date/time handling
+      return this.queues.map(queue => {
+        // Extract date from appointmentDate or appointment_date
+        const appointmentDate = queue.appointmentDate || queue.appointment_date
+        const appointmentTime = queue.appointmentTime || queue.appointment_time
+
+        // Format date to YYYY-MM-DD
+        let dateStr = ''
+        if (appointmentDate) {
+          try {
+            const date = new Date(appointmentDate)
+            dateStr = date.toISOString().split('T')[0]
+          } catch (e) {
+            dateStr = appointmentDate
+          }
+        }
+
+        return {
+          id: queue.id,
+          date: dateStr,
+          timeSlot: appointmentTime || 'N/A',
+          customerName: queue.customerName || queue.customer_name || 'N/A',
+          carModel: queue.vehicleModel || queue.vehicle_model || 'N/A',
+          location: queue.branch || 'N/A',
+          status: queue.status || 'pending',
+          ...queue
+        }
+      })
     },
 
     todayAppointments() {
@@ -298,11 +329,37 @@ export default {
     }
   },
   async mounted() {
-    if (this.$store) {
-      await this.$store.dispatch('dashboard/fetchQueues')
-    }
+    await this.fetchAppointments()
   },
   methods: {
+    async fetchAppointments() {
+      try {
+        this.loading = true
+        // Fetch directly from API for calendar view
+        const response = await this.$api.testDrives.getAll()
+
+        // Handle different response formats
+        if (Array.isArray(response)) {
+          this.queues = response
+        } else if (response.testDrives) {
+          this.queues = response.testDrives
+        } else if (response.data) {
+          this.queues = response.data
+        } else {
+          this.queues = []
+        }
+
+        console.log('✅ Fetched calendar appointments:', this.queues.length)
+      } catch (error) {
+        console.error('Error fetching calendar data:', error)
+        this.$toast?.error('ไม่สามารถโหลดข้อมูลปฏิทินได้')
+        this.queues = []
+      } finally {
+        this.loading = false
+      }
+    },
+
+
     handleDateSelected(date) {
       this.selectedDate = date
     },
@@ -326,7 +383,8 @@ export default {
     },
     
     async refreshData() {
-      await this.$store.dispatch('dashboard/fetchQueues')
+      await this.fetchAppointments()
+      this.$toast?.success('รีเฟรชข้อมูลเรียบร้อย')
     },
     
     getCurrentDate() {

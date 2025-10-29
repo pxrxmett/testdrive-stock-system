@@ -442,6 +442,123 @@
       </section>
     </main>
 
+    <!-- Create Event Modal -->
+    <div v-if="showEventModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-10 mx-auto p-6 border w-full max-w-2xl shadow-lg rounded-lg bg-white">
+        <div class="mb-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-gray-900">สร้างอีเวนต์ใหม่</h3>
+            <button @click="showEventModal = false" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <form @submit.prevent="createEvent" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">ชื่ออีเวนต์ <span class="text-red-500">*</span></label>
+              <input
+                v-model="newEvent.name"
+                type="text"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                placeholder="กรอกชื่ออีเวนต์"
+              >
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">สถานที่ <span class="text-red-500">*</span></label>
+              <input
+                v-model="newEvent.location"
+                type="text"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                placeholder="กรอกสถานที่จัดงาน"
+              >
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">วันเริ่มต้น <span class="text-red-500">*</span></label>
+              <input
+                v-model="newEvent.startDate"
+                type="date"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+              >
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">วันสิ้นสุด <span class="text-red-500">*</span></label>
+              <input
+                v-model="newEvent.endDate"
+                type="date"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+              >
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">ประเภท <span class="text-red-500">*</span></label>
+              <select
+                v-model="newEvent.type"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+              >
+                <option value="">-- เลือกประเภท --</option>
+                <option value="งานแสดงรถ">งานแสดงรถ</option>
+                <option value="ทดลองขับ">ทดลองขับ</option>
+                <option value="ส่งมอบรถ">ส่งมอบรถ</option>
+                <option value="การตลาด">การตลาด</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">สถานะ <span class="text-red-500">*</span></label>
+              <select
+                v-model="newEvent.status"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+              >
+                <option value="วางแผน">วางแผน</option>
+                <option value="เตรียมการ">เตรียมการ</option>
+                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+              </select>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="flex items-center space-x-2">
+                <input
+                  v-model="newEvent.autoReturnEnabled"
+                  type="checkbox"
+                  class="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                >
+                <span class="text-sm text-gray-700">เปิดการคืนรถอัตโนมัติ</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+            <button
+              type="button"
+              @click="showEventModal = false"
+              class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              ยกเลิก
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              สร้างอีเวนต์
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Overdue Events Modal -->
     <div v-if="showOverdueModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
@@ -454,20 +571,20 @@
               </svg>
             </button>
           </div>
-          
+
           <div class="space-y-3 max-h-60 overflow-y-auto">
             <div v-for="event in overdueEvents" :key="event.id" class="p-3 border border-orange-200 rounded-lg bg-orange-50">
               <div class="font-medium text-gray-900">{{ event.name }}</div>
               <div class="text-sm text-gray-600">{{ event.bookedVehicles.length }} รถถูกจอง</div>
               <div class="text-xs text-orange-600">เลยกำหนด {{ getDaysOverdue(event) }} วัน</div>
               <div class="mt-2 flex space-x-2">
-                <button 
+                <button
                   @click="quickReturnVehicles(event)"
                   class="text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
                 >
                   คืนรถ
                 </button>
-                <button 
+                <button
                   @click="extendEvent(event)"
                   class="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700"
                 >
@@ -510,7 +627,16 @@ export default {
       loading: false,
       error: null,
       autoReturnTimer: null,
-      notificationTimer: null
+      notificationTimer: null,
+      newEvent: {
+        name: '',
+        location: '',
+        startDate: '',
+        endDate: '',
+        type: '',
+        status: 'วางแผน',
+        autoReturnEnabled: true
+      }
     }
   },
   
@@ -691,6 +817,40 @@ export default {
     },
     
     // Quick Actions
+    async createEvent() {
+      try {
+        // Map frontend data to API format
+        const eventData = {
+          name: this.newEvent.name,
+          location: this.newEvent.location,
+          start_date: this.newEvent.startDate,
+          end_date: this.newEvent.endDate,
+          status: this.mapStatusToAPI(this.newEvent.status),
+          type: this.mapTypeToAPI(this.newEvent.type),
+          auto_return_enabled: this.newEvent.autoReturnEnabled
+        }
+
+        await this.$api.events.create(eventData)
+        await this.fetchEvents() // Refresh events list
+        this.$toast?.success(`สร้างอีเวนต์ "${this.newEvent.name}" เรียบร้อยแล้ว`)
+
+        // Reset form and close modal
+        this.newEvent = {
+          name: '',
+          location: '',
+          startDate: '',
+          endDate: '',
+          type: '',
+          status: 'วางแผน',
+          autoReturnEnabled: true
+        }
+        this.showEventModal = false
+      } catch (error) {
+        console.error('Error creating event:', error)
+        this.$toast?.error('ไม่สามารถสร้างอีเวนต์ได้')
+      }
+    },
+
     async quickCreateEvent() {
       const eventName = prompt('ชื่ออีเวนต์ฉุกเฉิน:')
       if (!eventName) return

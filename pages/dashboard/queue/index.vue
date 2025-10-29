@@ -229,9 +229,14 @@ export default {
         const salesId = queue.salesId || queue.sales_id || queue.sales?.id || 'unassigned'
 
         if (!groups.has(salesId)) {
+          // Find sales person by matching ID (handle both string and number comparison)
+          const salesPerson = queue.sales || this.salesList.find(s =>
+            s.id === salesId || s.id === Number(salesId) || String(s.id) === String(salesId)
+          ) || null
+
           groups.set(salesId, {
             salesId,
-            salesPerson: queue.sales || this.salesList.find(s => s.id === salesId) || null,
+            salesPerson,
             queues: []
           })
         }
@@ -260,15 +265,18 @@ export default {
   methods: {
     async fetchSalesList() {
       try {
-        // TODO: Replace with actual API call when sales endpoint is ready
-        this.salesList = [
-          { id: '1', nickname: 'John', firstName: 'John Smith' },
-          { id: '2', nickname: 'Mary', firstName: 'Mary Johnson' },
-          { id: '3', nickname: 'Mike', firstName: 'Mike Wilson' }
-        ]
+        // Try to fetch from API first
+        const response = await this.$api._axios.$get('/users', { params: { role: 'sales' } })
+        this.salesList = response?.users || response || []
+        console.log('✅ Fetched sales list from API:', this.salesList.length)
       } catch (error) {
-        console.error('Error fetching sales list:', error)
-        this.salesList = []
+        console.warn('⚠️ Could not fetch sales from API, using mock data:', error.message)
+        // Fallback to mock data if API is not available
+        this.salesList = [
+          { id: 1, nickname: 'John', firstName: 'John', lastName: 'Smith', name: 'John Smith' },
+          { id: 2, nickname: 'Mary', firstName: 'Mary', lastName: 'Johnson', name: 'Mary Johnson' },
+          { id: 3, nickname: 'Mike', firstName: 'Mike', lastName: 'Wilson', name: 'Mike Wilson' }
+        ]
       }
     },
     handleFilterChange(filters) {
