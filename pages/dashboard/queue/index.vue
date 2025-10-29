@@ -60,27 +60,86 @@
       </div>
     </div>
 
-    <!-- Advanced Search -->
-    <AdvancedSearch />
+    <!-- Filters -->
+    <QueueFilters :sales-list="salesList" @filter-change="handleFilterChange" />
 
-    <!-- Results Summary -->
-    <div v-if="filteredQueues.length > 0" class="text-sm text-gray-600">
-      แสดงผลลัพธ์ {{ filteredQueues.length }} รายการ
+    <!-- View Toggle -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-2 bg-white rounded-lg border border-gray-200 p-1">
+        <button
+          @click="currentView = 'list'"
+          :class="[
+            'px-4 py-2 rounded-md font-medium text-sm transition-colors flex items-center space-x-2',
+            currentView === 'list' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'
+          ]"
+        >
+          <Icon name="list" icon-class="w-4 h-4" />
+          <span>รายการ</span>
+        </button>
+        <button
+          @click="currentView = 'group'"
+          :class="[
+            'px-4 py-2 rounded-md font-medium text-sm transition-colors flex items-center space-x-2',
+            currentView === 'group' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'
+          ]"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <span>จัดกลุ่มตามพนักงาน</span>
+        </button>
+        <button
+          @click="currentView = 'calendar'"
+          :class="[
+            'px-4 py-2 rounded-md font-medium text-sm transition-colors flex items-center space-x-2',
+            currentView === 'calendar' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'
+          ]"
+        >
+          <Icon name="calendar" icon-class="w-4 h-4" />
+          <span>ปฏิทิน</span>
+        </button>
+      </div>
+      <div v-if="displayFilteredQueues.length > 0" class="text-sm text-gray-600">
+        แสดงผลลัพธ์ {{ displayFilteredQueues.length }} รายการ
+      </div>
     </div>
-    <div v-else class="card p-8 text-center">
+
+    <!-- Content Views -->
+    <div v-if="displayFilteredQueues.length === 0" class="card p-8 text-center">
       <Icon name="search" icon-class="w-12 h-12 text-gray-300 mx-auto mb-3" />
       <h3 class="text-lg font-medium text-gray-900 mb-2">ไม่พบข้อมูลที่ค้นหา</h3>
       <p class="text-gray-500">ลองเปลี่ยนเงื่อนไขการค้นหาหรือล้างตัวกรอง</p>
     </div>
 
-    <!-- Queue Table -->
-    <QueueTable 
-      v-if="filteredQueues.length > 0"
-      :queues="filteredQueues"
-      @view="handleView"
-      @edit="handleEdit"
-      @delete="handleDelete"
-    />
+    <!-- List View (Original) -->
+    <div v-else-if="currentView === 'list'">
+      <QueueTable
+        :queues="displayFilteredQueues"
+        @view="handleView"
+        @edit="handleEdit"
+        @delete="handleDelete"
+      />
+    </div>
+
+    <!-- Group by Sales View -->
+    <div v-else-if="currentView === 'group'" class="space-y-4">
+      <SalesGroupCard
+        v-for="group in groupedBySales"
+        :key="group.salesId"
+        :sales-person="group.salesPerson"
+        :queues="group.queues"
+        @queue-click="handleView($event.id)"
+        @queue-view="handleView($event.id)"
+        @queue-edit="handleEdit($event.id)"
+        @queue-confirm="confirmQueue($event)"
+        @queue-cancel="handleDelete($event.id)"
+      />
+    </div>
+
+    <!-- Calendar View -->
+    <div v-else-if="currentView === 'calendar'" class="card p-6">
+      <p class="text-center text-gray-600">Calendar View - Coming Soon</p>
+    </div>
 
     <!-- Export/Action Bar -->
     <div v-if="filteredQueues.length > 0" class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -109,24 +168,112 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import QueueFilters from '~/components/QueueFilters.vue'
+import SalesGroupCard from '~/components/SalesGroupCard.vue'
 
 export default {
   name: 'QueueManagement',
   layout: 'dashboard',
+  components: {
+    QueueFilters,
+    SalesGroupCard
+  },
   data() {
     return {
-      selectedRows: []
+      selectedRows: [],
+      currentView: 'list', // 'list', 'group', 'calendar'
+      customFilters: {},
+      salesList: []
     }
   },
   computed: {
-    ...mapGetters('dashboard', ['filteredQueues', 'statsData'])
+    ...mapGetters('dashboard', ['filteredQueues', 'statsData']),
+    displayFilteredQueues() {
+      let filtered = [...this.filteredQueues]
+
+      // Apply custom filters
+      if (this.customFilters.search) {
+        const search = this.customFilters.search.toLowerCase()
+        filtered = filtered.filter(q =>
+          q.customerName?.toLowerCase().includes(search) ||
+          q.customer_name?.toLowerCase().includes(search) ||
+          q.phone?.toLowerCase().includes(search) ||
+          q.customer_phone?.toLowerCase().includes(search) ||
+          q.vehicleModel?.toLowerCase().includes(search) ||
+          q.vehicle_model?.toLowerCase().includes(search)
+        )
+      }
+
+      if (this.customFilters.status) {
+        filtered = filtered.filter(q => q.status === this.customFilters.status)
+      }
+
+      if (this.customFilters.salesId) {
+        if (this.customFilters.salesId === 'unassigned') {
+          filtered = filtered.filter(q => !q.salesId && !q.sales_id && !q.sales)
+        } else {
+          filtered = filtered.filter(q =>
+            q.salesId === this.customFilters.salesId ||
+            q.sales_id === this.customFilters.salesId ||
+            q.sales?.id === this.customFilters.salesId
+          )
+        }
+      }
+
+      return filtered
+    },
+    groupedBySales() {
+      const groups = new Map()
+
+      this.displayFilteredQueues.forEach(queue => {
+        const salesId = queue.salesId || queue.sales_id || queue.sales?.id || 'unassigned'
+
+        if (!groups.has(salesId)) {
+          groups.set(salesId, {
+            salesId,
+            salesPerson: queue.sales || this.salesList.find(s => s.id === salesId) || null,
+            queues: []
+          })
+        }
+
+        groups.get(salesId).queues.push(queue)
+      })
+
+      const result = Array.from(groups.values())
+
+      // Sort: assigned first, then by queue count
+      result.sort((a, b) => {
+        if (a.salesId === 'unassigned') return 1
+        if (b.salesId === 'unassigned') return -1
+        return b.queues.length - a.queues.length
+      })
+
+      return result
+    }
   },
   async mounted() {
     if (this.$store) {
       await this.$store.dispatch('dashboard/fetchQueues')
     }
+    await this.fetchSalesList()
   },
   methods: {
+    async fetchSalesList() {
+      try {
+        // TODO: Replace with actual API call when sales endpoint is ready
+        this.salesList = [
+          { id: '1', nickname: 'John', firstName: 'John Smith' },
+          { id: '2', nickname: 'Mary', firstName: 'Mary Johnson' },
+          { id: '3', nickname: 'Mike', firstName: 'Mike Wilson' }
+        ]
+      } catch (error) {
+        console.error('Error fetching sales list:', error)
+        this.salesList = []
+      }
+    },
+    handleFilterChange(filters) {
+      this.customFilters = filters
+    },
     handleAddQueue() {
       this.$router.push('/dashboard/queue/add')
     },
@@ -139,6 +286,18 @@ export default {
     async handleDelete(queueId) {
       if (confirm('คุณต้องการลบคิวนี้หรือไม่?')) {
         this.$store.commit('dashboard/deleteQueue', queueId)
+      }
+    },
+    async confirmQueue(queue) {
+      if (confirm(`ยืนยันคิวของ ${queue.customerName || queue.customer_name}?`)) {
+        try {
+          await this.$api.testDrives.update(queue.id, { status: 'confirmed' })
+          this.$toast?.success('ยืนยันคิวสำเร็จ')
+          await this.$store.dispatch('dashboard/fetchQueues')
+        } catch (error) {
+          console.error('Error confirming queue:', error)
+          this.$toast?.error('ไม่สามารถยืนยันคิวได้')
+        }
       }
     },
     exportToCSV() {
