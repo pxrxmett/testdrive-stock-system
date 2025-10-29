@@ -232,10 +232,10 @@
             <div class="flex items-start justify-between mb-4">
               <div class="flex items-center space-x-3">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span class="text-sm font-semibold text-blue-600">{{ vehicle.id.slice(-2) }}</span>
+                  <span class="text-sm font-semibold text-blue-600">{{ vehicle?.id?.toString().slice(-2) || '--' }}</span>
                 </div>
                 <div>
-                  <div class="text-sm font-medium text-gray-500">{{ vehicle.id }}</div>
+                  <div class="text-sm font-medium text-gray-500">{{ vehicle?.id || 'N/A' }}</div>
                   <div class="text-lg font-bold text-blue-600">{{ vehicle.plateNumber }}</div>
                 </div>
               </div>
@@ -356,13 +356,13 @@
                 <!-- Left: Main Info -->
                 <div class="flex items-center space-x-4 flex-1">
                   <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span class="text-xs font-semibold text-blue-600">{{ vehicle.id.slice(-2) }}</span>
+                    <span class="text-xs font-semibold text-blue-600">{{ vehicle?.id?.toString().slice(-2) || '--' }}</span>
                   </div>
-                  
+
                   <div class="min-w-0 flex-1">
                     <div class="flex items-center space-x-3">
                       <span class="font-semibold text-blue-600">{{ vehicle.plateNumber }}</span>
-                      <span class="text-sm text-gray-500">{{ vehicle.id }}</span>
+                      <span class="text-sm text-gray-500">{{ vehicle?.id || 'N/A' }}</span>
                     </div>
                     <div class="text-sm font-medium text-gray-900 truncate">{{ vehicle.model }}</div>
                     <div class="flex items-center space-x-2 mt-1">
