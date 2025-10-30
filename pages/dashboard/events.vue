@@ -506,8 +506,9 @@
                 v-model="newEvent.type"
                 required
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                :class="{ 'border-red-500': !newEvent.type }"
               >
-                <option value="">-- เลือกประเภท --</option>
+                <option value="" disabled>-- เลือกประเภท --</option>
                 <option value="งานแสดงรถ">งานแสดงรถ</option>
                 <option value="ทดลองขับ">ทดลองขับ</option>
                 <option value="ส่งมอบรถ">ส่งมอบรถ</option>
@@ -819,6 +820,32 @@ export default {
     // Quick Actions
     async createEvent() {
       try {
+        // Validate required fields
+        if (!this.newEvent.name || !this.newEvent.name.trim()) {
+          this.$toast?.error('กรุณากรอกชื่ออีเวนต์')
+          return
+        }
+
+        if (!this.newEvent.location || !this.newEvent.location.trim()) {
+          this.$toast?.error('กรุณากรอกสถานที่')
+          return
+        }
+
+        if (!this.newEvent.type || this.newEvent.type === '') {
+          this.$toast?.error('กรุณาเลือกประเภทอีเวนต์')
+          return
+        }
+
+        if (!this.newEvent.startDate) {
+          this.$toast?.error('กรุณาเลือกวันเริ่มต้น')
+          return
+        }
+
+        if (!this.newEvent.endDate) {
+          this.$toast?.error('กรุณาเลือกวันสิ้นสุด')
+          return
+        }
+
         // Validate dates are in ISO 8601 format (YYYY-MM-DD)
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/
         if (!dateRegex.test(this.newEvent.startDate) || !dateRegex.test(this.newEvent.endDate)) {
@@ -830,10 +857,16 @@ export default {
           return
         }
 
+        // Validate end date is after start date
+        if (new Date(this.newEvent.endDate) < new Date(this.newEvent.startDate)) {
+          this.$toast?.error('วันสิ้นสุดต้องมาหลังวันเริ่มต้น')
+          return
+        }
+
         // Map frontend data to API format
         const eventData = {
-          name: this.newEvent.name,
-          location: this.newEvent.location,
+          name: this.newEvent.name.trim(),
+          location: this.newEvent.location.trim(),
           start_date: this.newEvent.startDate, // Already in YYYY-MM-DD format
           end_date: this.newEvent.endDate,     // Already in YYYY-MM-DD format
           status: this.mapStatusToAPI(this.newEvent.status),
@@ -866,16 +899,35 @@ export default {
           message: error.message,
           response: error.response?.data,
           status: error.response?.status,
-          formData: this.newEvent
+          headers: error.response?.headers,
+          formData: this.newEvent,
+          eventData
         })
 
         // Display detailed error message from backend
-        const errorMessage = error.response?.data?.message
-          || error.response?.data?.error
-          || error.message
-          || 'ไม่สามารถสร้างอีเวนต์ได้'
+        let errorMessage = 'ไม่สามารถสร้างอีเวนต์ได้'
+
+        if (error.response?.data) {
+          const data = error.response.data
+
+          // Handle validation errors
+          if (data.errors && Array.isArray(data.errors)) {
+            errorMessage = data.errors.map(e => e.message || e).join(', ')
+          } else if (data.message) {
+            errorMessage = data.message
+          } else if (data.error) {
+            errorMessage = data.error
+          } else if (typeof data === 'string') {
+            errorMessage = data
+          }
+        } else if (error.message) {
+          errorMessage = error.message
+        }
 
         this.$toast?.error(`เกิดข้อผิดพลาด: ${errorMessage}`)
+
+        // Log detailed error for debugging
+        console.log('📋 Validation failed for:', eventData)
       }
     },
 
