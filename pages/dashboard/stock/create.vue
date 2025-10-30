@@ -264,7 +264,8 @@ export default {
 
         console.log('📤 Creating vehicle with data:', JSON.stringify(vehicleData, null, 2))
 
-        const response = await this.$api._axios.$post('/vehicles', vehicleData)
+        // Use correct API endpoint: POST /api/stock
+        const response = await this.$api.stock.create(vehicleData)
         console.log('✅ Vehicle created successfully:', response)
 
         this.$toast?.success('เพิ่มรถเรียบร้อยแล้ว')

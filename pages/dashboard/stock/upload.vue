@@ -335,7 +335,8 @@ export default {
 
             console.log(`📤 Uploading vehicle ${i + 1}/${this.parsedData.length}:`, vehicleData)
 
-            await this.$api._axios.$post('/vehicles', vehicleData)
+            // Use correct API endpoint: POST /api/stock
+            await this.$api.stock.create(vehicleData)
             imported++
           } catch (error) {
             failed++
