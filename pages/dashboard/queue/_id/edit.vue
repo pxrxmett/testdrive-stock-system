@@ -219,6 +219,7 @@ import StatusBadge from '~/components/StatusBadge.vue'
 
 export default {
   name: 'QueueEdit',
+  layout: 'dashboard',
   components: {
     StatusBadge
   },
@@ -295,20 +296,27 @@ export default {
     },
 
     async fetchSales() {
+      // Use mock sales data until users/sales endpoint is available
+      // TODO: Replace with actual API call when backend is ready
+      console.log('ℹ️ Using mock sales data (API endpoint /users?role=sales not available yet)')
+
+      return [
+        { id: 1, name: 'พนักงาน A', firstName: 'สมชาย', nickname: 'ชาย' },
+        { id: 2, name: 'พนักงาน B', firstName: 'สมหญิง', nickname: 'หญิง' },
+        { id: 3, name: 'พนักงาน C', firstName: 'สมศรี', nickname: 'ศรี' },
+        { id: 4, name: 'พนักงาน D', firstName: 'สมหมาย', nickname: 'หมาย' },
+        { id: 5, name: 'พนักงาน E', firstName: 'สมพร', nickname: 'พร' }
+      ]
+
+      /* Uncomment when API is ready:
       try {
-        // Try to fetch from a users/sales endpoint
-        // If it doesn't exist, we'll catch the error and return mock data
         const response = await this.$api._axios.$get('/users', { params: { role: 'sales' } })
         return response?.users || response || []
       } catch (error) {
         console.error('Error fetching sales:', error)
-        // Return mock sales data for development
-        return [
-          { id: 1, name: 'พนักงาน A', firstName: 'สมชาย', nickname: 'ชาย' },
-          { id: 2, name: 'พนักงาน B', firstName: 'สมหญิง', nickname: 'หญิง' },
-          { id: 3, name: 'พนักงาน C', firstName: 'สมศรี', nickname: 'ศรี' }
-        ]
+        return []
       }
+      */
     },
 
     populateForm(queue) {
