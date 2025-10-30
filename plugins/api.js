@@ -81,6 +81,22 @@ export default function ({ $axios, app }, inject) {
 
     delete(id) {
       return api.$delete(`/stock/vehicles/${id}`)
+    },
+
+    // Bulk upload from Excel file
+    upload(file, data) {
+      const formData = new FormData()
+      formData.append('file', file)
+      if (data) {
+        Object.keys(data).forEach(key => {
+          formData.append(key, data[key])
+        })
+      }
+      return api.$post('/stock/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
     }
   }
 
@@ -132,13 +148,65 @@ export default function ({ $axios, app }, inject) {
     }
   }
 
+  // Auth API
+  const auth = {
+    login(credentials) {
+      return api.$post('/auth/login', credentials)
+    },
+
+    me() {
+      return api.$get('/auth/me')
+    },
+
+    refreshToken(refreshToken) {
+      return api.$post('/auth/refresh-token', { refreshToken })
+    },
+
+    lineLogin(data) {
+      return api.$post('/auth/line-login', data)
+    }
+  }
+
+  // Staffs API
+  const staffs = {
+    create(data) {
+      return api.$post('/staffs', data)
+    },
+
+    getAll(params = {}) {
+      return api.$get('/staffs', { params })
+    },
+
+    getById(id) {
+      return api.$get(`/staffs/${id}`)
+    }
+  }
+
+  // Line Integration API
+  const lineIntegration = {
+    check(data) {
+      return api.$post('/line-integration/check', data)
+    },
+
+    link(data) {
+      return api.$post('/line-integration/link', data)
+    },
+
+    getStaffInfo(id) {
+      return api.$get(`/line-integration/staff/${id}`)
+    }
+  }
+
   // Inject structured API with methods
   inject('api', {
     // Keep raw axios instance for backwards compatibility
     _axios: api,
     // API modules
+    auth,
     testDrives,
     stock,
-    events
+    events,
+    staffs,
+    lineIntegration
   })
 }

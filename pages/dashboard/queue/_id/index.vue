@@ -213,6 +213,7 @@ import StatusBadge from '~/components/StatusBadge.vue'
 
 export default {
   name: 'QueueDetail',
+  layout: 'dashboard',
   components: {
     StatusBadge
   },
