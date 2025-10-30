@@ -113,7 +113,10 @@
           <thead class="bg-gray-50">
             <tr>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">รุ่นรถ</th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">ทะเบียน</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                ทะเบียน <span class="text-red-500">*</span>
+                <span class="text-xs normal-case text-gray-400 block mt-1">แก้ไขได้ถ้าไฟล์ไม่มี</span>
+              </th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">สี</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">ปี</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">ราคา</th>
@@ -124,7 +127,15 @@
           <tbody class="bg-white divide-y divide-gray-200">
             <tr v-for="(row, index) in parsedData" :key="index" :class="{ 'bg-red-50': row.error }">
               <td class="px-4 py-3 text-sm">{{ row.model || '-' }}</td>
-              <td class="px-4 py-3 text-sm font-medium">{{ row.plateNumber || '-' }}</td>
+              <td class="px-4 py-3 text-sm font-medium">
+                <input
+                  v-model="row.plateNumber"
+                  type="text"
+                  class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  :class="{ 'border-red-500 bg-red-50': !row.plateNumber || row.plateNumber.trim() === '' }"
+                  placeholder="กรอกทะเบียน"
+                >
+              </td>
               <td class="px-4 py-3 text-sm">{{ row.color || '-' }}</td>
               <td class="px-4 py-3 text-sm">{{ row.year || '-' }}</td>
               <td class="px-4 py-3 text-sm">{{ row.price ? row.price.toLocaleString() : '-' }}</td>
@@ -300,29 +311,50 @@ export default {
       if (this.parsedData.length === 0) return
 
       this.uploading = true
+      let imported = 0
+      let failed = 0
+      const errors = []
 
       try {
-        // Format data for API
-        const vehicles = this.parsedData.map(row => ({
-          model: row.model,
-          plate_number: row.plateNumber,
-          color: row.color || null,
-          year: row.year || null,
-          price: row.price || null,
-          status: row.status || 'available',
-          notes: row.notes || null
-        }))
+        console.log('📤 Starting bulk upload of', this.parsedData.length, 'vehicles')
 
-        console.log('📤 Uploading vehicles:', JSON.stringify(vehicles, null, 2))
+        // Upload vehicles one by one since bulk endpoint doesn't exist
+        for (let i = 0; i < this.parsedData.length; i++) {
+          const row = this.parsedData[i]
 
-        const response = await this.$api._axios.$post('/vehicles/bulk-upload', { vehicles })
+          try {
+            const vehicleData = {
+              model: row.model,
+              plate_number: row.plateNumber,
+              color: row.color || null,
+              year: row.year || null,
+              price: row.price || null,
+              status: row.status || 'available',
+              notes: row.notes || null
+            }
 
-        this.uploadResult = {
-          imported: response.imported || response.success || vehicles.length,
-          failed: response.failed || 0
+            console.log(`📤 Uploading vehicle ${i + 1}/${this.parsedData.length}:`, vehicleData)
+
+            await this.$api._axios.$post('/vehicles', vehicleData)
+            imported++
+          } catch (error) {
+            failed++
+            const errorMsg = error.response?.data?.message || error.message
+            errors.push(`แถวที่ ${i + 1}: ${errorMsg}`)
+            console.error(`❌ Failed to upload vehicle ${i + 1}:`, error.response?.data || error.message)
+          }
         }
 
-        this.$toast?.success(`นำเข้าข้อมูลสำเร็จ ${this.uploadResult.imported} รายการ`)
+        this.uploadResult = { imported, failed }
+
+        if (imported > 0) {
+          this.$toast?.success(`นำเข้าข้อมูลสำเร็จ ${imported} รายการ`)
+        }
+
+        if (failed > 0) {
+          console.warn('❌ Upload errors:', errors)
+          this.$toast?.error(`อัพโหลดล้มเหลว ${failed} รายการ - ตรวจสอบ console`)
+        }
       } catch (error) {
         console.error('❌ Error uploading vehicles:', error)
 
