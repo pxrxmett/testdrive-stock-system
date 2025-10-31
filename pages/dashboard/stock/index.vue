@@ -235,8 +235,8 @@
                   <span class="text-sm font-semibold text-blue-600">{{ vehicle?.id?.toString().slice(-2) || '--' }}</span>
                 </div>
                 <div>
-                  <div class="text-sm font-medium text-gray-500">{{ vehicle?.id || 'N/A' }}</div>
-                  <div class="text-lg font-bold text-blue-600">{{ vehicle.plateNumber }}</div>
+                  <div class="text-sm font-medium text-gray-900">{{ vehicle.model || 'N/A' }}</div>
+                  <div class="text-sm text-blue-600">{{ vehicle.plateNumber || 'ไม่มีทะเบียน' }}</div>
                 </div>
               </div>
               <span :class="getStatusClass(vehicle.status)" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border">
