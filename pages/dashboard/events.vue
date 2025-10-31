@@ -819,6 +819,8 @@ export default {
     
     // Quick Actions
     async createEvent() {
+      let eventData = null // Declare outside try-catch for error logging
+
       try {
         // Validate required fields
         if (!this.newEvent.name || !this.newEvent.name.trim()) {
@@ -864,7 +866,7 @@ export default {
         }
 
         // Map frontend data to API format
-        const eventData = {
+        eventData = {
           name: this.newEvent.name.trim(),
           location: this.newEvent.location.trim(),
           start_date: this.newEvent.startDate, // Already in YYYY-MM-DD format
@@ -901,7 +903,7 @@ export default {
           status: error.response?.status,
           headers: error.response?.headers,
           formData: this.newEvent,
-          eventData
+          eventData: eventData || 'Not created yet'
         })
 
         // Display detailed error message from backend
