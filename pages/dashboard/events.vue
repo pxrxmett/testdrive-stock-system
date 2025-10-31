@@ -873,7 +873,9 @@ export default {
           end_date: this.newEvent.endDate,     // Already in YYYY-MM-DD format
           status: this.mapStatusToAPI(this.newEvent.status),
           type: this.mapTypeToAPI(this.newEvent.type),
-          auto_return_enabled: this.newEvent.autoReturnEnabled
+          auto_return_enabled: this.newEvent.autoReturnEnabled,
+          description: '', // Add empty description if not provided
+          organized_by: 'System' // Add default organizer
         }
 
         // Log request data for debugging
@@ -906,6 +908,9 @@ export default {
           eventData: eventData || 'Not created yet'
         })
 
+        // Log full error response for debugging
+        console.error('🔍 Full error response:', JSON.stringify(error.response?.data, null, 2))
+
         // Display detailed error message from backend
         let errorMessage = 'ไม่สามารถสร้างอีเวนต์ได้'
 
@@ -921,6 +926,9 @@ export default {
             errorMessage = data.error
           } else if (typeof data === 'string') {
             errorMessage = data
+          } else {
+            // If none of the above, show the whole data object
+            errorMessage = JSON.stringify(data)
           }
         } else if (error.message) {
           errorMessage = error.message
