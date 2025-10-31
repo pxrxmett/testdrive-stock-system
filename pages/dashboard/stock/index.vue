@@ -679,12 +679,12 @@ export default {
     
     editVehicle(vehicle) {
       console.log('Edit vehicle:', vehicle.id)
-      this.$toast?.info(`แก้ไขข้อมูลรถ ${vehicle.plateNumber}`)
+      this.$router.push(`/dashboard/stock/${vehicle.id}/edit`)
     },
-    
+
     viewVehicle(vehicle) {
       console.log('View vehicle:', vehicle.id)
-      this.$toast?.info(`ดูรายละเอียดรถ ${vehicle.plateNumber}`)
+      this.$router.push(`/dashboard/stock/${vehicle.id}`)
     },
     
     deleteVehicle(vehicle) {
