@@ -442,36 +442,38 @@ export default {
     appointments() {
       // Map queues to appointment format with proper date/time handling
       return this.queues.map(queue => {
-        // Extract date from appointmentDate or appointment_date
-        const appointmentDate = queue.appointmentDate || queue.appointment_date
-        const appointmentTime = queue.appointmentTime || queue.appointment_time
+        // Extract date from test_drive_date (API format)
+        const testDriveDate = queue.test_drive_date || queue.testDriveDate || queue.appointmentDate || queue.appointment_date
+        const testDriveTime = queue.test_drive_time || queue.testDriveTime || queue.appointmentTime || queue.appointment_time
 
         // Format date to YYYY-MM-DD
         let dateStr = ''
-        if (appointmentDate) {
+        if (testDriveDate) {
           try {
-            const date = new Date(appointmentDate)
+            const date = new Date(testDriveDate)
             dateStr = date.toISOString().split('T')[0]
           } catch (e) {
-            dateStr = appointmentDate
+            // If already in YYYY-MM-DD format
+            dateStr = testDriveDate
           }
         }
 
         return {
           id: queue.id,
           date: dateStr,
-          timeSlot: appointmentTime || 'N/A',
-          appointmentTime: appointmentTime || 'N/A',
-          appointment_time: appointmentTime || 'N/A',
-          customerName: queue.customerName || queue.customer_name || 'N/A',
-          customer_name: queue.customerName || queue.customer_name || 'N/A',
-          carModel: queue.vehicleModel || queue.vehicle_model || 'N/A',
-          vehicleModel: queue.vehicleModel || queue.vehicle_model || 'N/A',
-          vehicle_model: queue.vehicleModel || queue.vehicle_model || 'N/A',
-          phone: queue.phone || queue.customer_phone || 'N/A',
-          customer_phone: queue.phone || queue.customer_phone || 'N/A',
-          location: queue.branch || 'N/A',
-          status: queue.status || 'pending',
+          timeSlot: testDriveTime || 'N/A',
+          appointmentTime: testDriveTime || 'N/A',
+          appointment_time: testDriveTime || 'N/A',
+          test_drive_time: testDriveTime || 'N/A',
+          customerName: queue.customer_name || queue.customerName || 'N/A',
+          customer_name: queue.customer_name || queue.customerName || 'N/A',
+          carModel: queue.vehicle_model || queue.vehicleModel || 'N/A',
+          vehicleModel: queue.vehicle_model || queue.vehicleModel || 'N/A',
+          vehicle_model: queue.vehicle_model || queue.vehicleModel || 'N/A',
+          phone: queue.customer_phone || queue.phone || 'N/A',
+          customer_phone: queue.customer_phone || queue.phone || 'N/A',
+          location: queue.location || queue.branch || 'N/A',
+          status: queue.status || 'scheduled',
           notes: queue.notes || '',
           ...queue
         }

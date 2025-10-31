@@ -420,27 +420,59 @@ export default {
       if (!this.validateForm()) {
         return
       }
-      
+
       try {
-        const newQueue = {
-          id: this.generateQueueId(),
-          ...this.form,
-          status: 'scheduled',
-          createdAt: new Date().toISOString()
+        // Map frontend data to API format
+        const testDriveData = {
+          customer_name: this.form.customerName,
+          customer_phone: this.form.phone,
+          customer_email: this.form.email || null,
+          customer_type: this.form.customerType || null,
+          lead_source: this.form.leadSource || null,
+          vehicle_model: this.form.carModel,
+          test_drive_date: this.form.date,
+          test_drive_time: this.form.timeSlot,
+          duration_minutes: parseInt(this.form.duration) || 60,
+          location: this.form.location || null,
+          sales_representative: this.form.salesRep || null,
+          priority: this.form.priority || 'medium',
+          notes: this.form.notes || null,
+          status: 'scheduled'
         }
-        
-        // เพิ่มเข้า store
-        this.$store.commit('dashboard/addQueue', newQueue)
-        
+
+        console.log('📤 Creating test drive:', testDriveData)
+
+        // Call real API
+        const response = await this.$api.testDrives.create(testDriveData)
+
+        console.log('✅ Test drive created:', response)
+
         // แจ้งเตือนสำเร็จ
-        alert('เพิ่มคิวทดลองขับสำเร็จ!')
-        
+        this.$toast?.success('เพิ่มคิวทดลองขับสำเร็จ!')
+
+        // Clear draft
+        localStorage.removeItem('queueDraft')
+
         // กลับไปหน้ารายการ
         this.$router.push('/dashboard/queue')
-        
+
       } catch (error) {
-        console.error('Error creating queue:', error)
-        alert('เกิดข้อผิดพลาดในการเพิ่มคิว')
+        console.error('❌ Error creating test drive:', error)
+
+        let errorMessage = 'เกิดข้อผิดพลาดในการเพิ่มคิว'
+
+        if (error.response?.data) {
+          const data = error.response.data
+          if (data.errors && Array.isArray(data.errors)) {
+            errorMessage = data.errors.map(e => e.message || e).join(', ')
+          } else if (data.message) {
+            errorMessage = data.message
+          } else if (data.error) {
+            errorMessage = data.error
+          }
+        }
+
+        this.$toast?.error(errorMessage)
       }
     },
     

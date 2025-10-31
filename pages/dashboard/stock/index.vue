@@ -240,7 +240,7 @@
                 </div>
               </div>
               <span :class="getStatusClass(vehicle.status)" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border">
-                {{ vehicle.status }}
+                {{ getStatusText(vehicle.status) }}
               </span>
             </div>
 
@@ -376,7 +376,7 @@
                       <span>{{ vehicle.year || 'N/A' }}</span>
                       <span>|</span>
                       <span :class="getStatusClass(vehicle.status)" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium">
-                        {{ vehicle.status || 'N/A' }}
+                        {{ getStatusText(vehicle.status) || 'N/A' }}
                       </span>
                     </div>
                   </div>
@@ -400,7 +400,7 @@
                   
                   <!-- Status -->
                   <span :class="getStatusClass(vehicle.status)" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border whitespace-nowrap">
-                    {{ vehicle.status }}
+                    {{ getStatusText(vehicle.status) }}
                   </span>
 
                   <!-- Actions -->
@@ -629,6 +629,23 @@ export default {
         'ไม่พร้อมใช้': 'unavailable'
       }
       return statusMap[frontendStatus] || frontendStatus
+    },
+
+    getStatusText(status) {
+      // If already in Thai, return as-is
+      if (status && status.match(/[ก-๙]/)) {
+        return status
+      }
+      // Otherwise map from English to Thai
+      const statusMap = {
+        'available': 'พร้อมใช้',
+        'in_use': 'ใช้งาน',
+        'maintenance': 'บำรุงรักษา',
+        'locked': 'ล็อกสำหรับอีเวนต์',
+        'locked_for_event': 'ล็อกสำหรับอีเวนต์',
+        'unavailable': 'ไม่พร้อมใช้'
+      }
+      return statusMap[status] || status || 'N/A'
     },
 
     async updateVehicleStatus(vehicleId, newStatus) {
