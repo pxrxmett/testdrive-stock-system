@@ -793,18 +793,15 @@ export default {
       // Convert UUID to readable Event ID (e.g., EVT-001)
       if (!uuid) return 'N/A'
 
-      // Find the index of this event in the sorted array
-      const sortedEvents = [...this.events].sort((a, b) => {
-        return new Date(a.createdAt) - new Date(b.createdAt)
-      })
-      const eventIndex = sortedEvents.findIndex(e => e.id === uuid)
+      // Find the index of this event in the current array
+      const eventIndex = this.events.findIndex(e => e.id === uuid)
 
       if (eventIndex !== -1) {
         // Use index + 1 for sequential numbering (EVT-001, EVT-002, etc.)
         return `EVT-${String(eventIndex + 1).padStart(3, '0')}`
       }
 
-      // Fallback: use hash if not found
+      // Fallback: use hash if not found (for details page when events array is not loaded)
       const hash = uuid.substring(0, 8)
       const num = parseInt(hash, 16) % 1000
       return `EVT-${String(num).padStart(3, '0')}`
