@@ -587,14 +587,6 @@ export default {
         const response = await this.$api.stock.getVehicles()
         const apiData = Array.isArray(response) ? response : (response.data || response.vehicles || [])
 
-        console.log('📥 Raw API Response:', {
-          isArray: Array.isArray(response),
-          hasData: !!response.data,
-          hasVehicles: !!response.vehicles,
-          firstItem: apiData[0],
-          totalItems: apiData.length
-        })
-
         // Map API data to frontend format
         // API uses different field names: modelGeneral, carCard, engineNo, chassisNo
         this.vehicles = apiData.map(vehicle => {
@@ -624,11 +616,6 @@ export default {
             eventDetails: vehicle.event_details || vehicle.eventDetails
           }
         })
-
-        console.log('✅ Mapped vehicles:', this.vehicles.length, 'vehicles')
-        if (this.vehicles.length > 0) {
-          console.log('📋 First vehicle after mapping:', this.vehicles[0])
-        }
 
         this.updateStats()
       } catch (error) {

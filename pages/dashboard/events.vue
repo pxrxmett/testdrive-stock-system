@@ -707,30 +707,15 @@ export default {
           createdAt: event.created_at || event.createdAt
         }))
 
-        await this.fetchEventStats()
+        // Calculate stats from events data instead of separate API call
+        // Backend doesn't have /api/events/stats endpoint
+        this.updateEventStats()
       } catch (error) {
         console.error('Error fetching events:', error)
         this.error = error.response?.data?.message || error.message || 'ไม่สามารถดึงข้อมูลอีเวนต์ได้'
         this.$toast?.error(`เกิดข้อผิดพลาด: ${this.error}`)
       } finally {
         this.loading = false
-      }
-    },
-
-    async fetchEventStats() {
-      try {
-        const response = await this.$api.events.getStats()
-        const stats = response.data || response
-
-        this.eventStats = {
-          total: stats.total || this.events.length,
-          active: stats.active || this.events.filter(e => e.status === 'กำลังดำเนินการ').length,
-          bookedVehicles: stats.bookedVehicles || this.events.reduce((sum, e) => sum + e.bookedVehicles.length, 0),
-          upcoming: stats.upcoming || this.events.filter(e => e.status === 'วางแผน' || e.status === 'เตรียมการ').length
-        }
-      } catch (error) {
-        // Fallback to calculating from events array
-        this.updateEventStats()
       }
     },
 
