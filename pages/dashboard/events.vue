@@ -881,8 +881,16 @@ export default {
         // Log request data for debugging
         console.log('📤 Creating event with data:', JSON.stringify(eventData, null, 2))
 
-        const response = await this.$api.events.create(eventData)
-        console.log('✅ Event created successfully:', response)
+        try {
+          const response = await this.$api.events.create(eventData)
+          console.log('✅ Event created successfully:', response)
+        } catch (apiError) {
+          // Check if it's a network error or backend is down
+          if (!apiError.response) {
+            throw new Error('ไม่สามารถเชื่อมต่อกับ API Server ได้ กรุณาตรวจสอบว่า backend server ทำงานอยู่ที่ http://localhost:3000')
+          }
+          throw apiError
+        }
 
         await this.fetchEvents() // Refresh events list
         this.$toast?.success(`สร้างอีเวนต์ "${this.newEvent.name}" เรียบร้อยแล้ว`)

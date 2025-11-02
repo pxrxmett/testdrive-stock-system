@@ -126,6 +126,15 @@ export default function ({ $axios, app }, inject) {
       return api.$delete(`/events/${id}`)
     },
 
+    // Get event statistics
+    getStats() {
+      return api.$get('/events/stats').catch(error => {
+        // If endpoint doesn't exist, return empty stats
+        console.warn('Events stats endpoint not available:', error.message)
+        return { data: { total: 0, active: 0, bookedVehicles: 0, upcoming: 0 } }
+      })
+    },
+
     // Vehicle management for events
     assignVehicle(eventId, vehicleData) {
       return api.$post(`/events/${eventId}/vehicles`, vehicleData)
@@ -145,6 +154,21 @@ export default function ({ $axios, app }, inject) {
 
     updateStatus(eventId, status) {
       return api.$patch(`/events/${eventId}/status`, { status })
+    },
+
+    // Return vehicles from event
+    returnVehicles(eventId) {
+      return api.$post(`/events/${eventId}/return-vehicles`)
+    },
+
+    // Extend event duration
+    extendEvent(eventId, days) {
+      return api.$patch(`/events/${eventId}/extend`, { days })
+    },
+
+    // Auto return overdue vehicles
+    autoReturnOverdue() {
+      return api.$post('/events/auto-return-overdue')
     },
 
     getCalendarView(params = {}) {
