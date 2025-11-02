@@ -262,11 +262,15 @@ export default {
           status: error.response?.status
         })
 
+        // Log full error response for debugging
+        console.error('🔍 Full error response:', JSON.stringify(error.response?.data, null, 2))
+
         // Handle validation errors from backend
         if (error.response?.data?.message) {
           const messages = error.response.data.message
           if (Array.isArray(messages)) {
-            this.$toast?.error(messages.join(', '))
+            console.error('📋 Validation errors:', messages)
+            this.$toast?.error('Validation errors: ' + messages.join(', '))
           } else {
             this.$toast?.error(messages)
           }
