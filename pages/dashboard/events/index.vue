@@ -690,8 +690,12 @@ export default {
         const response = await this.$api.events.getAll()
         const apiData = Array.isArray(response) ? response : (response.data || [])
 
+        console.log('📋 API Events Response:', apiData)
+
         // Map API data to frontend format
-        this.events = apiData.map(event => ({
+        this.events = apiData.map(event => {
+          console.log('🔍 Event vehicles:', event.id, event.vehicles, event.booked_vehicles, event.eventVehicles)
+          return {
           id: event.id,
           name: event.title || event.name,  // Backend uses 'title'
           title: event.title || event.name,  // Keep both for compatibility
@@ -706,7 +710,8 @@ export default {
           autoReturnEnabled: event.auto_return_enabled !== false,
           autoReturnedAt: event.auto_returned_at || event.autoReturnedAt,
           createdAt: event.created_at || event.createdAt
-        }))
+        }
+      })
 
         // Calculate stats from events data instead of separate API call
         // Backend doesn't have /api/events/stats endpoint
@@ -788,11 +793,21 @@ export default {
       // Convert UUID to readable Event ID (e.g., EVT-001)
       if (!uuid) return 'N/A'
 
-      // Use first 8 characters of UUID to generate a number
-      const hash = uuid.substring(0, 8)
-      const num = parseInt(hash, 16) % 10000 // Get a number between 0-9999
+      // Find the index of this event in the sorted array
+      const sortedEvents = [...this.events].sort((a, b) => {
+        return new Date(a.createdAt) - new Date(b.createdAt)
+      })
+      const eventIndex = sortedEvents.findIndex(e => e.id === uuid)
 
-      return `EVT-${String(num).padStart(4, '0')}`
+      if (eventIndex !== -1) {
+        // Use index + 1 for sequential numbering (EVT-001, EVT-002, etc.)
+        return `EVT-${String(eventIndex + 1).padStart(3, '0')}`
+      }
+
+      // Fallback: use hash if not found
+      const hash = uuid.substring(0, 8)
+      const num = parseInt(hash, 16) % 1000
+      return `EVT-${String(num).padStart(3, '0')}`
     },
     
     isEventOverdue(event) {
@@ -1146,14 +1161,35 @@ export default {
       this.$toast?.info(`แก้ไขอีเวนต์ ${event.name}`)
     },
     
-    deleteEvent(event) {
-      if (confirm(`ลบอีเวนต์ "${event.name}" หรือไม่?\n\nการดำเนินการนี้ไม่สามารถย้อนกลับได้`)) {
+    async deleteEvent(event) {
+      // Show confirmation dialog
+      const confirmed = confirm(
+        `⚠️ ยืนยันการลบอีเวนต์\n\n` +
+        `อีเวนต์: ${event.name || event.title}\n` +
+        `สถานที่: ${event.location}\n` +
+        `รถที่จอง: ${event.bookedVehicles.length} คัน\n\n` +
+        `คุณแน่ใจหรือไม่? การดำเนินการนี้ไม่สามารถย้อนกลับได้`
+      )
+
+      if (!confirmed) {
+        return
+      }
+
+      try {
+        // Call API to delete event
+        await this.$api.events.delete(event.id)
+
+        // Remove from local array
         const index = this.events.findIndex(e => e.id === event.id)
         if (index !== -1) {
           this.events.splice(index, 1)
           this.updateEventStats()
-          this.$toast?.success(`ลบอีเวนต์ ${event.name} เรียบร้อยแล้ว`)
         }
+
+        this.$toast?.success(`ลบอีเวนต์ "${event.name || event.title}" เรียบร้อยแล้ว`)
+      } catch (error) {
+        console.error('Error deleting event:', error)
+        this.$toast?.error('ไม่สามารถลบอีเวนต์ได้')
       }
     },
     
