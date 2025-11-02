@@ -409,8 +409,8 @@ export default {
     async fetchVehicles() {
       try {
         this.loadingVehicles = true
-        const response = await this.$api.vehicles.getAll()
-        const vehicles = Array.isArray(response) ? response : (response.data || response.vehicles || [])
+        const response = await this.$api.stock.getAll()
+        const vehicles = Array.isArray(response) ? response : (response.data || response.vehicles || response.stock || [])
 
         // Filter only available vehicles
         this.availableVehicles = vehicles
