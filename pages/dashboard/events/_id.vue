@@ -50,13 +50,13 @@
             <dt class="text-sm font-medium text-gray-500">สถานะ</dt>
             <dd class="mt-1">
               <span :class="getStatusClass(event.status)" class="inline-flex px-3 py-1 rounded-full text-sm font-medium">
-                {{ event.status }}
+                {{ mapStatusToThai(event.status) }}
               </span>
             </dd>
           </div>
           <div>
             <dt class="text-sm font-medium text-gray-500">ประเภท</dt>
-            <dd class="mt-1 text-sm text-gray-900">{{ event.type }}</dd>
+            <dd class="mt-1 text-sm text-gray-900">{{ mapTypeToThai(event.type) }}</dd>
           </div>
           <div>
             <dt class="text-sm font-medium text-gray-500">สถานที่</dt>
@@ -71,12 +71,12 @@
           <div v-if="event.startTime && event.endTime">
             <dt class="text-sm font-medium text-gray-500">เวลา</dt>
             <dd class="mt-1 text-sm text-gray-900">
-              {{ event.startTime }} - {{ event.endTime }}
+              {{ formatTime(event.startTime) }} - {{ formatTime(event.endTime) }}
             </dd>
           </div>
-          <div>
-            <dt class="text-sm font-medium text-gray-500">ผู้สร้าง</dt>
-            <dd class="mt-1 text-sm text-gray-900">{{ event.createdBy || 'N/A' }}</dd>
+          <div v-if="event.createdAt">
+            <dt class="text-sm font-medium text-gray-500">วันที่สร้าง</dt>
+            <dd class="mt-1 text-sm text-gray-900">{{ formatDate(event.createdAt) }}</dd>
           </div>
           <div v-if="event.description" class="md:col-span-2">
             <dt class="text-sm font-medium text-gray-500">รายละเอียด</dt>
@@ -165,6 +165,7 @@ export default {
 
     formatEventId(uuid) {
       if (!uuid) return 'N/A'
+      // For details page, just use a simple hash-based ID
       const hash = uuid.substring(0, 8)
       const num = parseInt(hash, 16) % 1000
       return `EVT-${String(num).padStart(3, '0')}`
@@ -178,6 +179,37 @@ export default {
         month: 'short',
         day: 'numeric'
       })
+    },
+
+    formatTime(timeString) {
+      if (!timeString) return 'N/A'
+      // If time is in format "HH:mm:ss", return "HH:mm"
+      if (timeString.includes(':')) {
+        return timeString.substring(0, 5)
+      }
+      return timeString
+    },
+
+    mapStatusToThai(status) {
+      const map = {
+        'planning': 'วางแผน',
+        'preparing': 'เตรียมการ',
+        'in_progress': 'กำลังดำเนินการ',
+        'completed': 'เสร็จสิ้น',
+        'overdue': 'เลยกำหนด'
+      }
+      return map[status] || status
+    },
+
+    mapTypeToThai(type) {
+      const map = {
+        'car_show': 'งานแสดงรถ',
+        'test_drive': 'ทดลองขับ',
+        'marketing': 'การตลาด',
+        'delivery': 'ส่งมอบรถ',
+        'emergency': 'ฉุกเฉิน'
+      }
+      return map[type] || type
     },
 
     getStatusClass(status) {
