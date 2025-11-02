@@ -84,6 +84,34 @@
             <p v-if="errors.endDate" class="mt-1 text-xs text-red-500">{{ errors.endDate }}</p>
           </div>
 
+          <!-- Start Time -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              เวลาเริ่มต้น <span class="text-red-500">*</span>
+            </label>
+            <input
+              v-model="form.startTime"
+              type="time"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            >
+            <p v-if="errors.startTime" class="mt-1 text-xs text-red-500">{{ errors.startTime }}</p>
+          </div>
+
+          <!-- End Time -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              เวลาสิ้นสุด <span class="text-red-500">*</span>
+            </label>
+            <input
+              v-model="form.endTime"
+              type="time"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            >
+            <p v-if="errors.endTime" class="mt-1 text-xs text-red-500">{{ errors.endTime }}</p>
+          </div>
+
           <!-- Type -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -174,6 +202,8 @@ export default {
         location: '',
         startDate: '',
         endDate: '',
+        startTime: '09:00',
+        endTime: '18:00',
         type: '',
         status: 'planning',
         description: ''
@@ -234,18 +264,31 @@ export default {
       this.saving = true
 
       try {
-        // Map to backend API format
+        // Get current user ID from auth
+        const currentUser = this.$auth?.user
+        if (!currentUser || !currentUser.id) {
+          this.$toast?.error('ไม่พบข้อมูลผู้ใช้ กรุณา login ใหม่')
+          this.saving = false
+          return
+        }
+
+        // Map to backend API format (match API documentation)
         const eventData = {
           title: this.form.title.trim(),
-          location: this.form.location.trim(),
-          startDate: this.form.startDate + 'T00:00:00.000Z',  // ISO 8601 format
-          endDate: this.form.endDate + 'T23:59:59.999Z',      // ISO 8601 format
-          status: this.form.status,
+          description: this.form.description.trim() || '',
           type: this.form.type,
-          description: this.form.description.trim() || ''
+          status: this.form.status,
+          location: this.form.location.trim(),
+          startDate: this.form.startDate,  // Format: "YYYY-MM-DD"
+          endDate: this.form.endDate,      // Format: "YYYY-MM-DD"
+          startTime: this.form.startTime + ':00',  // Format: "HH:mm:ss"
+          endTime: this.form.endTime + ':00',      // Format: "HH:mm:ss"
+          createdBy: currentUser.id,       // UUID of current user
+          notes: this.form.description.trim() || ''
         }
 
         console.log('📤 Creating event:', JSON.stringify(eventData, null, 2))
+        console.log('👤 Current user:', currentUser)
 
         const response = await this.$api.events.create(eventData)
         console.log('✅ Event created:', response)
