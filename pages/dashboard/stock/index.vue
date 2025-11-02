@@ -585,10 +585,27 @@ export default {
         this.error = null
 
         const response = await this.$api.stock.getVehicles()
-        const apiData = Array.isArray(response) ? response : (response.data || [])
+        const apiData = Array.isArray(response) ? response : (response.data || response.vehicles || [])
+
+        console.log('📥 Raw API Response:', {
+          isArray: Array.isArray(response),
+          hasData: !!response.data,
+          hasVehicles: !!response.vehicles,
+          firstItem: apiData[0],
+          totalItems: apiData.length
+        })
 
         // Map API data to frontend format
         this.vehicles = apiData.map(vehicle => {
+          // Log each vehicle to see structure
+          console.log('🚗 Processing vehicle:', {
+            id: vehicle.id,
+            model: vehicle.model,
+            model_id: vehicle.model_id,
+            plate_number: vehicle.plate_number,
+            allFields: Object.keys(vehicle)
+          })
+
           // Get model name - handle both model_id and model string
           let modelName = vehicle.model
           if (vehicle.model_id && this.vehicleModels[vehicle.model_id]) {
@@ -596,7 +613,7 @@ export default {
           } else if (vehicle.model && this.vehicleModels[vehicle.model]) {
             modelName = this.vehicleModels[vehicle.model]
           } else if (!modelName) {
-            modelName = 'N/A'
+            modelName = vehicle.model || 'N/A'
           }
 
           return {

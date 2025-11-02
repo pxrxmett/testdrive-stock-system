@@ -296,27 +296,23 @@ export default {
     },
 
     async fetchSales() {
-      // Use mock sales data until users/sales endpoint is available
-      // TODO: Replace with actual API call when backend is ready
-      console.log('ℹ️ Using mock sales data (API endpoint /users?role=sales not available yet)')
-
-      return [
-        { id: 1, name: 'พนักงาน A', firstName: 'สมชาย', nickname: 'ชาย' },
-        { id: 2, name: 'พนักงาน B', firstName: 'สมหญิง', nickname: 'หญิง' },
-        { id: 3, name: 'พนักงาน C', firstName: 'สมศรี', nickname: 'ศรี' },
-        { id: 4, name: 'พนักงาน D', firstName: 'สมหมาย', nickname: 'หมาย' },
-        { id: 5, name: 'พนักงาน E', firstName: 'สมพร', nickname: 'พร' }
-      ]
-
-      /* Uncomment when API is ready:
       try {
-        const response = await this.$api._axios.$get('/users', { params: { role: 'sales' } })
-        return response?.users || response || []
+        // Use staffs endpoint instead of non-existent users endpoint
+        const response = await this.$api.staffs.getAll({ role: 'sales' })
+        const salesData = response?.staffs || response?.data || response || []
+        console.log('✅ Fetched sales list from staffs API:', salesData.length)
+        return salesData
       } catch (error) {
-        console.error('Error fetching sales:', error)
-        return []
+        console.warn('⚠️ Could not fetch sales from API, using mock data:', error.message)
+        // Fallback to mock data if API is not available
+        return [
+          { id: 1, name: 'พนักงาน A', firstName: 'สมชาย', nickname: 'ชาย' },
+          { id: 2, name: 'พนักงาน B', firstName: 'สมหญิง', nickname: 'หญิง' },
+          { id: 3, name: 'พนักงาน C', firstName: 'สมศรี', nickname: 'ศรี' },
+          { id: 4, name: 'พนักงาน D', firstName: 'สมหมาย', nickname: 'หมาย' },
+          { id: 5, name: 'พนักงาน E', firstName: 'สมพร', nickname: 'พร' }
+        ]
       }
-      */
     },
 
     populateForm(queue) {
@@ -362,20 +358,22 @@ export default {
     async saveQueue() {
       this.saving = true
       try {
-        // Prepare data for API
+        // Prepare data for API in snake_case format
         const updateData = {
-          customerName: this.form.customerName,
-          phone: this.form.phone,
-          email: this.form.email,
-          vehicleId: this.form.vehicleId,
-          vehicleModel: this.form.vehicleModel,
-          plateNumber: this.form.plateNumber,
-          salesId: this.form.salesId || null,
-          appointmentDate: this.form.appointmentDate,
-          appointmentTime: this.form.appointmentTime,
+          customer_name: this.form.customerName,
+          customer_phone: this.form.phone,
+          customer_email: this.form.email || null,
+          vehicle_id: this.form.vehicleId ? parseInt(this.form.vehicleId) : null,
+          vehicle_model: this.form.vehicleModel || null,
+          plate_number: this.form.plateNumber || null,
+          sales_id: this.form.salesId ? parseInt(this.form.salesId) : null,
+          appointment_date: this.form.appointmentDate,
+          appointment_time: this.form.appointmentTime,
           status: this.form.status,
-          notes: this.form.notes
+          notes: this.form.notes || null
         }
+
+        console.log('📤 Updating queue with data:', JSON.stringify(updateData, null, 2))
 
         await this.$api.testDrives.update(this.queueId, updateData)
 
@@ -384,8 +382,18 @@ export default {
         // Redirect back to detail page
         this.$router.push(`/dashboard/queue/${this.queueId}`)
       } catch (error) {
-        console.error('Error saving queue:', error)
-        this.$toast?.error('ไม่สามารถบันทึกข้อมูลได้')
+        console.error('❌ Error saving queue:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status
+        })
+
+        const errorMessage = error.response?.data?.message
+          || error.response?.data?.error
+          || error.message
+          || 'ไม่สามารถบันทึกข้อมูลได้'
+
+        this.$toast?.error(`เกิดข้อผิดพลาด: ${errorMessage}`)
       } finally {
         this.saving = false
       }
