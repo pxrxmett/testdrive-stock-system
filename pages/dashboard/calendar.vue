@@ -633,9 +633,10 @@ export default {
     },
 
     handleConfirmBooking(booking) {
-      // TODO: Implement booking confirmation
+      // Future Enhancement: Implement booking confirmation API
+      // await this.$api.testDrives.confirm(booking.id)
       console.log('Confirm booking:', booking)
-      this.$toast?.info('ฟีเจอร์ยืนยันการจองกำลังพัฒนา')
+      this.$toast?.info('ฟีเจอร์นี้จะพัฒนาในเวอร์ชันถัดไป')
     },
 
     handleEditBooking(booking) {
@@ -646,9 +647,10 @@ export default {
       if (!confirm('คุณต้องการยกเลิกการจองนี้หรือไม่?')) return
 
       try {
-        // TODO: Implement cancel API call
+        // Future Enhancement: Implement cancel booking API
+        // await this.$api.testDrives.cancel(booking.id)
         console.log('Cancel booking:', booking)
-        this.$toast?.success('ยกเลิกการจองเรียบร้อย')
+        this.$toast?.info('ฟีเจอร์นี้จะพัฒนาในเวอร์ชันถัดไป')
         await this.refreshData()
       } catch (error) {
         console.error('Error canceling booking:', error)

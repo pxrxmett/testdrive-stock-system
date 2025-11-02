@@ -721,13 +721,15 @@ export default {
       this.error = null
 
       try {
-        // TODO: Replace with real API calls
-        // const testDrives = await this.$api.testDrives.getAll()
-        // this.calculateMetrics(testDrives)
-        // this.calculatePopularCars(testDrives)
-        // this.calculateRevenue(testDrives)
+        // Future Enhancement: Replace with real analytics API when available
+        // const analyticsData = await this.$api.analytics.getStats({
+        //   period: this.selectedPeriod,
+        //   startDate: this.customDateRange.start,
+        //   endDate: this.customDateRange.end
+        // })
+        // this.processAnalyticsData(analyticsData)
 
-        // Simulate API call
+        // Currently using mock data for demonstration
         await new Promise(resolve => setTimeout(resolve, 1000))
       } catch (error) {
         this.error = 'ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่อีกครั้ง'

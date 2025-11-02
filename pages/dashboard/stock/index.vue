@@ -596,43 +596,39 @@ export default {
         })
 
         // Map API data to frontend format
+        // API uses different field names: modelGeneral, carCard, engineNo, chassisNo
         this.vehicles = apiData.map(vehicle => {
-          // Log each vehicle to see structure
-          console.log('🚗 Processing vehicle:', {
-            id: vehicle.id,
-            model: vehicle.model,
-            model_id: vehicle.model_id,
-            plate_number: vehicle.plate_number,
-            allFields: Object.keys(vehicle)
-          })
-
-          // Get model name - handle both model_id and model string
-          let modelName = vehicle.model
-          if (vehicle.model_id && this.vehicleModels[vehicle.model_id]) {
-            modelName = this.vehicleModels[vehicle.model_id]
-          } else if (vehicle.model && this.vehicleModels[vehicle.model]) {
-            modelName = this.vehicleModels[vehicle.model]
-          } else if (!modelName) {
-            modelName = vehicle.model || 'N/A'
-          }
-
           return {
             id: vehicle.id,
-            plateNumber: vehicle.plate_number || vehicle.plateNumber || 'ไม่มีทะเบียน',
-            model: modelName,
-            category: vehicle.category || vehicle.type || 'กระบะ',
-            type: vehicle.fuel_type || vehicle.fuelType || vehicle.type || 'น้ำมัน',
+            // Use carCard for plate number
+            plateNumber: vehicle.carCard || vehicle.plate_number || vehicle.plateNumber || 'ไม่มีทะเบียน',
+            // Use modelGeneral for model name
+            model: vehicle.modelGeneral || vehicle.model || vehicle.modelCode || 'N/A',
+            // Use type field for category
+            category: vehicle.type || vehicle.category || 'กระบะ',
+            // Fuel type - may need to derive from model or type
+            type: vehicle.fuelType || vehicle.fuel_type || 'น้ำมัน',
+            // Color
             color: vehicle.color || 'ไม่ระบุ',
+            // Year - may not be in API, use current year
             year: vehicle.year || vehicle.model_year || new Date().getFullYear(),
-            vin: vehicle.vin || '-',
-            chassisNumber: vehicle.chassis_number || vehicle.chassisNumber || vehicle.vin || '-',
-            engineNumber: vehicle.engine_number || vehicle.engineNumber || '-',
-            motorNumber: vehicle.motor_number || vehicle.motorNumber || '-',
+            // Use chassisNo for VIN
+            vin: vehicle.chassisNo || vehicle.chassis_number || vehicle.vin || '-',
+            chassisNumber: vehicle.chassisNo || vehicle.chassis_number || vehicle.vin || '-',
+            // Use engineNo for engine number
+            engineNumber: vehicle.engineNo || vehicle.engine_number || vehicle.engineNumber || '-',
+            motorNumber: vehicle.motorNumber || vehicle.motor_number || '-',
+            // Map status
             status: this.mapAPIStatus(vehicle.status),
             eventStatus: vehicle.event_status || vehicle.eventStatus,
             eventDetails: vehicle.event_details || vehicle.eventDetails
           }
         })
+
+        console.log('✅ Mapped vehicles:', this.vehicles.length, 'vehicles')
+        if (this.vehicles.length > 0) {
+          console.log('📋 First vehicle after mapping:', this.vehicles[0])
+        }
 
         this.updateStats()
       } catch (error) {
