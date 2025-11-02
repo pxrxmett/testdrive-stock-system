@@ -270,12 +270,19 @@ export default {
 
       try {
         // Get current user ID from auth
+        console.log('🔍 Checking auth...')
+        console.log('Auth object:', this.$auth)
         const currentUser = this.$auth?.user
+        console.log('👤 Current user:', currentUser)
+
         if (!currentUser || !currentUser.id) {
+          console.error('❌ No user ID found!')
           this.$toast?.error('ไม่พบข้อมูลผู้ใช้ กรุณา login ใหม่')
           this.saving = false
           return
         }
+
+        console.log('✅ User ID found:', currentUser.id)
 
         // Map to backend API format (match API documentation)
         const eventData = {
