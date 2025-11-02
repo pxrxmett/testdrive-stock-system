@@ -456,10 +456,10 @@ export default {
   methods: {
     async fetchSalesList() {
       try {
-        // Try to fetch from API first
-        const response = await this.$api._axios.$get('/users', { params: { role: 'sales' } })
-        this.salesList = response?.users || response || []
-        console.log('✅ Fetched sales list from API:', this.salesList.length)
+        // Use staffs endpoint instead of non-existent users endpoint
+        const response = await this.$api.staffs.getAll({ role: 'sales' })
+        this.salesList = response?.staffs || response?.data || response || []
+        console.log('✅ Fetched sales list from staffs API:', this.salesList.length)
       } catch (error) {
         console.warn('⚠️ Could not fetch sales from API, using mock data:', error.message)
         // Fallback to mock data if API is not available

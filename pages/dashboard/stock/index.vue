@@ -527,7 +527,22 @@ export default {
       },
       vehicles: [],
       loading: false,
-      error: null
+      error: null,
+      // Vehicle models lookup
+      vehicleModels: {
+        1: 'D-Max',
+        2: 'D-Max Spark',
+        3: 'MU-X',
+        4: 'V-Cross',
+        5: 'Hi-Lander',
+        6: 'Spacecab',
+        'D-Max': 'D-Max',
+        'D-Max Spark': 'D-Max Spark',
+        'MU-X': 'MU-X',
+        'V-Cross': 'V-Cross',
+        'Hi-Lander': 'Hi-Lander',
+        'Spacecab': 'Spacecab'
+      }
     }
   },
   
@@ -573,22 +588,34 @@ export default {
         const apiData = Array.isArray(response) ? response : (response.data || [])
 
         // Map API data to frontend format
-        this.vehicles = apiData.map(vehicle => ({
-          id: vehicle.id,
-          plateNumber: vehicle.plate_number || vehicle.plateNumber,
-          model: vehicle.model,
-          category: vehicle.category || vehicle.type,
-          type: vehicle.fuel_type || vehicle.fuelType || vehicle.type,
-          color: vehicle.color,
-          year: vehicle.year || vehicle.model_year,
-          vin: vehicle.vin,
-          chassisNumber: vehicle.chassis_number || vehicle.chassisNumber || vehicle.vin,
-          engineNumber: vehicle.engine_number || vehicle.engineNumber || '',
-          motorNumber: vehicle.motor_number || vehicle.motorNumber || '',
-          status: this.mapAPIStatus(vehicle.status),
-          eventStatus: vehicle.event_status || vehicle.eventStatus,
-          eventDetails: vehicle.event_details || vehicle.eventDetails
-        }))
+        this.vehicles = apiData.map(vehicle => {
+          // Get model name - handle both model_id and model string
+          let modelName = vehicle.model
+          if (vehicle.model_id && this.vehicleModels[vehicle.model_id]) {
+            modelName = this.vehicleModels[vehicle.model_id]
+          } else if (vehicle.model && this.vehicleModels[vehicle.model]) {
+            modelName = this.vehicleModels[vehicle.model]
+          } else if (!modelName) {
+            modelName = 'N/A'
+          }
+
+          return {
+            id: vehicle.id,
+            plateNumber: vehicle.plate_number || vehicle.plateNumber || 'ไม่มีทะเบียน',
+            model: modelName,
+            category: vehicle.category || vehicle.type || 'กระบะ',
+            type: vehicle.fuel_type || vehicle.fuelType || vehicle.type || 'น้ำมัน',
+            color: vehicle.color || 'ไม่ระบุ',
+            year: vehicle.year || vehicle.model_year || new Date().getFullYear(),
+            vin: vehicle.vin || '-',
+            chassisNumber: vehicle.chassis_number || vehicle.chassisNumber || vehicle.vin || '-',
+            engineNumber: vehicle.engine_number || vehicle.engineNumber || '-',
+            motorNumber: vehicle.motor_number || vehicle.motorNumber || '-',
+            status: this.mapAPIStatus(vehicle.status),
+            eventStatus: vehicle.event_status || vehicle.eventStatus,
+            eventDetails: vehicle.event_details || vehicle.eventDetails
+          }
+        })
 
         this.updateStats()
       } catch (error) {
@@ -661,13 +688,22 @@ export default {
     },
 
     getStatusClass(status) {
-      switch (status) {
-        case 'พร้อมใช้': return 'text-green-700 bg-green-50 border-green-200'
-        case 'ใช้งาน': return 'text-blue-700 bg-blue-50 border-blue-200'
-        case 'บำรุงรักษา': return 'text-amber-700 bg-amber-50 border-amber-200'
-        case 'ล็อกสำหรับอีเวนต์': return 'text-purple-700 bg-purple-50 border-purple-200'
-        case 'ไม่พร้อมใช้': return 'text-red-700 bg-red-50 border-red-200'
-        default: return 'text-gray-700 bg-gray-50 border-gray-200'
+      // Handle both Thai and English status
+      const statusLower = (status || '').toLowerCase()
+
+      // Map status to color classes
+      if (status === 'พร้อมใช้' || statusLower === 'available') {
+        return 'text-green-700 bg-green-50 border-green-200'
+      } else if (status === 'ใช้งาน' || statusLower === 'in_use' || statusLower === 'in use') {
+        return 'text-blue-700 bg-blue-50 border-blue-200'
+      } else if (status === 'บำรุงรักษา' || statusLower === 'maintenance') {
+        return 'text-amber-700 bg-amber-50 border-amber-200'
+      } else if (status === 'ล็อกสำหรับอีเวนต์' || statusLower === 'locked_for_event' || statusLower === 'locked') {
+        return 'text-purple-700 bg-purple-50 border-purple-200'
+      } else if (status === 'ไม่พร้อมใช้' || statusLower === 'unavailable') {
+        return 'text-red-700 bg-red-50 border-red-200'
+      } else {
+        return 'text-gray-700 bg-gray-50 border-gray-200'
       }
     },
     
