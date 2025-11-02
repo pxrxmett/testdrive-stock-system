@@ -262,8 +262,8 @@
                   </svg>
                 </div>
                 <div>
-                  <div class="text-sm font-medium text-gray-500">{{ event.id }}</div>
-                  <div class="text-lg font-bold text-gray-900">{{ event.name }}</div>
+                  <div class="text-sm font-medium text-gray-500">{{ formatEventId(event.id) }}</div>
+                  <div class="text-lg font-bold text-gray-900">{{ event.title || event.name }}</div>
                 </div>
               </div>
               <div class="flex flex-col space-y-1">
@@ -693,14 +693,15 @@ export default {
         // Map API data to frontend format
         this.events = apiData.map(event => ({
           id: event.id,
-          name: event.name,
+          name: event.title || event.name,  // Backend uses 'title'
+          title: event.title || event.name,  // Keep both for compatibility
           location: event.location,
           startDate: event.start_date || event.startDate,
           endDate: event.end_date || event.endDate,
           status: this.mapAPIStatus(event.status),
           type: this.mapAPIType(event.type),
-          bookedVehicles: Array.isArray(event.booked_vehicles || event.bookedVehicles)
-            ? (event.booked_vehicles || event.bookedVehicles).map(v => v.plateNumber || v.plate_number || v)
+          bookedVehicles: Array.isArray(event.booked_vehicles || event.bookedVehicles || event.vehicles)
+            ? (event.booked_vehicles || event.bookedVehicles || event.vehicles).map(v => v.plateNumber || v.plate_number || v.carCard || v)
             : [],
           autoReturnEnabled: event.auto_return_enabled !== false,
           autoReturnedAt: event.auto_returned_at || event.autoReturnedAt,
@@ -774,13 +775,24 @@ export default {
     getEventStatusClass(event) {
       const status = this.getEventStatus(event)
       switch (status) {
-        case 'วางแผน': return 'text-gray-700 bg-gray-100'
-        case 'เตรียมการ': return 'text-orange-700 bg-orange-100'
-        case 'กำลังดำเนินการ': return 'text-blue-700 bg-blue-100'
-        case 'เสร็จสิ้น': return 'text-green-700 bg-green-100'
-        case 'เลยกำหนด': return 'text-red-700 bg-red-100'
-        default: return 'text-gray-700 bg-gray-100'
+        case 'วางแผน': return 'text-gray-700 bg-gray-100 border border-gray-300'
+        case 'เตรียมการ': return 'text-orange-700 bg-orange-100 border border-orange-300'
+        case 'กำลังดำเนินการ': return 'text-blue-700 bg-blue-100 border border-blue-300'
+        case 'เสร็จสิ้น': return 'text-green-700 bg-green-100 border border-green-300'
+        case 'เลยกำหนด': return 'text-red-700 bg-red-100 border border-red-300'
+        default: return 'text-gray-700 bg-gray-100 border border-gray-300'
       }
+    },
+
+    formatEventId(uuid) {
+      // Convert UUID to readable Event ID (e.g., EVT-001)
+      if (!uuid) return 'N/A'
+
+      // Use first 8 characters of UUID to generate a number
+      const hash = uuid.substring(0, 8)
+      const num = parseInt(hash, 16) % 10000 // Get a number between 0-9999
+
+      return `EVT-${String(num).padStart(4, '0')}`
     },
     
     isEventOverdue(event) {

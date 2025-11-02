@@ -165,6 +165,68 @@
         </div>
       </div>
 
+      <!-- Vehicle Selection Card -->
+      <div class="bg-white rounded-lg border border-gray-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900">เลือกรถยนต์</h2>
+            <p class="text-sm text-gray-600">เลือกรถที่ต้องการนำไปแสดงในอีเวนต์</p>
+          </div>
+          <span class="text-sm text-gray-600">
+            เลือกแล้ว: <span class="font-semibold text-purple-600">{{ selectedVehicles.length }}</span> คัน
+          </span>
+        </div>
+
+        <!-- Loading State -->
+        <div v-if="loadingVehicles" class="text-center py-8">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+          <p class="mt-2 text-sm text-gray-600">กำลังโหลดรถยนต์...</p>
+        </div>
+
+        <!-- Vehicle List -->
+        <div v-else-if="availableVehicles.length > 0" class="space-y-2 max-h-96 overflow-y-auto">
+          <label
+            v-for="vehicle in availableVehicles"
+            :key="vehicle.id"
+            class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+            :class="{ 'border-purple-500 bg-purple-50': selectedVehicles.includes(vehicle.id) }"
+          >
+            <input
+              type="checkbox"
+              :value="vehicle.id"
+              v-model="selectedVehicles"
+              class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+            >
+            <div class="ml-3 flex-1">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-900">
+                    {{ vehicle.model || 'N/A' }}
+                  </p>
+                  <p class="text-xs text-gray-600">
+                    {{ vehicle.plateNumber || 'ไม่มีทะเบียน' }} • {{ vehicle.category || 'ไม่ระบุ' }}
+                  </p>
+                </div>
+                <span
+                  class="inline-flex items-center px-2 py-1 rounded text-xs font-medium"
+                  :class="getVehicleStatusClass(vehicle.status)"
+                >
+                  {{ vehicle.status }}
+                </span>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Empty State -->
+        <div v-else class="text-center py-8">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+          <p class="mt-2 text-sm text-gray-600">ไม่มีรถที่พร้อมใช้งาน</p>
+        </div>
+      </div>
+
       <!-- Action Buttons -->
       <div class="flex items-center justify-end space-x-3 bg-white p-4 rounded-lg border border-gray-200">
         <button
@@ -197,6 +259,9 @@ export default {
   data() {
     return {
       saving: false,
+      loadingVehicles: false,
+      availableVehicles: [],
+      selectedVehicles: [],
       form: {
         title: '',
         location: '',
@@ -305,6 +370,11 @@ export default {
         const response = await this.$api.events.create(eventData)
         console.log('✅ Event created:', response)
 
+        // Assign selected vehicles to the event
+        if (response && response.id) {
+          await this.assignVehiclesToEvent(response.id)
+        }
+
         this.$toast?.success(`สร้างอีเวนต์ "${this.form.title}" เรียบร้อยแล้ว`)
 
         // Redirect to events list
@@ -334,7 +404,72 @@ export default {
       } finally {
         this.saving = false
       }
+    },
+
+    async fetchVehicles() {
+      try {
+        this.loadingVehicles = true
+        const response = await this.$api.vehicles.getAll()
+        const vehicles = Array.isArray(response) ? response : (response.data || response.vehicles || [])
+
+        // Filter only available vehicles
+        this.availableVehicles = vehicles
+          .filter(v => v.status === 'พร้อมใช้' || v.status === 'available')
+          .map(v => ({
+            id: v.id,
+            model: v.modelGeneral || v.model || v.modelCode || 'N/A',
+            plateNumber: v.carCard || v.plate_number || v.plateNumber || 'ไม่มีทะเบียน',
+            category: v.type || v.category || 'ไม่ระบุ',
+            status: v.status || 'ไม่ระบุ'
+          }))
+
+        console.log('📦 Loaded', this.availableVehicles.length, 'available vehicles')
+      } catch (error) {
+        console.error('Error fetching vehicles:', error)
+        this.$toast?.error('ไม่สามารถโหลดข้อมูลรถยนต์ได้')
+        this.availableVehicles = []
+      } finally {
+        this.loadingVehicles = false
+      }
+    },
+
+    getVehicleStatusClass(status) {
+      const statusLower = (status || '').toLowerCase()
+      if (status === 'พร้อมใช้' || statusLower === 'available') {
+        return 'text-green-700 bg-green-50 border border-green-200'
+      } else if (status === 'ใช้งานอยู่' || statusLower === 'in_use') {
+        return 'text-blue-700 bg-blue-50 border border-blue-200'
+      } else if (status === 'ซ่อมแซม' || statusLower === 'maintenance') {
+        return 'text-orange-700 bg-orange-50 border border-orange-200'
+      } else {
+        return 'text-gray-700 bg-gray-50 border border-gray-200'
+      }
+    },
+
+    async assignVehiclesToEvent(eventId) {
+      if (this.selectedVehicles.length === 0) {
+        return
+      }
+
+      try {
+        console.log('🚗 Assigning', this.selectedVehicles.length, 'vehicles to event', eventId)
+
+        // Use the API endpoint to assign vehicles
+        // POST /api/events/{id}/assign-vehicles with { vehicleIds: [...] }
+        await this.$api.events.assignVehicles(eventId, {
+          vehicleIds: this.selectedVehicles
+        })
+
+        console.log('✅ Vehicles assigned successfully')
+      } catch (error) {
+        console.error('Error assigning vehicles:', error)
+        this.$toast?.warning('สร้างอีเวนต์สำเร็จ แต่ไม่สามารถเพิ่มรถยนต์ได้')
+      }
     }
+  },
+
+  async mounted() {
+    await this.fetchVehicles()
   }
 }
 </script>

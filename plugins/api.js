@@ -139,6 +139,11 @@ export default function ({ $axios, app }, inject) {
       return api.$post(`/events/${eventId}/vehicles/batch`, { vehicleIds })
     },
 
+    // Alias for assignVehiclesBatch
+    assignVehicles(eventId, data) {
+      return api.$post(`/events/${eventId}/vehicles/batch`, data)
+    },
+
     unassignVehicle(eventId, vehicleId) {
       return api.$delete(`/events/${eventId}/vehicles/${vehicleId}`)
     },
