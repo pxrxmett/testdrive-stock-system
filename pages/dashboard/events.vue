@@ -28,8 +28,8 @@
               <span class="text-sm font-medium">อีเวนต์ฉุกเฉิน</span>
             </button>
             
-            <button 
-              @click="showEventModal = true" 
+            <button
+              @click="$router.push('/dashboard/events/add')"
               class="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -411,7 +411,7 @@
           </div>
           <h3 class="text-lg font-medium text-gray-900 mb-2">ไม่พบอีเวนต์</h3>
           <p class="text-gray-600 mb-4">ลองปรับเปลี่ยนเงื่อนไขการค้นหาหรือสร้างอีเวนต์ใหม่</p>
-          <button @click="showEventModal = true" class="inline-flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+          <button @click="$router.push('/dashboard/events/add')" class="inline-flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
@@ -850,20 +850,18 @@ export default {
           return
         }
 
-        // Map frontend data to API format
+        // Map frontend data to API format (match backend DTO)
         eventData = {
-          name: this.newEvent.name.trim(),
+          title: this.newEvent.name.trim(),  // Backend uses 'title' not 'name'
           location: this.newEvent.location.trim(),
-          start_date: this.newEvent.startDate, // Already in YYYY-MM-DD format
-          end_date: this.newEvent.endDate,     // Already in YYYY-MM-DD format
+          startDate: this.newEvent.startDate + 'T00:00:00.000Z',  // ISO 8601 format
+          endDate: this.newEvent.endDate + 'T23:59:59.999Z',      // ISO 8601 format
           status: this.mapStatusToAPI(this.newEvent.status),
           type: this.mapTypeToAPI(this.newEvent.type),
-          auto_return_enabled: this.newEvent.autoReturnEnabled,
-          description: '', // Add empty description if not provided
-          organized_by: 'System' // Add default organizer
+          description: '' // Optional field
+          // Note: auto_return_enabled and organized_by are not accepted by backend
         }
 
-        // Log request data for debugging
         console.log('📤 Creating event with data:', JSON.stringify(eventData, null, 2))
 
         try {
@@ -939,14 +937,15 @@ export default {
       if (!eventName) return
 
       try {
+        const today = new Date().toISOString().split('T')[0]
         const eventData = {
-          name: eventName,
+          title: eventName,  // Backend uses 'title' not 'name'
           location: 'ระบุสถานที่',
-          start_date: new Date().toISOString().split('T')[0],
-          end_date: new Date().toISOString().split('T')[0],
+          startDate: today + 'T00:00:00.000Z',  // ISO 8601 format
+          endDate: today + 'T23:59:59.999Z',    // ISO 8601 format
           status: 'in_progress',
           type: 'emergency',
-          auto_return_enabled: true
+          description: 'สร้างอีเวนต์ฉุกเฉิน'
         }
 
         const response = await this.$api.events.create(eventData)
