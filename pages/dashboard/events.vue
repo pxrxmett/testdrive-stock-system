@@ -28,15 +28,15 @@
               <span class="text-sm font-medium">อีเวนต์ฉุกเฉิน</span>
             </button>
             
-            <button
-              @click="$router.push('/dashboard/events/add')"
+            <nuxt-link
+              to="/dashboard/events/add"
               class="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
               <span class="text-sm font-medium">สร้างอีเวนต์ใหม่</span>
-            </button>
+            </nuxt-link>
           </div>
         </div>
       </div>
@@ -411,12 +411,12 @@
           </div>
           <h3 class="text-lg font-medium text-gray-900 mb-2">ไม่พบอีเวนต์</h3>
           <p class="text-gray-600 mb-4">ลองปรับเปลี่ยนเงื่อนไขการค้นหาหรือสร้างอีเวนต์ใหม่</p>
-          <button @click="$router.push('/dashboard/events/add')" class="inline-flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+          <nuxt-link to="/dashboard/events/add" class="inline-flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
             <span>สร้างอีเวนต์ใหม่</span>
-          </button>
+          </nuxt-link>
         </div>
       </section>
 
