@@ -95,12 +95,11 @@
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
               <option value="">-- เลือกประเภท --</option>
-              <option value="promotion">โปรโมชั่น</option>
-              <option value="motor_show">งานมอเตอร์โชว์</option>
-              <option value="test_drive">งานทดลองขับ</option>
-              <option value="roadshow">งานโรดโชว์</option>
-              <option value="emergency">เหตุฉุกเฉิน</option>
-              <option value="other">อื่นๆ</option>
+              <option value="car_show">งานแสดงรถ</option>
+              <option value="test_drive">ทดลองขับ</option>
+              <option value="marketing">การตลาด</option>
+              <option value="delivery">ส่งมอบรถ</option>
+              <option value="emergency">ฉุกเฉิน</option>
             </select>
             <p v-if="errors.type" class="mt-1 text-xs text-red-500">{{ errors.type }}</p>
           </div>
