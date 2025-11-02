@@ -166,7 +166,7 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex items-center justify-end space-x-3">
+      <div class="flex items-center justify-end space-x-3 bg-white p-4 rounded-lg border border-gray-200">
         <button
           type="button"
           @click="$router.back()"
@@ -178,6 +178,7 @@
           type="submit"
           :disabled="saving"
           class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+          @click="console.log('🖱️ Submit button clicked!')"
         >
           <svg v-if="saving" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -256,11 +257,16 @@ export default {
     },
 
     async handleSubmit() {
+      console.log('🎯 handleSubmit called!')
+      console.log('📝 Form data:', this.form)
+
       if (!this.validateForm()) {
+        console.log('❌ Validation failed:', this.errors)
         this.$toast?.error('กรุณากรอกข้อมูลให้ครบถ้วน')
         return
       }
 
+      console.log('✅ Validation passed!')
       this.saving = true
 
       try {
