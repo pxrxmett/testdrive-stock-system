@@ -126,15 +126,6 @@ export default function ({ $axios, app }, inject) {
       return api.$delete(`/events/${id}`)
     },
 
-    // Get event statistics
-    getStats() {
-      return api.$get('/events/stats').catch(error => {
-        // If endpoint doesn't exist, return empty stats
-        console.warn('Events stats endpoint not available:', error.message)
-        return { data: { total: 0, active: 0, bookedVehicles: 0, upcoming: 0 } }
-      })
-    },
-
     // Vehicle management for events
     assignVehicle(eventId, vehicleData) {
       return api.$post(`/events/${eventId}/vehicles`, vehicleData)
