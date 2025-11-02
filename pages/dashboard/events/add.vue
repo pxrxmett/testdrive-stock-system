@@ -269,10 +269,10 @@ export default {
       this.saving = true
 
       try {
-        // Get current user ID from auth
+        // Get current user ID from auth (using Vuex store)
         console.log('🔍 Checking auth...')
-        console.log('Auth object:', this.$auth)
-        const currentUser = this.$auth?.user
+        console.log('Store state:', this.$store.state.auth)
+        const currentUser = this.$store.state.auth?.user
         console.log('👤 Current user:', currentUser)
 
         if (!currentUser || !currentUser.id) {
@@ -300,7 +300,7 @@ export default {
         }
 
         console.log('📤 Creating event:', JSON.stringify(eventData, null, 2))
-        console.log('👤 Current user:', currentUser)
+        console.log('👤 Creating as user:', currentUser.username, '(ID:', currentUser.id, ')')
 
         const response = await this.$api.events.create(eventData)
         console.log('✅ Event created:', response)
