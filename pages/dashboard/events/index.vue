@@ -1154,7 +1154,7 @@ export default {
     },
     
     viewEvent(event) {
-      this.$toast?.info(`ดูรายละเอียดอีเวนต์ ${event.name}`)
+      this.$router.push(`/dashboard/events/${event.id}`)
     },
     
     editEvent(event) {
