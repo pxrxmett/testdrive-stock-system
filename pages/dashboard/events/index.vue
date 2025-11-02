@@ -1158,7 +1158,7 @@ export default {
     },
     
     editEvent(event) {
-      this.$toast?.info(`แก้ไขอีเวนต์ ${event.name}`)
+      this.$router.push(`/dashboard/events/${event.id}/edit`)
     },
     
     async deleteEvent(event) {
