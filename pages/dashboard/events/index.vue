@@ -297,8 +297,15 @@
                   {{ event.type }}
                 </span>
                 <span class="text-xs text-gray-500">
-                  {{ event.bookedVehicles.length }} รถถูกจอง
+                  {{ event.vehiclesCount || event.bookedVehicles.length }} รถถูกจอง
                 </span>
+              </div>
+
+              <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                <span>สร้างโดย: {{ event.creatorName || 'ไม่ระบุ' }}</span>
               </div>
 
               <!-- Auto Return Info -->
@@ -769,29 +776,57 @@ export default {
 
         console.log('📋 API Events Response:', apiData)
 
-        // Map API data to frontend format
-        this.events = apiData.map(event => {
-          console.log('🔍 Event vehicles:', event.id, event.vehicles, event.booked_vehicles, event.eventVehicles)
-          return {
-          id: event.id,
-          name: event.title || event.name,  // Backend uses 'title'
-          title: event.title || event.name,  // Keep both for compatibility
-          location: event.location,
-          startDate: event.start_date || event.startDate,
-          endDate: event.end_date || event.endDate,
-          status: this.mapAPIStatus(event.status),
-          type: this.mapAPIType(event.type),
-          bookedVehicles: Array.isArray(event.booked_vehicles || event.bookedVehicles || event.vehicles)
-            ? (event.booked_vehicles || event.bookedVehicles || event.vehicles).map(v => v.plateNumber || v.plate_number || v.carCard || v)
-            : [],
-          autoReturnEnabled: event.auto_return_enabled !== false,
-          autoReturnedAt: event.auto_returned_at || event.autoReturnedAt,
-          createdAt: event.created_at || event.createdAt
-        }
-      })
+        // Fetch vehicles for each event separately
+        const eventsWithVehicles = await Promise.all(
+          apiData.map(async (event) => {
+            // Fetch vehicles for this event
+            let vehiclesList = []
+            try {
+              const vehiclesResponse = await this.$api.events.getVehicles(event.id)
+              vehiclesList = Array.isArray(vehiclesResponse)
+                ? vehiclesResponse
+                : (vehiclesResponse.data || vehiclesResponse.vehicles || [])
+              console.log(`🚗 Event ${event.title}: ${vehiclesList.length} vehicles`)
+            } catch (err) {
+              console.error(`Error fetching vehicles for event ${event.id}:`, err)
+              vehiclesList = []
+            }
 
-        // Calculate stats from events data instead of separate API call
-        // Backend doesn't have /api/events/stats endpoint
+            // Fetch creator info if createdBy exists
+            let creatorName = 'ไม่ระบุ'
+            if (event.createdBy) {
+              try {
+                const creator = await this.$api.staffs.getById(event.createdBy)
+                creatorName = creator.name || creator.username || 'ไม่ระบุ'
+              } catch (err) {
+                console.error(`Error fetching creator for event ${event.id}:`, err)
+                creatorName = 'ไม่ระบุ'
+              }
+            }
+
+            return {
+              id: event.id,
+              name: event.title || event.name,
+              title: event.title || event.name,
+              location: event.location,
+              startDate: event.start_date || event.startDate,
+              endDate: event.end_date || event.endDate,
+              status: this.mapAPIStatus(event.status),
+              type: this.mapAPIType(event.type),
+              bookedVehicles: vehiclesList.map(v => v.plateNumber || v.plate_number || v.carCard || v.id),
+              vehiclesCount: vehiclesList.length,
+              autoReturnEnabled: event.auto_return_enabled !== false,
+              autoReturnedAt: event.auto_returned_at || event.autoReturnedAt,
+              createdAt: event.created_at || event.createdAt,
+              createdBy: event.createdBy,
+              creatorName: creatorName
+            }
+          })
+        )
+
+        this.events = eventsWithVehicles
+
+        // Calculate stats from events data
         this.updateEventStats()
       } catch (error) {
         console.error('Error fetching events:', error)
