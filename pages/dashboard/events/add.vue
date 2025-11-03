@@ -414,13 +414,20 @@ export default {
 
         console.log('🔍 Raw vehicles from API:', vehicles.slice(0, 2)) // Show first 2 vehicles
 
+        // Show ALL fields of first vehicle to identify UUID field
+        if (vehicles.length > 0) {
+          console.log('📋 ALL FIELDS of first vehicle:')
+          console.log(JSON.stringify(vehicles[0], null, 2))
+          console.log('🔑 Available field names:', Object.keys(vehicles[0]))
+        }
+
         // Filter only available vehicles
         this.availableVehicles = vehicles
           .filter(v => v.status === 'พร้อมใช้' || v.status === 'available')
           .map(v => {
             // Backend might use different field names for UUID
-            const vehicleId = v.vehicleId || v.vehicle_id || v.uuid || v.id
-            console.log(`🆔 Vehicle ${v.carCard}: id=${v.id}, vehicleId=${v.vehicleId}, uuid=${v.uuid}`)
+            const vehicleId = v.vehicleId || v.vehicle_id || v.uuid || v.stockId || v.stock_id || v.id
+            console.log(`🆔 Vehicle ${v.carCard}: Using vehicleId=${vehicleId} (type: ${typeof vehicleId})`)
             return {
               id: vehicleId, // Use the correct UUID field
               model: v.modelGeneral || v.model || v.modelCode || 'N/A',
