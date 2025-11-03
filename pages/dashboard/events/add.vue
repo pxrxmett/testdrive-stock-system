@@ -487,17 +487,44 @@ export default {
 
         console.log('✅ Vehicles assigned successfully, response:', result)
 
-        // Check for errors in response
-        if (result.errors && result.errors.length > 0) {
-          console.error('⚠️ Backend reported errors:', result.errors)
-        }
-        if (result.failed > 0) {
-          console.warn(`⚠️ ${result.failed} vehicles failed to assign out of ${this.selectedVehicles.length}`)
-        }
+        // Check assignment results
+        const successCount = result.success || 0
+        const failedCount = result.failed || 0
+        const totalCount = this.selectedVehicles.length
 
-        // Verify by fetching vehicles for this event
-        const verifyVehicles = await this.$api.events.getVehicles(eventId)
-        console.log('🔍 Verification - vehicles in event:', verifyVehicles)
+        if (successCount > 0 && failedCount === 0) {
+          // All vehicles assigned successfully
+          this.$toast?.success(`เพิ่มรถยนต์ ${successCount} คันเข้าอีเวนต์สำเร็จ`)
+        } else if (successCount > 0 && failedCount > 0) {
+          // Partial success
+          this.$toast?.warning(`เพิ่มรถยนต์สำเร็จ ${successCount} คัน แต่ล้มเหลว ${failedCount} คัน`)
+          console.error('⚠️ Partially failed. Errors:', result.errors)
+        } else if (successCount === 0 && failedCount > 0) {
+          // All failed - show detailed error
+          console.error('❌ All vehicles failed to assign. Errors:', result.errors)
+
+          // Parse first error to show user-friendly message
+          let errorMsg = 'ไม่สามารถเพิ่มรถยนต์เข้าอีเวนต์ได้'
+          if (result.errors && result.errors.length > 0) {
+            const firstError = result.errors[0]
+            if (firstError.includes('foreign key constraint')) {
+              errorMsg = '⚠️ ระบบมีปัญหา: ข้อมูลรถยนต์ไม่ตรงกับฐานข้อมูล\n\nกรุณาติดต่อผู้ดูแลระบบเพื่อแก้ไข database schema'
+            }
+          }
+
+          this.$toast?.error(errorMsg)
+
+          // Show alert with details for debugging
+          alert(
+            `❌ ไม่สามารถเพิ่มรถยนต์เข้าอีเวนต์ได้\n\n` +
+            `สาเหตุ: ${failedCount} คันล้มเหลวทั้งหมด\n\n` +
+            `นี่เป็นปัญหาจาก Backend Database Schema:\n` +
+            `- Table event_vehicles foreign key ชี้ไปที่ table vehicles\n` +
+            `- แต่รถยนต์ที่เลือก (ID: ${this.selectedVehicles.join(', ')}) อยู่ใน table stock\n\n` +
+            `กรุณาติดต่อ Backend Developer เพื่อแก้ไข foreign key constraint\n\n` +
+            `Event ID: ${eventId}`
+          )
+        }
       } catch (error) {
         console.error('❌ Error assigning vehicles:', error)
         console.error('Error details:', {
@@ -505,7 +532,7 @@ export default {
           response: error.response?.data,
           status: error.response?.status
         })
-        this.$toast?.warning('สร้างอีเวนต์สำเร็จ แต่ไม่สามารถเพิ่มรถยนต์ได้')
+        this.$toast?.error('เกิดข้อผิดพลาดในการเพิ่มรถยนต์')
       }
     }
   },
