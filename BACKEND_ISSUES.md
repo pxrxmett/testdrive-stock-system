@@ -1,6 +1,147 @@
 # 🐛 Backend Issues - ต้องแก้ไข
 
-## ❌ CRITICAL: Vehicle Assignment Foreign Key Error
+## ❌ CRITICAL #1: Missing Vehicle Update Endpoint
+
+### ปัญหา
+**Frontend ไม่สามารถแก้ไขข้อมูล vehicle ได้** เพราะ Backend ไม่มี endpoint สำหรับ update vehicle!
+
+จาก Swagger API documentation พบว่ามีเฉพาะ:
+```
+✅ POST /api/stock                          - สร้าง vehicle ใหม่
+✅ GET /api/stock/{id}                      - อ่านข้อมูล vehicle
+✅ PATCH /api/stock/vehicles/{id}/status    - แก้ไขเฉพาะ status
+✅ DELETE /api/stock/vehicles/{id}          - ลบ vehicle
+
+❌ PATCH /api/stock/{id}                    - ไม่มี!
+❌ PUT /api/stock/{id}                      - ไม่มี!
+❌ PATCH /api/stock/vehicles/{id}           - ไม่มี!
+❌ PUT /api/stock/vehicles/{id}             - ไม่มี!
+```
+
+**ขาด endpoint สำหรับ Update ข้อมูลทั้งหมด!**
+
+### Impact
+- หน้า `/dashboard/stock/{id}/edit` ใช้งานไม่ได้
+- Admin ไม่สามารถแก้ไข:
+  - ทะเบียนรถ (plate_number)
+  - รุ่น (model)
+  - สี (color)
+  - ราคา (price)
+  - ปี (year)
+  - ฯลฯ
+- แก้ได้แค่ status เท่านั้น (ผ่าน updateStatus endpoint)
+
+### วิธีแก้
+
+**เพิ่ม endpoint ใหม่ใน Backend:**
+
+#### Option 1: PATCH /api/stock/vehicles/{id} (แนะนำ)
+
+```typescript
+// src/stock/stock.controller.ts
+
+@Patch('vehicles/:id')
+@ApiOperation({ summary: 'Update vehicle information' })
+@ApiParam({ name: 'id', type: 'number', description: 'Vehicle ID' })
+async updateVehicle(
+  @Param('id') id: number,
+  @Body() updateDto: UpdateVehicleDto
+) {
+  return this.stockService.update(id, updateDto);
+}
+```
+
+#### Option 2: PUT /api/stock/{id}
+
+```typescript
+@Put(':id')
+@ApiOperation({ summary: 'Update vehicle (full replacement)' })
+async replaceVehicle(
+  @Param('id') id: number,
+  @Body() updateDto: UpdateVehicleDto
+) {
+  return this.stockService.update(id, updateDto);
+}
+```
+
+### DTO Example
+
+```typescript
+// src/stock/dto/update-vehicle.dto.ts
+
+export class UpdateVehicleDto {
+  @IsOptional()
+  @IsString()
+  model?: string;
+
+  @IsOptional()
+  @IsString()
+  plate_number?: string;
+
+  @IsOptional()
+  @IsString()
+  color?: string;
+
+  @IsOptional()
+  @IsNumber()
+  year?: number;
+
+  @IsOptional()
+  @IsNumber()
+  price?: number;
+
+  @IsOptional()
+  @IsEnum(['available', 'in_use', 'maintenance', 'reserved'])
+  status?: string;
+
+  // ... other fields
+}
+```
+
+### Expected Request/Response
+
+**Request:**
+```http
+PATCH /api/stock/vehicles/154
+Content-Type: application/json
+
+{
+  "model": "BYD DOLPHIN (435KM-STD)",
+  "plate_number": "คก-2366",
+  "color": "WHITE",
+  "year": 2025,
+  "price": 826000,
+  "status": "available"
+}
+```
+
+**Response:**
+```json
+{
+  "id": 154,
+  "model": "BYD DOLPHIN (435KM-STD)",
+  "plate_number": "คก-2366",
+  "color": "WHITE",
+  "year": 2025,
+  "price": 826000,
+  "status": "available",
+  "updated_at": "2025-11-03T12:00:00Z"
+}
+```
+
+### Frontend Code (Ready to use)
+
+Frontend `/pages/dashboard/stock/_id/edit.vue` พร้อมแล้ว:
+```javascript
+// Line 189
+await this.$api.stock.update(this.vehicleId, vehicleData)
+```
+
+เมื่อ Backend เพิ่ม endpoint แล้ว Frontend จะใช้งานได้ทันที (ไม่ต้องแก้อะไร)
+
+---
+
+## ❌ CRITICAL #2: Vehicle Assignment Foreign Key Error
 
 ### ปัญหา
 เมื่อพยายาม assign รถยนต์เข้า event ผ่าน endpoint:
