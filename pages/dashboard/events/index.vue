@@ -783,24 +783,27 @@ export default {
             let vehiclesList = []
             try {
               const vehiclesResponse = await this.$api.events.getVehicles(event.id)
+              console.log(`📦 Raw vehicles response for ${event.title}:`, vehiclesResponse)
               vehiclesList = Array.isArray(vehiclesResponse)
                 ? vehiclesResponse
                 : (vehiclesResponse.data || vehiclesResponse.vehicles || [])
-              console.log(`🚗 Event ${event.title}: ${vehiclesList.length} vehicles`)
+              console.log(`🚗 Event ${event.title}: ${vehiclesList.length} vehicles`, vehiclesList)
             } catch (err) {
               console.error(`Error fetching vehicles for event ${event.id}:`, err)
               vehiclesList = []
             }
 
-            // Fetch creator info if createdBy exists
+            // Get creator name - use current user info if it's them
             let creatorName = 'ไม่ระบุ'
             if (event.createdBy) {
-              try {
-                const creator = await this.$api.staffs.getById(event.createdBy)
-                creatorName = creator.name || creator.username || 'ไม่ระบุ'
-              } catch (err) {
-                console.error(`Error fetching creator for event ${event.id}:`, err)
-                creatorName = 'ไม่ระบุ'
+              const currentUser = this.$store.state.auth?.user
+              if (currentUser && currentUser.id === event.createdBy) {
+                // Event created by current user
+                creatorName = currentUser.name || currentUser.username || 'คุณ'
+              } else {
+                // Event created by someone else - just show "Admin" or "Staff"
+                // Backend doesn't have /staffs/{id} endpoint yet
+                creatorName = 'Admin'
               }
             }
 
