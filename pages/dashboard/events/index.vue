@@ -442,6 +442,80 @@
       </section>
     </main>
 
+    <!-- Delete Confirmation Modal -->
+    <div v-if="showDeleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
+      <div class="relative mx-auto p-8 border w-full max-w-md shadow-2xl rounded-xl bg-white">
+        <!-- Icon -->
+        <div class="flex items-center justify-center w-16 h-16 mx-auto bg-red-100 rounded-full mb-4">
+          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+        </div>
+
+        <!-- Content -->
+        <div class="text-center">
+          <h3 class="text-xl font-bold text-gray-900 mb-2">ยืนยันการลบอีเวนต์</h3>
+          <p class="text-sm text-gray-600 mb-4">การดำเนินการนี้ไม่สามารถย้อนกลับได้</p>
+
+          <!-- Event Info -->
+          <div v-if="eventToDelete" class="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+            <div class="space-y-2">
+              <div class="flex items-start">
+                <svg class="w-5 h-5 text-gray-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"/>
+                </svg>
+                <div class="flex-1">
+                  <p class="text-xs text-gray-500">อีเวนต์</p>
+                  <p class="font-medium text-gray-900">{{ eventToDelete.title || eventToDelete.name }}</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <svg class="w-5 h-5 text-gray-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                </svg>
+                <div class="flex-1">
+                  <p class="text-xs text-gray-500">สถานที่</p>
+                  <p class="font-medium text-gray-900">{{ eventToDelete.location }}</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <svg class="w-5 h-5 text-gray-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                </svg>
+                <div class="flex-1">
+                  <p class="text-xs text-gray-500">รถที่จอง</p>
+                  <p class="font-medium text-gray-900">{{ eventToDelete.bookedVehicles?.length || 0 }} คัน</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center justify-end space-x-3">
+            <button
+              @click="cancelDelete"
+              class="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+            >
+              ยกเลิก
+            </button>
+            <button
+              @click="confirmDelete"
+              :disabled="deleting"
+              class="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+            >
+              <svg v-if="deleting" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{{ deleting ? 'กำลังลบ...' : 'ลบอีเวนต์' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Create Event Modal -->
     <div v-if="showEventModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-10 mx-auto p-6 border w-full max-w-2xl shadow-lg rounded-lg bg-white">
@@ -613,6 +687,9 @@ export default {
       filterDate: '',
       showEventModal: false,
       showOverdueModal: false,
+      showDeleteModal: false,
+      eventToDelete: null,
+      deleting: false,
       systemSettings: {
         autoReturnEnabled: true,
         gracePeriodDays: 3,
@@ -1158,35 +1235,43 @@ export default {
       this.$router.push(`/dashboard/events/${event.id}/edit`)
     },
     
-    async deleteEvent(event) {
-      // Show confirmation dialog
-      const confirmed = confirm(
-        `⚠️ ยืนยันการลบอีเวนต์\n\n` +
-        `อีเวนต์: ${event.name || event.title}\n` +
-        `สถานที่: ${event.location}\n` +
-        `รถที่จอง: ${event.bookedVehicles.length} คัน\n\n` +
-        `คุณแน่ใจหรือไม่? การดำเนินการนี้ไม่สามารถย้อนกลับได้`
-      )
+    deleteEvent(event) {
+      // Show modal instead of browser confirm
+      this.eventToDelete = event
+      this.showDeleteModal = true
+    },
 
-      if (!confirmed) {
-        return
-      }
+    cancelDelete() {
+      this.showDeleteModal = false
+      this.eventToDelete = null
+    },
+
+    async confirmDelete() {
+      if (!this.eventToDelete) return
 
       try {
+        this.deleting = true
+
         // Call API to delete event
-        await this.$api.events.delete(event.id)
+        await this.$api.events.delete(this.eventToDelete.id)
 
         // Remove from local array
-        const index = this.events.findIndex(e => e.id === event.id)
+        const index = this.events.findIndex(e => e.id === this.eventToDelete.id)
         if (index !== -1) {
           this.events.splice(index, 1)
           this.updateEventStats()
         }
 
-        this.$toast?.success(`ลบอีเวนต์ "${event.name || event.title}" เรียบร้อยแล้ว`)
+        this.$toast?.success(`ลบอีเวนต์ "${this.eventToDelete.name || this.eventToDelete.title}" เรียบร้อยแล้ว`)
+
+        // Close modal
+        this.showDeleteModal = false
+        this.eventToDelete = null
       } catch (error) {
         console.error('Error deleting event:', error)
         this.$toast?.error('ไม่สามารถลบอีเวนต์ได้')
+      } finally {
+        this.deleting = false
       }
     },
     

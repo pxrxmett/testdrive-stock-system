@@ -117,6 +117,62 @@
         </div>
       </div>
     </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div v-if="showDeleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+      <div class="relative mx-auto p-8 border w-full max-w-md shadow-2xl rounded-xl bg-white">
+        <!-- Icon -->
+        <div class="flex items-center justify-center w-16 h-16 mx-auto bg-red-100 rounded-full mb-4">
+          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </div>
+
+        <!-- Title -->
+        <h3 class="text-xl font-bold text-gray-900 text-center mb-2">
+          ยืนยันการลบอีเวนต์
+        </h3>
+
+        <!-- Warning Text -->
+        <p class="text-sm text-gray-600 text-center mb-6">
+          การดำเนินการนี้ไม่สามารถย้อนกลับได้
+        </p>
+
+        <!-- Event Info Display -->
+        <div v-if="event" class="bg-gray-50 rounded-lg p-4 mb-6 space-y-2">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600">อีเวนต์:</span>
+            <span class="font-medium text-gray-900">{{ event.title }}</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600">สถานที่:</span>
+            <span class="font-medium text-gray-900">{{ event.location }}</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600">รถที่จอง:</span>
+            <span class="font-medium text-gray-900">{{ vehicles.length }} คัน</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex space-x-3">
+          <button
+            @click="cancelDelete"
+            :disabled="deleting"
+            class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            ยกเลิก
+          </button>
+          <button
+            @click="confirmDelete"
+            :disabled="deleting"
+            class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {{ deleting ? 'กำลังลบ...' : 'ลบอีเวนต์' }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -129,7 +185,10 @@ export default {
       event: null,
       vehicles: [],
       loading: true,
-      error: null
+      error: null,
+      allEvents: [],
+      showDeleteModal: false,
+      deleting: false
     }
   },
   async mounted() {
@@ -140,6 +199,17 @@ export default {
       try {
         this.loading = true
         const eventId = this.$route.params.id
+
+        // Fetch all events to get proper index for Event ID
+        try {
+          const allEventsResponse = await this.$api.events.getAll()
+          this.allEvents = Array.isArray(allEventsResponse)
+            ? allEventsResponse
+            : (allEventsResponse.data || [])
+        } catch (err) {
+          console.error('Error fetching all events:', err)
+          this.allEvents = []
+        }
 
         // Fetch event details
         const event = await this.$api.events.getById(eventId)
@@ -165,10 +235,13 @@ export default {
 
     formatEventId(uuid) {
       if (!uuid) return 'N/A'
-      // For details page, just use a simple hash-based ID
-      const hash = uuid.substring(0, 8)
-      const num = parseInt(hash, 16) % 1000
-      return `EVT-${String(num).padStart(3, '0')}`
+      // Find the index in all events array
+      const eventIndex = this.allEvents.findIndex(e => e.id === uuid)
+      if (eventIndex !== -1) {
+        return `EVT-${String(eventIndex + 1).padStart(3, '0')}`
+      }
+      // Fallback if not found in array
+      return 'EVT-000'
     },
 
     formatDate(dateString) {
@@ -230,17 +303,26 @@ export default {
       return 'text-gray-700 bg-gray-50'
     },
 
-    async deleteEvent() {
-      const confirmed = confirm(`ยืนยันการลบอีเวนต์ "${this.event.title}" หรือไม่?`)
-      if (!confirmed) return
+    deleteEvent() {
+      this.showDeleteModal = true
+    },
 
+    cancelDelete() {
+      this.showDeleteModal = false
+    },
+
+    async confirmDelete() {
       try {
+        this.deleting = true
         await this.$api.events.delete(this.event.id)
         this.$toast?.success('ลบอีเวนต์เรียบร้อยแล้ว')
         this.$router.push('/dashboard/events')
       } catch (error) {
         console.error('Error deleting event:', error)
         this.$toast?.error('ไม่สามารถลบอีเวนต์ได้')
+        this.showDeleteModal = false
+      } finally {
+        this.deleting = false
       }
     }
   }
