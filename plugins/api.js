@@ -76,7 +76,7 @@ export default function ({ $axios, app }, inject) {
     },
 
     update(id, data) {
-      return api.$patch(`/stock/${id}`, data)
+      return api.$patch(`/stock/vehicles/${id}`, data)
     },
 
     updateStatus(id, status) {
