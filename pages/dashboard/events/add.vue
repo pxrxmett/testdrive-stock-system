@@ -412,18 +412,26 @@ export default {
         const response = await this.$api.stock.getAll()
         const vehicles = Array.isArray(response) ? response : (response.data || response.vehicles || response.stock || [])
 
+        console.log('🔍 Raw vehicles from API:', vehicles.slice(0, 2)) // Show first 2 vehicles
+
         // Filter only available vehicles
         this.availableVehicles = vehicles
           .filter(v => v.status === 'พร้อมใช้' || v.status === 'available')
-          .map(v => ({
-            id: v.id,
-            model: v.modelGeneral || v.model || v.modelCode || 'N/A',
-            plateNumber: v.carCard || v.plate_number || v.plateNumber || 'ไม่มีทะเบียน',
-            category: v.type || v.category || 'ไม่ระบุ',
-            status: v.status || 'ไม่ระบุ'
-          }))
+          .map(v => {
+            // Backend might use different field names for UUID
+            const vehicleId = v.vehicleId || v.vehicle_id || v.uuid || v.id
+            console.log(`🆔 Vehicle ${v.carCard}: id=${v.id}, vehicleId=${v.vehicleId}, uuid=${v.uuid}`)
+            return {
+              id: vehicleId, // Use the correct UUID field
+              model: v.modelGeneral || v.model || v.modelCode || 'N/A',
+              plateNumber: v.carCard || v.plate_number || v.plateNumber || 'ไม่มีทะเบียน',
+              category: v.type || v.category || 'ไม่ระบุ',
+              status: v.status || 'ไม่ระบุ'
+            }
+          })
 
         console.log('📦 Loaded', this.availableVehicles.length, 'available vehicles')
+        console.log('✅ First vehicle ID:', this.availableVehicles[0]?.id)
       } catch (error) {
         console.error('Error fetching vehicles:', error)
         this.$toast?.error('ไม่สามารถโหลดข้อมูลรถยนต์ได้')
@@ -463,6 +471,14 @@ export default {
         })
 
         console.log('✅ Vehicles assigned successfully, response:', result)
+
+        // Check for errors in response
+        if (result.errors && result.errors.length > 0) {
+          console.error('⚠️ Backend reported errors:', result.errors)
+        }
+        if (result.failed > 0) {
+          console.warn(`⚠️ ${result.failed} vehicles failed to assign out of ${this.selectedVehicles.length}`)
+        }
 
         // Verify by fetching vehicles for this event
         const verifyVehicles = await this.$api.events.getVehicles(eventId)
