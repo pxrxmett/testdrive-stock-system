@@ -908,11 +908,19 @@ export default {
       // Convert UUID to readable Event ID (e.g., EVT-001)
       if (!uuid) return 'N/A'
 
-      // Find the index of this event in the current array
-      const eventIndex = this.events.findIndex(e => e.id === uuid)
+      // Sort events by creation date (oldest first) to get consistent numbering
+      const sortedEvents = [...this.events].sort((a, b) => {
+        const dateA = new Date(a.createdAt || 0)
+        const dateB = new Date(b.createdAt || 0)
+        return dateA - dateB
+      })
+
+      // Find the index of this event in the sorted array
+      const eventIndex = sortedEvents.findIndex(e => e.id === uuid)
 
       if (eventIndex !== -1) {
         // Use index + 1 for sequential numbering (EVT-001, EVT-002, etc.)
+        // Event created first = EVT-001, second = EVT-002, etc.
         return `EVT-${String(eventIndex + 1).padStart(3, '0')}`
       }
 

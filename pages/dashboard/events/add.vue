@@ -424,13 +424,20 @@ export default {
 
         // Filter only available vehicles
         this.availableVehicles = vehicles
-          .filter(v => v.status === 'พร้อมใช้' || v.status === 'available')
+          .filter(v => {
+            const status = v.status || ''
+            // Support different status values
+            return status === 'พร้อมใช้' ||
+                   status === 'พร้อมใช้งาน' ||
+                   status === 'available' ||
+                   status.toLowerCase() === 'available'
+          })
           .map(v => {
-            // Backend might use different field names for UUID
-            const vehicleId = v.vehicleId || v.vehicle_id || v.uuid || v.stockId || v.stock_id || v.id
+            // Use id field directly (it's the integer from stock table)
+            const vehicleId = v.id
             console.log(`🆔 Vehicle ${v.carCard}: Using vehicleId=${vehicleId} (type: ${typeof vehicleId})`)
             return {
-              id: vehicleId, // Use the correct UUID field
+              id: vehicleId,
               model: v.modelGeneral || v.model || v.modelCode || 'N/A',
               plateNumber: v.carCard || v.plate_number || v.plateNumber || 'ไม่มีทะเบียน',
               category: v.type || v.category || 'ไม่ระบุ',
