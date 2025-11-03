@@ -235,9 +235,18 @@ export default {
 
     formatEventId(uuid) {
       if (!uuid) return 'N/A'
-      // Find the index in all events array
-      const eventIndex = this.allEvents.findIndex(e => e.id === uuid)
+
+      // Sort events by creation date (oldest first) to get consistent numbering
+      const sortedEvents = [...this.allEvents].sort((a, b) => {
+        const dateA = new Date(a.createdAt || 0)
+        const dateB = new Date(b.createdAt || 0)
+        return dateA - dateB
+      })
+
+      // Find the index in sorted array
+      const eventIndex = sortedEvents.findIndex(e => e.id === uuid)
       if (eventIndex !== -1) {
+        // Event created first = EVT-001, second = EVT-002, etc.
         return `EVT-${String(eventIndex + 1).padStart(3, '0')}`
       }
       // Fallback if not found in array
