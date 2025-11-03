@@ -448,21 +448,32 @@ export default {
 
     async assignVehiclesToEvent(eventId) {
       if (this.selectedVehicles.length === 0) {
+        console.log('⚠️ No vehicles selected, skipping assignment')
         return
       }
 
       try {
         console.log('🚗 Assigning', this.selectedVehicles.length, 'vehicles to event', eventId)
+        console.log('📋 Vehicle IDs:', this.selectedVehicles)
 
         // Use the API endpoint to assign vehicles
-        // POST /api/events/{id}/assign-vehicles with { vehicleIds: [...] }
-        await this.$api.events.assignVehicles(eventId, {
+        // POST /api/events/{id}/vehicles/batch with { vehicleIds: [...] }
+        const result = await this.$api.events.assignVehicles(eventId, {
           vehicleIds: this.selectedVehicles
         })
 
-        console.log('✅ Vehicles assigned successfully')
+        console.log('✅ Vehicles assigned successfully, response:', result)
+
+        // Verify by fetching vehicles for this event
+        const verifyVehicles = await this.$api.events.getVehicles(eventId)
+        console.log('🔍 Verification - vehicles in event:', verifyVehicles)
       } catch (error) {
-        console.error('Error assigning vehicles:', error)
+        console.error('❌ Error assigning vehicles:', error)
+        console.error('Error details:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status
+        })
         this.$toast?.warning('สร้างอีเวนต์สำเร็จ แต่ไม่สามารถเพิ่มรถยนต์ได้')
       }
     }
