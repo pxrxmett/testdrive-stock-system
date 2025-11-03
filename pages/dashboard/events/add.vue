@@ -409,7 +409,8 @@ export default {
     async fetchVehicles() {
       try {
         this.loadingVehicles = true
-        const response = await this.$api.stock.getAll()
+        // Try /stock/vehicles endpoint instead of /stock
+        const response = await this.$api.stock.getVehicles()
         const vehicles = Array.isArray(response) ? response : (response.data || response.vehicles || response.stock || [])
 
         console.log('🔍 Raw vehicles from API:', vehicles.slice(0, 2)) // Show first 2 vehicles
