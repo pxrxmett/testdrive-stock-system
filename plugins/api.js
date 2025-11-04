@@ -186,6 +186,10 @@ export default function ({ $axios, app }, inject) {
       return api.$post('/auth/refresh-token', { refreshToken })
     },
 
+    changePassword(data) {
+      return api.$post('/auth/change-password', data)
+    },
+
     lineLogin(data) {
       return api.$post('/auth/line-login', data)
     }
@@ -221,6 +225,48 @@ export default function ({ $axios, app }, inject) {
     }
   }
 
+  // Users API
+  const users = {
+    getProfile() {
+      return api.$get('/users/profile')
+    },
+
+    updateProfile(data) {
+      return api.$patch('/users/profile', data)
+    },
+
+    getSettings() {
+      return api.$get('/users/settings')
+    },
+
+    updateNotificationSettings(data) {
+      return api.$patch('/users/settings/notifications', data)
+    },
+
+    updateSystemSettings(data) {
+      return api.$patch('/users/settings/system', data)
+    }
+  }
+
+  // Analytics API
+  const analytics = {
+    getDashboard(params = {}) {
+      return api.$get('/analytics/dashboard', { params })
+    },
+
+    getVehicleStatistics(params = {}) {
+      return api.$get('/analytics/vehicles/statistics', { params })
+    },
+
+    getEventStatistics(params = {}) {
+      return api.$get('/analytics/events/statistics', { params })
+    },
+
+    getTestDriveStatistics(params = {}) {
+      return api.$get('/analytics/test-drives/statistics', { params })
+    }
+  }
+
   // Inject structured API with methods
   inject('api', {
     // Keep raw axios instance for backwards compatibility
@@ -231,6 +277,8 @@ export default function ({ $axios, app }, inject) {
     stock,
     events,
     staffs,
-    lineIntegration
+    lineIntegration,
+    users,
+    analytics
   })
 }

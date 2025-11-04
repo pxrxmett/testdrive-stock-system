@@ -421,10 +421,8 @@ export default {
 
     async saveProfile() {
       try {
-        // Future Enhancement: Implement API call to update profile
-        // await this.$api.users.updateProfile(this.profileForm)
-
-        this.$toast?.info('ฟีเจอร์นี้จะพัฒนาในเวอร์ชันถัดไป')
+        await this.$api.users.updateProfile(this.profileForm)
+        this.$toast?.success('บันทึกข้อมูลส่วนตัวสำเร็จ')
         this.hasChanges = false
       } catch (error) {
         console.error('Error saving profile:', error)
@@ -444,13 +442,12 @@ export default {
       }
 
       try {
-        // Future Enhancement: Implement API call to change password
-        // await this.$api.auth.changePassword({
-        //   currentPassword: this.securityForm.currentPassword,
-        //   newPassword: this.securityForm.newPassword
-        // })
+        await this.$api.auth.changePassword({
+          currentPassword: this.securityForm.currentPassword,
+          newPassword: this.securityForm.newPassword
+        })
 
-        this.$toast?.info('ฟีเจอร์นี้จะพัฒนาในเวอร์ชันถัดไป')
+        this.$toast?.success('เปลี่ยนรหัสผ่านสำเร็จ')
         this.securityForm = {
           currentPassword: '',
           newPassword: '',
@@ -459,16 +456,19 @@ export default {
         }
       } catch (error) {
         console.error('Error changing password:', error)
-        this.$toast?.error('ไม่สามารถเปลี่ยนรหัสผ่านได้')
+        if (error.response?.status === 401) {
+          this.$toast?.error('รหัสผ่านปัจจุบันไม่ถูกต้อง')
+        } else {
+          this.$toast?.error('ไม่สามารถเปลี่ยนรหัสผ่านได้')
+        }
       }
     },
 
     async saveNotifications() {
       try {
+        await this.$api.users.updateNotificationSettings(this.notificationForm)
         localStorage.setItem('notification-settings', JSON.stringify(this.notificationForm))
-        // Future Enhancement: Implement API call to save notification preferences
-        // await this.$api.users.updateNotificationSettings(this.notificationForm)
-        this.$toast?.info('การตั้งค่าบันทึกแล้ว (เฉพาะในเบราว์เซอร์)')
+        this.$toast?.success('บันทึกการตั้งค่าการแจ้งเตือนสำเร็จ')
         this.hasChanges = false
       } catch (error) {
         console.error('Error saving notifications:', error)
@@ -478,10 +478,9 @@ export default {
 
     async saveSystem() {
       try {
+        await this.$api.users.updateSystemSettings(this.systemForm)
         localStorage.setItem('system-settings', JSON.stringify(this.systemForm))
-        // Future Enhancement: Implement API call to apply system settings (language, timezone, etc.)
-        // await this.$api.users.updateSystemSettings(this.systemForm)
-        this.$toast?.info('การตั้งค่าบันทึกแล้ว (เฉพาะในเบราว์เซอร์)')
+        this.$toast?.success('บันทึกการตั้งค่าระบบสำเร็จ')
         this.hasChanges = false
       } catch (error) {
         console.error('Error saving system settings:', error)
