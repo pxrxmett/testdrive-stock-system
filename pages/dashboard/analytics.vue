@@ -8,15 +8,15 @@
       </div>
       <div class="flex items-center space-x-2">
         <button
-          @click="period = '6months'; loadAnalytics()"
-          :class="period === '6months' ? 'btn-primary' : 'btn-secondary'"
+          @click="period = 6; loadAnalytics()"
+          :class="period === 6 ? 'btn-primary' : 'btn-secondary'"
           class="text-sm"
         >
           6 เดือน
         </button>
         <button
-          @click="period = '12months'; loadAnalytics()"
-          :class="period === '12months' ? 'btn-primary' : 'btn-secondary'"
+          @click="period = 12; loadAnalytics()"
+          :class="period === 12 ? 'btn-primary' : 'btn-secondary'"
           class="text-sm"
         >
           12 เดือน
@@ -166,7 +166,7 @@ export default {
 
   data() {
     return {
-      period: '12months',
+      period: 12, // Changed from '12months' to just the number
       loading: false,
       error: null,
       dashboardStats: null,
@@ -186,12 +186,17 @@ export default {
       this.error = null
 
       try {
+        console.log('📊 Loading analytics with period:', this.period)
+
+        // Try without parameters first, then with period
+        const params = this.period ? { period: this.period } : {}
+
         // Load all analytics data in parallel
         const [dashboard, vehicles, events, testDrives] = await Promise.all([
-          this.$api.analytics.getDashboard({ period: this.period }),
-          this.$api.analytics.getVehicleStatistics({ period: this.period }),
-          this.$api.analytics.getEventStatistics({ period: this.period }),
-          this.$api.analytics.getTestDriveStatistics({ period: this.period })
+          this.$api.analytics.getDashboard(params),
+          this.$api.analytics.getVehicleStatistics(params),
+          this.$api.analytics.getEventStatistics(params),
+          this.$api.analytics.getTestDriveStatistics(params)
         ])
 
         this.dashboardStats = dashboard
@@ -206,8 +211,12 @@ export default {
           testDrives
         })
       } catch (error) {
-        console.error('Error loading analytics:', error)
-        this.error = 'ไม่สามารถโหลดข้อมูลสถิติได้ กรุณาลองใหม่อีกครั้ง'
+        console.error('❌ Error loading analytics:', error)
+        console.error('Response data:', error.response?.data)
+        console.error('Response status:', error.response?.status)
+
+        const errorMsg = error.response?.data?.message || error.message
+        this.error = `ไม่สามารถโหลดข้อมูลสถิติได้: ${errorMsg}`
       } finally {
         this.loading = false
       }
