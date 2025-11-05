@@ -314,17 +314,17 @@ export default {
       this.submitting = true
 
       try {
-        // Prepare update data in API format
+        // Prepare update data in API format (camelCase for Backend)
         const updateData = {
           model: this.formData.model.trim(),
-          plate_number: this.formData.plate_number.trim(),
+          plateNumber: this.formData.plate_number.trim(),  // Changed from plate_number
           color: this.formData.color.trim(),
           year: parseInt(this.formData.year),
           price: this.formData.price ? parseInt(this.formData.price) : null,
           status: this.formData.status,
           vin: this.formData.vin?.trim() || null,
-          chassis_number: this.formData.chassis_number?.trim() || null,
-          engine_number: this.formData.engine_number?.trim() || null,
+          chassisNumber: this.formData.chassis_number?.trim() || null,  // Changed from chassis_number
+          engineNumber: this.formData.engine_number?.trim() || null,    // Changed from engine_number
           notes: this.formData.notes?.trim() || null
         }
 

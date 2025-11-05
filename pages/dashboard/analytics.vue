@@ -6,6 +6,8 @@
         <h1 class="text-2xl font-bold text-gray-900">รายงานและสถิติ</h1>
         <p class="text-gray-600">ดูสถิติและรายงานการใช้งานระบบ</p>
       </div>
+      <!-- Period filter buttons hidden until backend supports it -->
+      <!--
       <div class="flex items-center space-x-2">
         <button
           @click="period = 6; loadAnalytics()"
@@ -22,6 +24,7 @@
           12 เดือน
         </button>
       </div>
+      -->
     </div>
 
     <!-- Loading State -->
@@ -186,17 +189,15 @@ export default {
       this.error = null
 
       try {
-        console.log('📊 Loading analytics with period:', this.period)
+        console.log('📊 Loading analytics (period filter not yet supported by backend)')
 
-        // Try without parameters first, then with period
-        const params = this.period ? { period: this.period } : {}
-
+        // Backend doesn't support period parameter yet, load without parameters
         // Load all analytics data in parallel
         const [dashboard, vehicles, events, testDrives] = await Promise.all([
-          this.$api.analytics.getDashboard(params),
-          this.$api.analytics.getVehicleStatistics(params),
-          this.$api.analytics.getEventStatistics(params),
-          this.$api.analytics.getTestDriveStatistics(params)
+          this.$api.analytics.getDashboard(),
+          this.$api.analytics.getVehicleStatistics(),
+          this.$api.analytics.getEventStatistics(),
+          this.$api.analytics.getTestDriveStatistics()
         ])
 
         this.dashboardStats = dashboard
