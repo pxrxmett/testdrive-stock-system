@@ -21,16 +21,20 @@
         >
           บันทึกแบบร่าง
         </button>
-        <button 
+        <button
           @click="submitForm"
-          :disabled="!isFormValid"
+          :disabled="!isFormValid || submitting"
           :class="[
             'btn-primary flex items-center space-x-2',
-            !isFormValid ? 'opacity-50 cursor-not-allowed' : ''
+            (!isFormValid || submitting) ? 'opacity-50 cursor-not-allowed' : ''
           ]"
         >
-          <Icon name="check" icon-class="w-4 h-4" />
-          <span>บันทึกคิว</span>
+          <svg v-if="submitting" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <Icon v-else name="check" icon-class="w-4 h-4" />
+          <span>{{ submitting ? 'กำลังบันทึก...' : 'บันทึกคิว' }}</span>
         </button>
       </div>
     </div>
@@ -359,6 +363,7 @@ export default {
         notes: ''
       },
       errors: {},
+      submitting: false,
       availableTimeSlots: [
         '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
         '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
@@ -421,6 +426,8 @@ export default {
         return
       }
 
+      this.submitting = true
+
       try {
         // Map frontend data to API format
         const testDriveData = {
@@ -473,6 +480,8 @@ export default {
         }
 
         this.$toast?.error(errorMessage)
+      } finally {
+        this.submitting = false
       }
     },
     
