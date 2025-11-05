@@ -191,33 +191,49 @@ export default {
       try {
         console.log('📊 Loading analytics (period filter not yet supported by backend)')
 
-        // Backend doesn't support period parameter yet, load without parameters
-        // Load all analytics data in parallel
-        const [dashboard, vehicles, events, testDrives] = await Promise.all([
-          this.$api.analytics.getDashboard(),
-          this.$api.analytics.getVehicleStatistics(),
-          this.$api.analytics.getEventStatistics(),
-          this.$api.analytics.getTestDriveStatistics()
+        // Load each endpoint separately with individual error handling
+        // This allows partial data display if some endpoints fail
+        const results = await Promise.allSettled([
+          this.$api.analytics.getDashboard().catch(e => {
+            console.warn('Dashboard stats failed:', e.response?.data?.message)
+            return null
+          }),
+          this.$api.analytics.getVehicleStatistics().catch(e => {
+            console.warn('Vehicle stats failed:', e.response?.data?.message)
+            return null
+          }),
+          this.$api.analytics.getEventStatistics().catch(e => {
+            console.warn('Event stats failed:', e.response?.data?.message)
+            return null
+          }),
+          this.$api.analytics.getTestDriveStatistics().catch(e => {
+            console.warn('Test drive stats failed:', e.response?.data?.message)
+            return null
+          })
         ])
 
-        this.dashboardStats = dashboard
-        this.vehicleStats = vehicles
-        this.eventStats = events
-        this.testDriveStats = testDrives
+        // Extract successful results
+        this.dashboardStats = results[0].status === 'fulfilled' ? results[0].value : null
+        this.vehicleStats = results[1].status === 'fulfilled' ? results[1].value : null
+        this.eventStats = results[2].status === 'fulfilled' ? results[2].value : null
+        this.testDriveStats = results[3].status === 'fulfilled' ? results[3].value : null
 
-        console.log('✅ Analytics loaded:', {
-          dashboard,
-          vehicles,
-          events,
-          testDrives
-        })
+        // Check if any data loaded successfully
+        const hasData = this.dashboardStats || this.vehicleStats || this.eventStats || this.testDriveStats
+
+        if (!hasData) {
+          this.error = 'Backend Analytics API ยังไม่พร้อมใช้งาน (500 Internal Server Error)\n\nกรุณาติดต่อ Backend Developer เพื่อแก้ไข Analytics endpoints'
+        } else {
+          console.log('✅ Analytics loaded (partial):', {
+            dashboard: !!this.dashboardStats,
+            vehicles: !!this.vehicleStats,
+            events: !!this.eventStats,
+            testDrives: !!this.testDriveStats
+          })
+        }
       } catch (error) {
         console.error('❌ Error loading analytics:', error)
-        console.error('Response data:', error.response?.data)
-        console.error('Response status:', error.response?.status)
-
-        const errorMsg = error.response?.data?.message || error.message
-        this.error = `ไม่สามารถโหลดข้อมูลสถิติได้: ${errorMsg}`
+        this.error = 'Backend Analytics API มีปัญหา กรุณาติดต่อ Backend Developer'
       } finally {
         this.loading = false
       }
