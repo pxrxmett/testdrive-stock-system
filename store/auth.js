@@ -45,8 +45,8 @@ export const actions = {
         password: credentials.password
       })
 
-      // Validate response has token
-      const token = response.access_token || response.token
+      // Validate response has token (Backend sends accessToken in camelCase)
+      const token = response.accessToken || response.token
 
       if (!token) {
         console.error('Login response missing token:', response)
@@ -138,7 +138,8 @@ export const actions = {
     try {
       const response = await this.$axios.$post('/auth/refresh-token')
 
-      const token = response.access_token || response.token
+      // Backend sends accessToken in camelCase
+      const token = response.accessToken || response.token
       commit('setToken', token)
 
       // Update cookie
