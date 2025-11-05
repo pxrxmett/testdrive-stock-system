@@ -6,25 +6,37 @@
         <h1 class="text-2xl font-bold text-gray-900">รายงานและสถิติ</h1>
         <p class="text-gray-600">ดูสถิติและรายงานการใช้งานระบบ</p>
       </div>
-      <!-- Period filter buttons hidden until backend supports it -->
-      <!--
+      <!-- Period filter buttons -->
       <div class="flex items-center space-x-2">
         <button
-          @click="period = 6; loadAnalytics()"
-          :class="period === 6 ? 'btn-primary' : 'btn-secondary'"
+          @click="setPeriod(1)"
+          :class="selectedPeriod === 1 ? 'btn-primary' : 'btn-secondary'"
+          class="text-sm"
+        >
+          1 เดือน
+        </button>
+        <button
+          @click="setPeriod(3)"
+          :class="selectedPeriod === 3 ? 'btn-primary' : 'btn-secondary'"
+          class="text-sm"
+        >
+          3 เดือน
+        </button>
+        <button
+          @click="setPeriod(6)"
+          :class="selectedPeriod === 6 ? 'btn-primary' : 'btn-secondary'"
           class="text-sm"
         >
           6 เดือน
         </button>
         <button
-          @click="period = 12; loadAnalytics()"
-          :class="period === 12 ? 'btn-primary' : 'btn-secondary'"
+          @click="setPeriod(12)"
+          :class="selectedPeriod === 12 ? 'btn-primary' : 'btn-secondary'"
           class="text-sm"
         >
-          12 เดือน
+          1 ปี
         </button>
       </div>
-      -->
     </div>
 
     <!-- Loading State -->
@@ -46,7 +58,7 @@
               </svg>
             </div>
           </div>
-          <p class="text-2xl font-bold text-gray-900">{{ dashboardStats.totalVehicles || 0 }}</p>
+          <p class="text-2xl font-bold text-gray-900">{{ dashboardStats.vehicles?.total || 0 }}</p>
           <p class="text-sm text-gray-500 mt-1">คัน</p>
         </div>
 
@@ -59,7 +71,7 @@
               </svg>
             </div>
           </div>
-          <p class="text-2xl font-bold text-gray-900">{{ dashboardStats.availableVehicles || 0 }}</p>
+          <p class="text-2xl font-bold text-gray-900">{{ dashboardStats.vehicles?.available || 0 }}</p>
           <p class="text-sm text-gray-500 mt-1">คัน</p>
         </div>
 
@@ -72,7 +84,7 @@
               </svg>
             </div>
           </div>
-          <p class="text-2xl font-bold text-gray-900">{{ dashboardStats.totalEvents || 0 }}</p>
+          <p class="text-2xl font-bold text-gray-900">{{ dashboardStats.events?.total || 0 }}</p>
           <p class="text-sm text-gray-500 mt-1">อีเวนต์</p>
         </div>
 
@@ -85,7 +97,7 @@
               </svg>
             </div>
           </div>
-          <p class="text-2xl font-bold text-gray-900">{{ dashboardStats.totalTestDrives || 0 }}</p>
+          <p class="text-2xl font-bold text-gray-900">{{ dashboardStats.testDrives?.total || 0 }}</p>
           <p class="text-sm text-gray-500 mt-1">ครั้ง</p>
         </div>
       </div>
@@ -96,15 +108,15 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="p-4 bg-gray-50 rounded-lg">
             <p class="text-sm text-gray-600">อัตราการใช้งาน</p>
-            <p class="text-2xl font-bold text-gray-900 mt-1">{{ vehicleStats.utilizationRate || 0 }}%</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1">{{ vehicleStats.utilizationRate?.toFixed(1) || 0 }}%</p>
           </div>
           <div class="p-4 bg-gray-50 rounded-lg">
             <p class="text-sm text-gray-600">รถใช้งานอยู่</p>
-            <p class="text-2xl font-bold text-gray-900 mt-1">{{ vehicleStats.inUse || 0 }}</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1">{{ vehicleStats.statusSummary?.inUse || 0 }}</p>
           </div>
           <div class="p-4 bg-gray-50 rounded-lg">
             <p class="text-sm text-gray-600">รถบำรุงรักษา</p>
-            <p class="text-2xl font-bold text-gray-900 mt-1">{{ vehicleStats.maintenance || 0 }}</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1">{{ vehicleStats.statusSummary?.maintenance || 0 }}</p>
           </div>
         </div>
       </div>
@@ -112,18 +124,22 @@
       <!-- Event Statistics -->
       <div v-if="eventStats" class="bg-white p-6 rounded-lg border border-gray-200">
         <h3 class="text-lg font-semibold text-gray-900 mb-4">สถิติอีเวนต์</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div class="p-4 bg-gray-50 rounded-lg">
             <p class="text-sm text-gray-600">อีเวนต์กำลังดำเนินการ</p>
-            <p class="text-2xl font-bold text-gray-900 mt-1">{{ eventStats.ongoing || 0 }}</p>
+            <p class="text-2xl font-bold text-blue-600 mt-1">{{ eventStats.statusSummary?.inProgress || 0 }}</p>
           </div>
           <div class="p-4 bg-gray-50 rounded-lg">
             <p class="text-sm text-gray-600">อีเวนต์ที่เสร็จสิ้น</p>
-            <p class="text-2xl font-bold text-gray-900 mt-1">{{ eventStats.completed || 0 }}</p>
+            <p class="text-2xl font-bold text-green-600 mt-1">{{ eventStats.statusSummary?.completed || 0 }}</p>
           </div>
           <div class="p-4 bg-gray-50 rounded-lg">
-            <p class="text-sm text-gray-600">รถที่ถูก assign</p>
-            <p class="text-2xl font-bold text-gray-900 mt-1">{{ eventStats.vehiclesAssigned || 0 }}</p>
+            <p class="text-sm text-gray-600">เฉลี่ยรถต่ออีเวนต์</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1">{{ eventStats.avgVehiclesPerEvent?.toFixed(1) || 0 }}</p>
+          </div>
+          <div class="p-4 bg-gray-50 rounded-lg">
+            <p class="text-sm text-gray-600">ระยะเวลาเฉลี่ย (วัน)</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1">{{ eventStats.avgEventDuration?.toFixed(1) || 0 }}</p>
           </div>
         </div>
       </div>
@@ -134,19 +150,19 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div class="p-4 bg-gray-50 rounded-lg">
             <p class="text-sm text-gray-600">ทดลองขับทั้งหมด</p>
-            <p class="text-2xl font-bold text-gray-900 mt-1">{{ testDriveStats.total || 0 }}</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1">{{ testDriveStats.statusSummary?.total || 0 }}</p>
           </div>
           <div class="p-4 bg-gray-50 rounded-lg">
             <p class="text-sm text-gray-600">เสร็จสิ้น</p>
-            <p class="text-2xl font-bold text-green-600 mt-1">{{ testDriveStats.completed || 0 }}</p>
+            <p class="text-2xl font-bold text-green-600 mt-1">{{ testDriveStats.statusSummary?.completed || 0 }}</p>
           </div>
           <div class="p-4 bg-gray-50 rounded-lg">
             <p class="text-sm text-gray-600">ถูกยกเลิก</p>
-            <p class="text-2xl font-bold text-red-600 mt-1">{{ testDriveStats.cancelled || 0 }}</p>
+            <p class="text-2xl font-bold text-red-600 mt-1">{{ testDriveStats.statusSummary?.cancelled || 0 }}</p>
           </div>
           <div class="p-4 bg-gray-50 rounded-lg">
-            <p class="text-sm text-gray-600">อัตราความสำเร็จ</p>
-            <p class="text-2xl font-bold text-blue-600 mt-1">{{ testDriveStats.completionRate || 0 }}%</p>
+            <p class="text-sm text-gray-600">อัตรายืนยัน</p>
+            <p class="text-2xl font-bold text-blue-600 mt-1">{{ testDriveStats.confirmationRate?.toFixed(1) || 0 }}%</p>
           </div>
         </div>
       </div>
@@ -169,7 +185,9 @@ export default {
 
   data() {
     return {
-      period: 12, // Changed from '12months' to just the number
+      selectedPeriod: 12, // months
+      startDate: null,
+      endDate: null,
       loading: false,
       error: null,
       dashboardStats: null,
@@ -180,44 +198,89 @@ export default {
   },
 
   async mounted() {
+    this.setPeriod(12) // Default to 12 months
     await this.loadAnalytics()
   },
 
   methods: {
+    setPeriod(months) {
+      this.selectedPeriod = months
+
+      // Calculate date range
+      const end = new Date()
+      const start = new Date()
+      start.setMonth(start.getMonth() - months)
+
+      // Format as YYYY-MM-DD
+      this.endDate = end.toISOString().split('T')[0]
+      this.startDate = start.toISOString().split('T')[0]
+
+      console.log(`📅 Period set to ${months} months:`, {
+        startDate: this.startDate,
+        endDate: this.endDate
+      })
+
+      this.loadAnalytics()
+    },
+
     async loadAnalytics() {
       this.loading = true
       this.error = null
 
       try {
-        console.log('📊 Loading analytics (period filter not yet supported by backend)')
+        console.log('📊 Loading analytics with date range:', {
+          startDate: this.startDate,
+          endDate: this.endDate
+        })
 
-        // Backend doesn't support period parameter yet, load without parameters
-        // Load all analytics data in parallel
-        const [dashboard, vehicles, events, testDrives] = await Promise.all([
-          this.$api.analytics.getDashboard(),
-          this.$api.analytics.getVehicleStatistics(),
-          this.$api.analytics.getEventStatistics(),
-          this.$api.analytics.getTestDriveStatistics()
+        // Prepare query parameters
+        const params = {}
+        if (this.startDate) params.startDate = this.startDate
+        if (this.endDate) params.endDate = this.endDate
+
+        // Load each endpoint separately with individual error handling
+        // This allows partial data display if some endpoints fail
+        const results = await Promise.allSettled([
+          this.$api.analytics.getDashboard(params).catch(e => {
+            console.warn('Dashboard stats failed:', e.response?.data?.message)
+            return null
+          }),
+          this.$api.analytics.getVehicleStatistics(params).catch(e => {
+            console.warn('Vehicle stats failed:', e.response?.data?.message)
+            return null
+          }),
+          this.$api.analytics.getEventStatistics(params).catch(e => {
+            console.warn('Event stats failed:', e.response?.data?.message)
+            return null
+          }),
+          this.$api.analytics.getTestDriveStatistics(params).catch(e => {
+            console.warn('Test drive stats failed:', e.response?.data?.message)
+            return null
+          })
         ])
 
-        this.dashboardStats = dashboard
-        this.vehicleStats = vehicles
-        this.eventStats = events
-        this.testDriveStats = testDrives
+        // Extract successful results
+        this.dashboardStats = results[0].status === 'fulfilled' ? results[0].value : null
+        this.vehicleStats = results[1].status === 'fulfilled' ? results[1].value : null
+        this.eventStats = results[2].status === 'fulfilled' ? results[2].value : null
+        this.testDriveStats = results[3].status === 'fulfilled' ? results[3].value : null
 
-        console.log('✅ Analytics loaded:', {
-          dashboard,
-          vehicles,
-          events,
-          testDrives
-        })
+        // Check if any data loaded successfully
+        const hasData = this.dashboardStats || this.vehicleStats || this.eventStats || this.testDriveStats
+
+        if (!hasData) {
+          this.error = 'Backend Analytics API ยังไม่พร้อมใช้งาน (500 Internal Server Error)\n\nกรุณาติดต่อ Backend Developer เพื่อแก้ไข Analytics endpoints'
+        } else {
+          console.log('✅ Analytics loaded (partial):', {
+            dashboard: !!this.dashboardStats,
+            vehicles: !!this.vehicleStats,
+            events: !!this.eventStats,
+            testDrives: !!this.testDriveStats
+          })
+        }
       } catch (error) {
         console.error('❌ Error loading analytics:', error)
-        console.error('Response data:', error.response?.data)
-        console.error('Response status:', error.response?.status)
-
-        const errorMsg = error.response?.data?.message || error.message
-        this.error = `ไม่สามารถโหลดข้อมูลสถิติได้: ${errorMsg}`
+        this.error = 'Backend Analytics API มีปัญหา กรุณาติดต่อ Backend Developer'
       } finally {
         this.loading = false
       }

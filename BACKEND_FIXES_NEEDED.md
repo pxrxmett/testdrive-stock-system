@@ -349,15 +349,44 @@ async delete(id: number) {
 
 ## ⚠️ HIGH Priority
 
-### ⚠️ HIGH #1: Analytics API Missing
+### ⚠️ HIGH #1: Analytics API - 500 Internal Server Error
 
-**ปัญหา:** หน้า Analytics ใช้ข้อมูล hardcoded/mock ทั้งหมด
+**🔴 UPDATE (2025-11-05):** Endpoints มีแล้วแต่ return **500 Internal Server Error**
 
-**ไฟล์ที่มีปัญหา:**
-- `/pages/dashboard/analytics.vue` - hardcoded values
-- `/pages/dashboard/analytics-improved.vue` - mock data
+**สถานะปัจจุบัน:**
+- ✅ Endpoints มีแล้ว: `/api/analytics/dashboard`, `/api/analytics/vehicles/statistics`, etc.
+- ❌ ทุก endpoints return 500 Internal Server Error
+- ✅ Frontend เชื่อมต่อแล้ว แต่ Backend มี bug
 
-**ต้องการ Endpoints เหล่านี้:**
+**Error Response:**
+```json
+{
+  "statusCode": 500,
+  "message": "Internal server error"
+}
+```
+
+**สาเหตุที่เป็นไปได้:**
+1. Logic ยังไม่ได้ implement จริง (เป็น placeholder)
+2. Database query ผิดพลาด
+3. มี unhandled exceptions
+4. ไม่มีข้อมูลใน database ทำให้ query fail
+5. TypeORM relations หรือ joins ไม่ถูกต้อง
+
+**ขั้นตอนแก้ไข:**
+1. ตรวจสอบ Backend logs ดูว่า error อะไร
+2. ตรวจสอบว่า implement logic จริงหรือยัง
+3. Test database queries แยกต่างหาก
+4. เพิ่ม try-catch และ error logging
+5. ทดสอบด้วย Postman/curl
+
+---
+
+**ปัญหาเดิม (แก้แล้ว):** หน้า Analytics ใช้ข้อมูล hardcoded/mock ทั้งหมด
+- ✅ Frontend เชื่อมต่อกับ API แล้ว
+- ✅ ไม่มี 400 Bad Request แล้ว (field naming ถูกต้องแล้ว)
+
+**ต้องการ Endpoints เหล่านี้ (มีแล้วแต่ต้องแก้ 500 error):**
 
 #### 1. GET /api/analytics/overview
 
