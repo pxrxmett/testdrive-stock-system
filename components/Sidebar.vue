@@ -43,9 +43,9 @@
         <NavItem
           icon="document"
           label="เอกสารทดลองขับ"
-          :active="isActive('/dashboard/test-drives')"
+          :active="isActive('/dashboard/documents')"
           :collapsed="collapsed"
-          @click="navigateTo('/dashboard/test-drives')"
+          @click="navigateTo('/dashboard/documents')"
         />
       </div>
 
@@ -168,6 +168,7 @@ export default {
     },
     
     getViewFromPath(path) {
+      if (path.includes('/documents')) return 'documents'
       if (path.includes('/queue')) return 'queue'
       if (path.includes('/stock')) return 'stock'
       if (path.includes('/events')) return 'events'
@@ -180,29 +181,37 @@ export default {
     isActive(path) {
       // ตรวจสอบว่า route ปัจจุบันตรงกับ path หรือไม่
       if (!this.$route) return false
-      
+
       // สำหรับ exact match
       if (this.$route.path === path) return true
-      
+
       // สำหรับ nested routes
       if (path !== '/' && this.$route.path.startsWith(path + '/')) return true
-      
+
       // สำหรับ stock page - รองรับทั้ง /stock และ /dashboard/stock
       if (path.includes('/stock')) {
-        return this.$route.path === '/stock' || 
+        return this.$route.path === '/stock' ||
                this.$route.path === '/dashboard/stock' ||
                this.$route.path.startsWith('/stock/') ||
                this.$route.path.startsWith('/dashboard/stock/')
       }
-      
+
       // สำหรับ events page
       if (path.includes('/events')) {
-        return this.$route.path === '/events' || 
+        return this.$route.path === '/events' ||
                this.$route.path === '/dashboard/events' ||
                this.$route.path.startsWith('/events/') ||
                this.$route.path.startsWith('/dashboard/events/')
       }
-      
+
+      // สำหรับ documents page
+      if (path.includes('/documents')) {
+        return this.$route.path === '/documents' ||
+               this.$route.path === '/dashboard/documents' ||
+               this.$route.path.startsWith('/documents/') ||
+               this.$route.path.startsWith('/dashboard/documents/')
+      }
+
       return false
     },
     
