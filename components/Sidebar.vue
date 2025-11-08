@@ -43,9 +43,9 @@
         <NavItem
           icon="document"
           label="เอกสารทดลองขับ"
-          :active="isActive('/dashboard/test-drives')"
+          :active="isActive('/dashboard/documents')"
           :collapsed="collapsed"
-          @click="navigateTo('/dashboard/test-drives')"
+          @click="navigateTo('/dashboard/documents')"
         />
       </div>
 
@@ -168,7 +168,7 @@ export default {
     },
     
     getViewFromPath(path) {
-      if (path.includes('/test-drives')) return 'test-drives'
+      if (path.includes('/documents')) return 'documents'
       if (path.includes('/queue')) return 'queue'
       if (path.includes('/stock')) return 'stock'
       if (path.includes('/events')) return 'events'
@@ -204,12 +204,12 @@ export default {
                this.$route.path.startsWith('/dashboard/events/')
       }
 
-      // สำหรับ test-drives page
-      if (path.includes('/test-drives')) {
-        return this.$route.path === '/test-drives' ||
-               this.$route.path === '/dashboard/test-drives' ||
-               this.$route.path.startsWith('/test-drives/') ||
-               this.$route.path.startsWith('/dashboard/test-drives/')
+      // สำหรับ documents page
+      if (path.includes('/documents')) {
+        return this.$route.path === '/documents' ||
+               this.$route.path === '/dashboard/documents' ||
+               this.$route.path.startsWith('/documents/') ||
+               this.$route.path.startsWith('/dashboard/documents/')
       }
 
       return false
