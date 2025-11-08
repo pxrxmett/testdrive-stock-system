@@ -33,15 +33,22 @@
           :collapsed="collapsed"
           @click="navigateTo('/dashboard/stock')"
         />
-        <NavItem 
+        <NavItem
           icon="calendar"
           label="จัดการอีเวนต์"
           :active="isActive('/dashboard/events')"
           :collapsed="collapsed"
           @click="navigateTo('/dashboard/events')"
         />
+        <NavItem
+          icon="document"
+          label="เอกสารทดลองขับ"
+          :active="isActive('/dashboard/test-drives')"
+          :collapsed="collapsed"
+          @click="navigateTo('/dashboard/test-drives')"
+        />
       </div>
-      
+
       <!-- Data Management Section -->
       <div class="pt-4">
         <div v-if="!collapsed" class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 px-2">
