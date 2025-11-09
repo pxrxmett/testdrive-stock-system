@@ -33,6 +33,7 @@
 export default {
   name: 'BydDocumentsPage',
   layout: 'dashboard',
+  middleware: false,
   head() {
     return {
       title: 'เอกสาร BYD - BYD EV System'

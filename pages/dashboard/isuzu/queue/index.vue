@@ -72,6 +72,7 @@
 export default {
   name: 'IsuzuQueuePage',
   layout: 'dashboard',
+  middleware: false,
   data() {
     return {
       brand: 'isuzu'

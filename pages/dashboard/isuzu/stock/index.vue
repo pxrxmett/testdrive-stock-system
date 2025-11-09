@@ -65,6 +65,7 @@
 export default {
   name: 'IsuzuStockPage',
   layout: 'dashboard',
+  middleware: false,
   head() {
     return {
       title: 'สต็อครถยนต์ ISUZU - ISUZU Queue System'

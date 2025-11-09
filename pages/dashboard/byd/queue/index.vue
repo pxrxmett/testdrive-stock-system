@@ -72,6 +72,7 @@
 export default {
   name: 'BydQueuePage',
   layout: 'dashboard',
+  middleware: false,
   data() {
     return {
       brand: 'byd'
