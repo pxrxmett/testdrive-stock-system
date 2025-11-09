@@ -137,15 +137,44 @@
         <section class="bg-white rounded-lg border border-gray-200 p-6">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-medium text-gray-900">ค้นหาและกรองข้อมูล</h3>
-            <button
-              @click="clearFilters"
-              class="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-              </svg>
-              <span>รีเซ็ต</span>
-            </button>
+            <div class="flex items-center space-x-2">
+              <button
+                @click="showAdvancedSearch = !showAdvancedSearch"
+                class="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                </svg>
+                <span>{{ showAdvancedSearch ? 'ซ่อน' : 'แสดง' }}ค้นหาขั้นสูง</span>
+              </button>
+              <button
+                @click="clearFilters"
+                class="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+                <span>รีเซ็ต</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Recent Searches -->
+          <div v-if="recentSearches.length > 0 && !filters.search" class="mb-4">
+            <p class="text-xs text-gray-500 mb-2">ค้นหาล่าสุด:</p>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="(search, index) in recentSearches"
+                :key="index"
+                @click="applyRecentSearch(search)"
+                class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors flex items-center space-x-1"
+              >
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>{{ search }}</span>
+              </button>
+            </div>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-6 gap-4">
@@ -159,6 +188,7 @@
                 type="text"
                 placeholder="ค้นหาเลขที่เอกสาร, ชื่อ, เบอร์โทร..."
                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                @input="saveRecentSearch"
               />
             </div>
 
@@ -220,7 +250,88 @@
               <option value="name_desc">ชื่อลูกค้า (ฮ-ก)</option>
             </select>
           </div>
+
+          <!-- Advanced Search Fields -->
+          <div v-if="showAdvancedSearch" class="mt-4 pt-4 border-t border-gray-200">
+            <h4 class="text-sm font-medium text-gray-700 mb-3">ค้นหาขั้นสูง</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">เลขบัตรประชาชน</label>
+                <input
+                  v-model="filters.idCard"
+                  type="text"
+                  placeholder="เช่น 1234567890123"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">เลขที่ใบขับขี่</label>
+                <input
+                  v-model="filters.licenseNumber"
+                  type="text"
+                  placeholder="เช่น 12345678"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">ทะเบียนรถ</label>
+                <input
+                  v-model="filters.licensePlate"
+                  type="text"
+                  placeholder="เช่น 1กก1234"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                />
+              </div>
+            </div>
+          </div>
         </section>
+
+        <!-- Bulk Actions Bar -->
+        <div v-if="selectedDocuments.length > 0" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span class="text-sm font-medium text-blue-900">เลือกแล้ว {{ selectedDocuments.length }} รายการ</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button
+                @click="exportSelected"
+                class="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <span>Export ที่เลือก</span>
+              </button>
+              <button
+                @click="printSelected"
+                :disabled="!canPrintSelected"
+                :class="[
+                  'flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors text-sm',
+                  canPrintSelected
+                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                ]"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                </svg>
+                <span>พิมพ์ที่เลือก</span>
+              </button>
+              <button
+                @click="clearSelection"
+                class="flex items-center space-x-2 px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                <span>ยกเลิก</span>
+              </button>
+            </div>
+          </div>
+        </div>
 
         <!-- Table -->
         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -228,6 +339,14 @@
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
+                  <th class="px-6 py-3 text-left">
+                    <input
+                      type="checkbox"
+                      :checked="isAllSelected"
+                      @change="toggleSelectAll"
+                      class="w-4 h-4 text-red-600 rounded focus:ring-red-500"
+                    />
+                  </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เลขที่เอกสาร</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">วันที่-เวลา</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ชื่อลูกค้า</th>
@@ -239,6 +358,16 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="testDrive in paginatedTestDrives" :key="testDrive.id" class="hover:bg-gray-50">
+                  <!-- Checkbox -->
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      :checked="isSelected(testDrive.id)"
+                      @change="toggleSelect(testDrive.id)"
+                      class="w-4 h-4 text-red-600 rounded focus:ring-red-500"
+                    />
+                  </td>
+
                   <!-- Document Number -->
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
@@ -299,6 +428,32 @@
                       >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                        </svg>
+                      </button>
+                      <button
+                        @click="downloadPDF(testDrive)"
+                        :disabled="!isDocReady(testDrive)"
+                        :class="[
+                          'hover:text-orange-900',
+                          isDocReady(testDrive) ? 'text-orange-600' : 'text-gray-300 cursor-not-allowed'
+                        ]"
+                        title="ดาวน์โหลด PDF"
+                      >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                      </button>
+                      <button
+                        @click="sendEmail(testDrive)"
+                        :disabled="!isDocReady(testDrive)"
+                        :class="[
+                          'hover:text-indigo-900',
+                          isDocReady(testDrive) ? 'text-indigo-600' : 'text-gray-300 cursor-not-allowed'
+                        ]"
+                        title="ส่งอีเมล"
+                      >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
                       </button>
                       <button
@@ -418,12 +573,18 @@ export default {
         dateFrom: '',
         dateTo: '',
         vehicleModel: '',
-        docStatus: ''
+        docStatus: '',
+        idCard: '',
+        licenseNumber: '',
+        licensePlate: ''
       },
       activeQuickFilter: '',
       sortBy: 'date_desc',
       currentPage: 1,
       perPage: 20,
+      showAdvancedSearch: false,
+      recentSearches: [],
+      selectedDocuments: [],
       quickFilters: [
         { label: 'ทั้งหมด', value: '' },
         { label: 'วันนี้', value: 'today' },
@@ -487,6 +648,31 @@ export default {
         filtered = filtered.filter(td => this.getDocStatus(td) === this.filters.docStatus)
       }
 
+      // Advanced Search Filters
+      if (this.filters.idCard) {
+        const idCard = this.filters.idCard.toLowerCase()
+        filtered = filtered.filter(td => {
+          const tdIdCard = (td.customer_id_card || td.customerIdCard || '').toLowerCase()
+          return tdIdCard.includes(idCard)
+        })
+      }
+
+      if (this.filters.licenseNumber) {
+        const licenseNumber = this.filters.licenseNumber.toLowerCase()
+        filtered = filtered.filter(td => {
+          const tdLicense = (td.customer_license_number || td.customerLicenseNumber || '').toLowerCase()
+          return tdLicense.includes(licenseNumber)
+        })
+      }
+
+      if (this.filters.licensePlate) {
+        const licensePlate = this.filters.licensePlate.toLowerCase()
+        filtered = filtered.filter(td => {
+          const tdPlate = (td.vehicle_license_plate || td.vehicleLicensePlate || td.vehicle?.license_plate || '').toLowerCase()
+          return tdPlate.includes(licensePlate)
+        })
+      }
+
       // Sorting
       filtered = this.sortDocuments(filtered)
 
@@ -541,6 +727,19 @@ export default {
 
     notReadyDocuments() {
       return this.testDrives.filter(td => this.getDocStatus(td) === 'not_ready').length
+    },
+
+    isAllSelected() {
+      return this.paginatedTestDrives.length > 0 &&
+             this.paginatedTestDrives.every(td => this.selectedDocuments.includes(td.id))
+    },
+
+    canPrintSelected() {
+      return this.selectedDocuments.length > 0 &&
+             this.selectedDocuments.every(id => {
+               const td = this.testDrives.find(t => t.id === id)
+               return td && this.isDocReady(td)
+             })
     }
   },
 
@@ -573,7 +772,10 @@ export default {
         dateFrom: '',
         dateTo: '',
         vehicleModel: '',
-        docStatus: ''
+        docStatus: '',
+        idCard: '',
+        licenseNumber: '',
+        licensePlate: ''
       }
       this.activeQuickFilter = ''
       this.currentPage = 1
@@ -626,6 +828,81 @@ export default {
       }).catch(() => {
         this.$toast?.error('ไม่สามารถคัดลอกลิงก์ได้')
       })
+    },
+
+    downloadPDF(testDrive) {
+      // Open document in new window and trigger print dialog
+      // User can save as PDF from print dialog
+      const url = `/dashboard/documents/${testDrive.id}?print=true`
+      const printWindow = window.open(url, '_blank')
+
+      if (printWindow) {
+        this.$toast?.success('กำลังเปิดหน้าต่างสำหรับพิมพ์/ดาวน์โหลด PDF')
+      } else {
+        this.$toast?.error('กรุณาอนุญาตให้เปิดหน้าต่างใหม่ใน browser')
+      }
+    },
+
+    sendEmail(testDrive) {
+      // Generate email with document link
+      const docNumber = this.getDocumentNumber(testDrive)
+      const customerName = testDrive.customer_name || testDrive.customerName || 'ลูกค้า'
+      const email = testDrive.customer_email || testDrive.email || ''
+      const docUrl = `${window.location.origin}/dashboard/documents/${testDrive.id}`
+
+      const subject = encodeURIComponent(`เอกสารทดลองขับ ${docNumber} - ISUZU`)
+      const body = encodeURIComponent(
+        `เรียน คุณ${customerName}\n\n` +
+        `ขอบคุณที่ใช้บริการทดลองขับกับ ISUZU\n\n` +
+        `เอกสารทดลองขับของท่าน (เลขที่ ${docNumber}) สามารถดูได้ที่:\n` +
+        `${docUrl}\n\n` +
+        `หากมีข้อสงสัยประการใด กรุณาติดต่อเรา\n\n` +
+        `ขอบคุณครับ/ค่ะ\n` +
+        `ISUZU Test Drive Team`
+      )
+
+      const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`
+
+      window.location.href = mailtoLink
+      this.$toast?.info('เปิดโปรแกรมอีเมลสำหรับส่งเอกสาร')
+    },
+
+    saveRecentSearch() {
+      if (!this.filters.search || this.filters.search.length < 2) return
+
+      const searchTerm = this.filters.search.trim()
+
+      // Remove if already exists
+      const filtered = this.recentSearches.filter(s => s !== searchTerm)
+
+      // Add to beginning
+      filtered.unshift(searchTerm)
+
+      // Keep only last 5
+      this.recentSearches = filtered.slice(0, 5)
+
+      // Save to localStorage
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('testDriveRecentSearches', JSON.stringify(this.recentSearches))
+      }
+    },
+
+    applyRecentSearch(search) {
+      this.filters.search = search
+      this.currentPage = 1
+    },
+
+    loadRecentSearches() {
+      if (typeof localStorage !== 'undefined') {
+        try {
+          const saved = localStorage.getItem('testDriveRecentSearches')
+          if (saved) {
+            this.recentSearches = JSON.parse(saved)
+          }
+        } catch (error) {
+          console.error('Error loading recent searches:', error)
+        }
+      }
     },
 
     getDocumentNumber(testDrive) {
@@ -772,11 +1049,105 @@ export default {
       document.body.removeChild(link)
 
       this.$toast?.success('Export Excel เรียบร้อย')
+    },
+
+    // Bulk Actions Methods
+    toggleSelect(id) {
+      const index = this.selectedDocuments.indexOf(id)
+      if (index > -1) {
+        this.selectedDocuments.splice(index, 1)
+      } else {
+        this.selectedDocuments.push(id)
+      }
+    },
+
+    toggleSelectAll() {
+      if (this.isAllSelected) {
+        // Unselect all in current page
+        this.paginatedTestDrives.forEach(td => {
+          const index = this.selectedDocuments.indexOf(td.id)
+          if (index > -1) {
+            this.selectedDocuments.splice(index, 1)
+          }
+        })
+      } else {
+        // Select all in current page
+        this.paginatedTestDrives.forEach(td => {
+          if (!this.selectedDocuments.includes(td.id)) {
+            this.selectedDocuments.push(td.id)
+          }
+        })
+      }
+    },
+
+    isSelected(id) {
+      return this.selectedDocuments.includes(id)
+    },
+
+    clearSelection() {
+      this.selectedDocuments = []
+    },
+
+    exportSelected() {
+      const selected = this.testDrives.filter(td => this.selectedDocuments.includes(td.id))
+
+      const data = selected.map(td => ({
+        'เลขที่เอกสาร': this.getDocumentNumber(td),
+        'วันที่-เวลา': this.formatDateTime(td.start_time || td.startTime || td.scheduled_start),
+        'ชื่อลูกค้า': td.customer_name || td.customerName || '-',
+        'เบอร์โทร': td.customer_phone || td.customerPhone || td.phone || '-',
+        'รุ่นรถ': td.vehicle?.model || '-',
+        'สถานะเอกสาร': this.getDocStatusText(td).replace(/[🟢🟡🔴]/g, '').trim(),
+        'PDPA': td.pdpa_consent ? 'ยินยอม' : 'ยังไม่ยินยอม',
+        'ลายเซ็น': td.signature_data ? 'มี' : 'ยังไม่มี'
+      }))
+
+      const headers = Object.keys(data[0])
+      const csv = [
+        headers.join(','),
+        ...data.map(row => headers.map(header => {
+          const value = row[header] || ''
+          return `"${String(value).replace(/"/g, '""')}"`
+        }).join(','))
+      ].join('\n')
+
+      const BOM = '\uFEFF'
+      const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      const url = URL.createObjectURL(blob)
+      const timestamp = new Date().toISOString().split('T')[0]
+
+      link.setAttribute('href', url)
+      link.setAttribute('download', `เอกสารทดลองขับ_เลือก_${timestamp}.csv`)
+      link.style.visibility = 'hidden'
+
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+
+      this.$toast?.success(`Export ${selected.length} รายการเรียบร้อย`)
+    },
+
+    printSelected() {
+      if (!this.canPrintSelected) {
+        this.$toast?.error('มีเอกสารบางรายการยังไม่พร้อม กรุณาเลือกเฉพาะเอกสารที่พร้อมพิมพ์')
+        return
+      }
+
+      this.$toast?.info(`กำลังพิมพ์ ${this.selectedDocuments.length} เอกสาร...`)
+
+      // Open each document in a new tab for printing
+      this.selectedDocuments.forEach((id, index) => {
+        setTimeout(() => {
+          window.open(`/dashboard/documents/${id}?print=true`, '_blank')
+        }, index * 500) // Delay to prevent browser blocking
+      })
     }
   },
 
   mounted() {
     this.loadTestDrives()
+    this.loadRecentSearches()
   },
 
   head() {
