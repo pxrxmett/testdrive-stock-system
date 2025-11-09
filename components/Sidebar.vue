@@ -1,64 +1,77 @@
 <template>
   <div :class="sidebarClasses">
     <!-- Logo Section -->
-    <div class="p-4 border-b border-gray-200">
+    <div class="p-4 h-16 flex items-center">
       <div class="flex items-center space-x-3">
-        <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
-          <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+        <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path d="M19 7h-3V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12l4-4V9a2 2 0 0 0-2-2zM10 4h4v3h-4V4zM4 5h4v4H4V5zm0 6h6v5H4v-5zm8 5v-3h3l-3 3z"/>
           </svg>
         </div>
         <div v-if="!collapsed">
-          <h1 class="text-sm font-semibold text-gray-900">ISUZU Queue</h1>
+          <h1 class="text-sm font-bold text-gray-900">ISUZU Queue</h1>
           <p class="text-xs text-gray-500">Management System</p>
         </div>
       </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
-      <!-- Dashboard -->
-      <div class="space-y-1 mb-2">
+    <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+      <!-- Main Navigation -->
+      <div class="space-y-1">
         <NavItem
-          icon="chart"
+          icon="home"
           label="Dashboard"
           :active="isActive('/dashboard') && $route.path === '/dashboard'"
           :collapsed="collapsed"
           @click="navigateTo('/dashboard')"
         />
+        <NavItem
+          icon="car"
+          label="จองรถ"
+          :active="isActive('/dashboard/booking')"
+          :collapsed="collapsed"
+          @click="navigateTo('/dashboard/booking')"
+        />
+        <NavItem
+          icon="clipboard"
+          label="คิว"
+          :active="isActive('/dashboard/queue')"
+          :collapsed="collapsed"
+          @click="navigateTo('/dashboard/queue')"
+        />
+      </div>
+
+      <!-- Divider -->
+      <div class="py-2">
+        <div class="border-t border-gray-200"></div>
       </div>
 
       <!-- ISUZU Section -->
-      <div class="pt-2">
-        <div v-if="!collapsed" class="flex items-center space-x-2 text-xs font-bold text-red-600 uppercase tracking-wider mb-2 px-2">
-          <span>🚗</span>
-          <span>รถยนต์ ISUZU</span>
+      <div>
+        <div v-if="!collapsed" class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2 px-3">
+          ISUZU
         </div>
-        <div v-else class="border-t-2 border-red-500 my-2"></div>
-
         <div class="space-y-1">
           <NavItem
-            icon="queue"
+            icon="clipboard"
             label="คิวทดลองขับ ISUZU"
             :active="isActive('/dashboard/isuzu/queue')"
             :collapsed="collapsed"
-            brand-color="#E31E24"
             @click="navigateTo('/dashboard/isuzu/queue')"
           />
           <NavItem
-            icon="stock"
+            icon="package"
             label="สต็อครถยนต์ ISUZU"
             :active="isActive('/dashboard/isuzu/stock')"
             :collapsed="collapsed"
-            brand-color="#E31E24"
             @click="navigateTo('/dashboard/isuzu/stock')"
           />
           <NavItem
-            icon="document"
+            icon="fileText"
             label="เอกสาร ISUZU"
             :active="isActive('/dashboard/isuzu/documents')"
             :collapsed="collapsed"
-            brand-color="#E31E24"
             @click="navigateTo('/dashboard/isuzu/documents')"
           />
           <NavItem
@@ -66,43 +79,36 @@
             label="พนักงาน ISUZU"
             :active="isActive('/dashboard/isuzu/staff')"
             :collapsed="collapsed"
-            brand-color="#E31E24"
             @click="navigateTo('/dashboard/isuzu/staff')"
           />
         </div>
       </div>
 
       <!-- BYD Section -->
-      <div class="pt-4">
-        <div v-if="!collapsed" class="flex items-center space-x-2 text-xs font-bold text-green-600 uppercase tracking-wider mb-2 px-2">
-          <span>⚡</span>
-          <span>รถไฟฟ้า BYD</span>
+      <div class="pt-3">
+        <div v-if="!collapsed" class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2 px-3">
+          BYD
         </div>
-        <div v-else class="border-t-2 border-green-500 my-2"></div>
-
         <div class="space-y-1">
           <NavItem
-            icon="queue"
+            icon="clipboard"
             label="คิวทดลองขับ BYD"
             :active="isActive('/dashboard/byd/queue')"
             :collapsed="collapsed"
-            brand-color="#00A651"
             @click="navigateTo('/dashboard/byd/queue')"
           />
           <NavItem
-            icon="stock"
+            icon="package"
             label="สต็อครถไฟฟ้า BYD"
             :active="isActive('/dashboard/byd/stock')"
             :collapsed="collapsed"
-            brand-color="#00A651"
             @click="navigateTo('/dashboard/byd/stock')"
           />
           <NavItem
-            icon="document"
+            icon="fileText"
             label="เอกสาร BYD"
             :active="isActive('/dashboard/byd/documents')"
             :collapsed="collapsed"
-            brand-color="#00A651"
             @click="navigateTo('/dashboard/byd/documents')"
           />
           <NavItem
@@ -110,22 +116,21 @@
             label="พนักงาน BYD"
             :active="isActive('/dashboard/byd/staff')"
             :collapsed="collapsed"
-            brand-color="#00A651"
             @click="navigateTo('/dashboard/byd/staff')"
           />
         </div>
       </div>
 
-      <!-- Common Section -->
-      <div class="pt-4">
-        <div v-if="!collapsed" class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 px-2">
-          ข้อมูลทั่วไป
-        </div>
-        <div v-else class="border-t border-gray-200 my-2"></div>
+      <!-- Divider -->
+      <div class="py-2">
+        <div class="border-t border-gray-200"></div>
+      </div>
 
+      <!-- Common Section -->
+      <div>
         <div class="space-y-1">
           <NavItem
-            icon="chart"
+            icon="barChart"
             label="รายงานเปรียบเทียบ"
             :active="isActive('/dashboard/analytics')"
             :collapsed="collapsed"
@@ -145,6 +150,53 @@
             :collapsed="collapsed"
             @click="navigateTo('/dashboard/events')"
           />
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="py-2">
+        <div class="border-t border-gray-200"></div>
+      </div>
+
+      <!-- Admin Section -->
+      <div v-if="isAdmin">
+        <div v-if="!collapsed" class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2 px-3">
+          ADMIN
+        </div>
+        <div class="space-y-1">
+          <NavItem
+            icon="users"
+            label="พนักงาน"
+            :active="isActive('/dashboard/staff')"
+            :collapsed="collapsed"
+            @click="navigateTo('/dashboard/staff')"
+          />
+          <NavItem
+            icon="link"
+            label="LINE Users"
+            :active="isActive('/admin/line-users')"
+            :collapsed="collapsed"
+            :badge="pendingLineUsersCount"
+            @click="navigateTo('/admin/line-users')"
+          />
+          <NavItem
+            icon="barChart"
+            label="รายงาน"
+            :active="isActive('/dashboard/reports')"
+            :collapsed="collapsed"
+            @click="navigateTo('/dashboard/reports')"
+          />
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="py-2">
+        <div class="border-t border-gray-200"></div>
+      </div>
+
+      <!-- Settings Section -->
+      <div>
+        <div class="space-y-1">
           <NavItem
             icon="settings"
             label="ตั้งค่า"
@@ -152,51 +204,26 @@
             :collapsed="collapsed"
             @click="navigateTo('/dashboard/settings')"
           />
-        </div>
-      </div>
-
-      <!-- Admin Section -->
-      <div class="pt-4" v-if="isAdmin">
-        <div v-if="!collapsed" class="flex items-center space-x-2 text-xs font-bold text-purple-600 uppercase tracking-wider mb-2 px-2">
-          <span>⚙️</span>
-          <span>ผู้ดูแลระบบ</span>
-        </div>
-        <div v-else class="border-t-2 border-purple-500 my-2"></div>
-
-        <div class="space-y-1">
           <NavItem
-            icon="users"
-            label="จัดการผู้ใช้ LINE"
-            :active="isActive('/admin/line-users')"
+            icon="user"
+            label="โปรไฟล์"
+            :active="isActive('/dashboard/profile')"
             :collapsed="collapsed"
-            brand-color="#9333EA"
-            @click="navigateTo('/admin/line-users')"
+            @click="navigateTo('/dashboard/profile')"
           />
         </div>
       </div>
     </nav>
 
-    <!-- User Section -->
-    <div class="p-3 border-t border-gray-200">
-      <div class="flex items-center space-x-2">
-        <div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
-          <span class="text-white font-medium text-xs">A</span>
-        </div>
-        <div v-if="!collapsed" class="flex-1 min-w-0">
-          <p class="text-xs font-medium text-gray-900 truncate">Admin</p>
-          <p class="text-xs text-gray-500 truncate">admin@isuzu.co.th</p>
-        </div>
-        <button 
-          v-if="!collapsed"
-          @click="logout"
-          class="p-1 rounded-md hover:bg-gray-100 transition-colors"
-          title="ออกจากระบบ"
-        >
-          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-        </button>
-      </div>
+    <!-- Logout -->
+    <div class="p-4 border-t border-gray-200">
+      <NavItem
+        icon="logOut"
+        label="ออกจากระบบ"
+        :active="false"
+        :collapsed="collapsed"
+        @click="logout"
+      />
     </div>
 
     <!-- Collapse Button -->
@@ -231,11 +258,17 @@ export default {
       default: 'queue'
     }
   },
+  data() {
+    return {
+      pendingLineUsersCount: 0
+    }
+  },
   computed: {
     sidebarClasses() {
+      const width = this.collapsed ? 'w-16' : 'w-[280px]'
       return [
-        'bg-white border-r border-gray-200 transition-all duration-300 flex flex-col shadow-lg relative',
-        this.collapsed ? 'w-16' : 'w-60'
+        'bg-gray-50 border-r border-gray-200 transition-all duration-300 flex flex-col relative',
+        width
       ]
     },
     isAdmin() {
@@ -243,6 +276,18 @@ export default {
       // For now, return true - replace with actual auth check
       const user = this.$store?.getters['auth/user']
       return user?.role === 'admin' || true // Temporarily allow all users
+    }
+  },
+  async mounted() {
+    // เพิ่ม keyboard event listener
+    document.addEventListener('keydown', this.handleKeyboard)
+
+    // Log current route สำหรับ debugging
+    console.log('Sidebar mounted, current route:', this.$route?.path)
+
+    // Fetch pending LINE users count
+    if (this.isAdmin) {
+      await this.fetchPendingLineUsersCount()
     }
   },
   methods: {
@@ -389,19 +434,21 @@ export default {
       if (event.key === 'Escape' && window.innerWidth < 1024) {
         this.$emit('toggle')
       }
+    },
+
+    async fetchPendingLineUsersCount() {
+      try {
+        const response = await this.$axios.get('/api/line-users/pending')
+        this.pendingLineUsersCount = response.data?.length || 0
+      } catch (error) {
+        console.error('Error fetching pending LINE users count:', error)
+        this.pendingLineUsersCount = 0
+      }
     }
   },
   
-  mounted() {
-    // เพิ่ม keyboard event listener
-    document.addEventListener('keydown', this.handleKeyboard)
-    
-    // Log current route สำหรับ debugging
-    console.log('Sidebar mounted, current route:', this.$route?.path)
-  },
-  
   beforeDestroy() {
-    // ลบ event listener
+    // ลບ event listener
     document.removeEventListener('keydown', this.handleKeyboard)
   },
   
