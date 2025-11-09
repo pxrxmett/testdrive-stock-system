@@ -42,7 +42,7 @@
             label="คิวทดลองขับ ISUZU"
             :active="isActive('/dashboard/isuzu/queue')"
             :collapsed="collapsed"
-            :brand-color="#E31E24"
+            brand-color="#E31E24"
             @click="navigateTo('/dashboard/isuzu/queue')"
           />
           <NavItem
@@ -50,7 +50,7 @@
             label="สต็อครถยนต์ ISUZU"
             :active="isActive('/dashboard/isuzu/stock')"
             :collapsed="collapsed"
-            :brand-color="#E31E24"
+            brand-color="#E31E24"
             @click="navigateTo('/dashboard/isuzu/stock')"
           />
           <NavItem
@@ -58,7 +58,7 @@
             label="เอกสาร ISUZU"
             :active="isActive('/dashboard/isuzu/documents')"
             :collapsed="collapsed"
-            :brand-color="#E31E24"
+            brand-color="#E31E24"
             @click="navigateTo('/dashboard/isuzu/documents')"
           />
           <NavItem
@@ -66,7 +66,7 @@
             label="พนักงาน ISUZU"
             :active="isActive('/dashboard/isuzu/staff')"
             :collapsed="collapsed"
-            :brand-color="#E31E24"
+            brand-color="#E31E24"
             @click="navigateTo('/dashboard/isuzu/staff')"
           />
         </div>
@@ -86,7 +86,7 @@
             label="คิวทดลองขับ BYD"
             :active="isActive('/dashboard/byd/queue')"
             :collapsed="collapsed"
-            :brand-color="#00A651"
+            brand-color="#00A651"
             @click="navigateTo('/dashboard/byd/queue')"
           />
           <NavItem
@@ -94,7 +94,7 @@
             label="สต็อครถไฟฟ้า BYD"
             :active="isActive('/dashboard/byd/stock')"
             :collapsed="collapsed"
-            :brand-color="#00A651"
+            brand-color="#00A651"
             @click="navigateTo('/dashboard/byd/stock')"
           />
           <NavItem
@@ -102,7 +102,7 @@
             label="เอกสาร BYD"
             :active="isActive('/dashboard/byd/documents')"
             :collapsed="collapsed"
-            :brand-color="#00A651"
+            brand-color="#00A651"
             @click="navigateTo('/dashboard/byd/documents')"
           />
           <NavItem
@@ -110,7 +110,7 @@
             label="พนักงาน BYD"
             :active="isActive('/dashboard/byd/staff')"
             :collapsed="collapsed"
-            :brand-color="#00A651"
+            brand-color="#00A651"
             @click="navigateTo('/dashboard/byd/staff')"
           />
         </div>
