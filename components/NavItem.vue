@@ -2,7 +2,6 @@
   <button
     @click="$emit('click')"
     :class="buttonClasses"
-    :style="buttonStyle"
     :title="collapsed ? label : ''"
   >
     <!-- Icon -->
@@ -10,31 +9,32 @@
       <svg
         class="w-5 h-5"
         :class="iconClasses"
-        :style="iconStyle"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
+        stroke-width="2"
       >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="iconPath" />
+        <path stroke-linecap="round" stroke-linejoin="round" :d="iconPath" />
       </svg>
     </div>
 
     <!-- Label -->
     <span
       v-if="!collapsed"
-      class="text-sm font-medium truncate transition-opacity duration-200"
+      class="text-sm font-medium truncate"
       :class="labelClasses"
-      :style="labelStyle"
     >
       {{ label }}
     </span>
 
-    <!-- Active Indicator -->
-    <div
-      v-if="active && !collapsed"
-      class="w-2 h-2 rounded-full ml-auto flex-shrink-0 animate-pulse"
-      :style="{ backgroundColor: activeColor }"
-    ></div>
+    <!-- Badge (optional) -->
+    <span
+      v-if="badge && !collapsed"
+      class="ml-auto flex-shrink-0 px-2 py-0.5 text-xs font-semibold rounded-full"
+      :class="badgeClasses"
+    >
+      {{ badge }}
+    </span>
   </button>
 </template>
 
@@ -58,34 +58,20 @@ export default {
       type: Boolean,
       default: false
     },
-    brandColor: {
-      type: String,
+    badge: {
+      type: [String, Number],
       default: null
     }
   },
   computed: {
-    activeColor() {
-      return this.brandColor || '#E31E24' // Default to ISUZU red
-    },
-
-    lightBgColor() {
-      if (!this.brandColor) return 'bg-red-50'
-
-      // Convert hex to light background
-      if (this.brandColor === '#E31E24') return 'bg-red-50'
-      if (this.brandColor === '#00A651') return 'bg-green-50'
-      return 'bg-gray-50'
-    },
-
     buttonClasses() {
       const baseClasses = [
-        'w-full flex items-center px-2 py-2.5 rounded-lg transition-all duration-200 group relative',
-        'hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-opacity-50'
+        'w-full flex items-center px-3 py-2.5 rounded-lg transition-all duration-150 group relative',
+        'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
       ]
 
       if (this.active) {
-        baseClasses.push(this.lightBgColor)
-        baseClasses.push('border-r-2 shadow-sm')
+        baseClasses.push('bg-white border-l-3 border-l-red-600 shadow-sm')
       }
 
       if (this.collapsed) {
@@ -97,49 +83,36 @@ export default {
       return baseClasses
     },
 
-    buttonStyle() {
-      if (this.active && this.brandColor) {
-        return {
-          borderRightColor: this.brandColor
-        }
-      }
-      return {}
-    },
-
     iconClasses() {
       if (this.active) {
-        return ''
+        return 'text-red-600'
       }
-      return 'text-gray-500 group-hover:text-gray-700 transition-colors duration-200'
-    },
-
-    iconStyle() {
-      if (this.active && this.brandColor) {
-        return { color: this.brandColor }
-      }
-      return {}
+      return 'text-gray-600 group-hover:text-gray-800 transition-colors duration-150'
     },
 
     labelClasses() {
-      return this.active ? '' : 'text-gray-700'
+      return this.active ? 'text-red-600' : 'text-gray-800 group-hover:text-gray-900'
     },
 
-    labelStyle() {
-      if (this.active && this.brandColor) {
-        return { color: this.brandColor }
-      }
-      return {}
+    badgeClasses() {
+      return 'bg-red-100 text-red-600'
     },
-    
+
     iconPath() {
       const icons = {
-        queue: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z",
-        chart: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
-        calendar: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z",
-        users: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z",
-        stock: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4",
-        settings: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z",
-        document: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+        // Lucide Icons (20x20px, stroke-width: 2)
+        home: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10",
+        car: "M14 16H9m10 0h3l-3.333-5.333M21 16v5a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1M3 16h3m0 0 3.333-5.333M6 16v5a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1m-3-5L10 3h4l3 8M6 11h12",
+        clipboard: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2 M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z",
+        users: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75",
+        link: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71 M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71",
+        barChart: "M12 20V10 M18 20V4 M6 20v-4",
+        settings: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
+        user: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2 M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z",
+        logOut: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9",
+        package: "M16.5 9.4l-9-5.19 M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z M3.27 6.96L12 12.01l8.73-5.05 M12 22.08V12",
+        fileText: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M16 13H8 M16 17H8 M10 9H8",
+        calendar: "M8 2v4 M16 2v4 M3 10h18 M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"
       }
 
       return icons[this.icon] || "M4 6h16M4 12h16M4 18h16"

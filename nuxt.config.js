@@ -13,12 +13,8 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { 
-        href: 'https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap', 
-        rel: 'stylesheet' 
-      },
       {
-        href: 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
+        href: 'https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap',
         rel: 'stylesheet'
       }
     ]
@@ -35,7 +31,9 @@ export default {
 
   components: true,
 
-  buildModules: [],
+  buildModules: [
+    '@nuxtjs/tailwindcss'
+  ],
 
   modules: [
     '@nuxtjs/axios',
