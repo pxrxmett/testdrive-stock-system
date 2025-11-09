@@ -47,8 +47,9 @@ export default {
       this.sidebarCollapsed = !this.sidebarCollapsed
     },
     handleNavigation(view) {
+      // Sidebar already handles navigation via $router.push
+      // Just update the view name for display purposes
       this.currentView = view
-      this.$router.push(`/dashboard/${view}`)
     },
     updateCurrentView() {
       const route = this.$route.name
