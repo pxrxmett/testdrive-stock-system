@@ -111,13 +111,13 @@
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="testDrive in filteredTestDrives" :key="testDrive.id" class="hover:bg-gray-50">
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {{ formatDateTime(testDrive.start_time) }}
+                  {{ formatDateTime(testDrive.start_time || testDrive.startTime || testDrive.scheduled_start) }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900">{{ testDrive.customer_name }}</div>
+                  <div class="text-sm font-medium text-gray-900">{{ testDrive.customer_name || testDrive.customerName || '-' }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ testDrive.customer_phone }}
+                  {{ testDrive.customer_phone || testDrive.customerPhone || testDrive.phone || '-' }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {{ testDrive.vehicle?.model || '-' }}
@@ -209,10 +209,11 @@ export default {
       // Search filter
       if (this.filters.search) {
         const search = this.filters.search.toLowerCase()
-        filtered = filtered.filter(td =>
-          td.customer_name?.toLowerCase().includes(search) ||
-          td.customer_phone?.includes(search)
-        )
+        filtered = filtered.filter(td => {
+          const name = (td.customer_name || td.customerName || '').toLowerCase()
+          const phone = td.customer_phone || td.customerPhone || td.phone || ''
+          return name.includes(search) || phone.includes(search)
+        })
       }
 
       // Status filter
@@ -223,7 +224,9 @@ export default {
       // Date filter
       if (this.filters.date) {
         filtered = filtered.filter(td => {
-          const tdDate = new Date(td.start_time).toISOString().split('T')[0]
+          const datetime = td.start_time || td.startTime || td.scheduled_start
+          if (!datetime) return false
+          const tdDate = new Date(datetime).toISOString().split('T')[0]
           return tdDate === this.filters.date
         })
       }
@@ -258,7 +261,7 @@ export default {
     },
 
     viewDocument(id) {
-      this.$router.push(`/dashboard/test-drives/${id}`)
+      this.$router.push(`/dashboard/documents/${id}`)
     },
 
     formatDateTime(datetime) {
