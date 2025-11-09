@@ -65,6 +65,7 @@
 export default {
   name: 'BydStockPage',
   layout: 'dashboard',
+  middleware: false,
   head() {
     return {
       title: 'สต็อครถไฟฟ้า BYD - BYD EV System'

@@ -33,6 +33,7 @@
 export default {
   name: 'IsuzuStaffPage',
   layout: 'dashboard',
+  middleware: false,
   head() {
     return {
       title: 'พนักงาน ISUZU - ISUZU Queue System'

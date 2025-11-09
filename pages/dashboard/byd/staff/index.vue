@@ -33,6 +33,7 @@
 export default {
   name: 'BydStaffPage',
   layout: 'dashboard',
+  middleware: false,
   head() {
     return {
       title: 'พนักงาน BYD - BYD EV System'

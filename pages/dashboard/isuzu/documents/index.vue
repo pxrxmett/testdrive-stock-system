@@ -33,6 +33,7 @@
 export default {
   name: 'IsuzuDocumentsPage',
   layout: 'dashboard',
+  middleware: false,
   head() {
     return {
       title: 'เอกสาร ISUZU - ISUZU Queue System'
