@@ -121,12 +121,16 @@ export default {
       return dateString || "ไม่ระบุวันที่"
     },
     getInitial(name) {
-      if (!name) return 'N'
-      const parts = name.split(' ')
-      if (parts.length > 1) {
-        return parts[1].charAt(0) || parts[0].charAt(0) || 'N'
+      if (!name || name === 'ไม่ระบุชื่อ' || name === 'ไม่ระบุพนักงานขาย') return 'ค'
+
+      // Try to get the second word (last name) first
+      const parts = name.trim().split(' ')
+      if (parts.length > 1 && parts[1]) {
+        return parts[1].charAt(0).toUpperCase()
       }
-      return name.charAt(0) || 'N'
+
+      // Otherwise use first character
+      return name.charAt(0).toUpperCase()
     }
   }
 }

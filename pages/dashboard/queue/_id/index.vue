@@ -74,18 +74,18 @@
           <div class="space-y-3">
             <div class="flex items-center justify-between py-2 border-b border-gray-100">
               <span class="text-gray-600">ชื่อลูกค้า</span>
-              <span class="font-medium text-gray-900">{{ queue.customerName || queue.customer_name || 'N/A' }}</span>
+              <span class="font-medium text-gray-900">{{ queue.customerName || queue.customer_name || 'ไม่ระบุชื่อ' }}</span>
             </div>
             <div class="flex items-center justify-between py-2 border-b border-gray-100">
               <span class="text-gray-600">เบอร์โทร</span>
               <a :href="`tel:${queue.phone || queue.customer_phone}`" class="font-medium text-blue-600 hover:underline">
-                {{ queue.phone || queue.customer_phone || 'N/A' }}
+                {{ queue.phone || queue.customer_phone || 'ไม่ระบุเบอร์' }}
               </a>
             </div>
             <div class="flex items-center justify-between py-2 border-b border-gray-100">
               <span class="text-gray-600">อีเมล</span>
               <a :href="`mailto:${queue.email || queue.customer_email}`" class="font-medium text-blue-600 hover:underline">
-                {{ queue.email || queue.customer_email || 'N/A' }}
+                {{ queue.email || queue.customer_email || 'ไม่ระบุอีเมล' }}
               </a>
             </div>
           </div>
@@ -102,11 +102,11 @@
           <div class="space-y-3">
             <div class="flex items-center justify-between py-2 border-b border-gray-100">
               <span class="text-gray-600">รุ่นรถ</span>
-              <span class="font-medium text-gray-900">{{ queue.vehicleModel || queue.vehicle_model || 'N/A' }}</span>
+              <span class="font-medium text-gray-900">{{ queue.vehicleModel || queue.vehicle_model || queue.carModel || 'ไม่ระบุรุ่นรถ' }}</span>
             </div>
             <div class="flex items-center justify-between py-2 border-b border-gray-100">
               <span class="text-gray-600">ทะเบียน</span>
-              <span class="font-medium text-gray-900">{{ queue.plateNumber || queue.plate_number || 'N/A' }}</span>
+              <span class="font-medium text-gray-900">{{ queue.plateNumber || queue.plate_number || 'ไม่ระบุทะเบียน' }}</span>
             </div>
           </div>
         </div>
@@ -228,15 +228,17 @@ export default {
       return this.$route.params.id
     },
     salesName() {
-      if (!this.queue?.sales) return 'N/A'
-      return this.queue.sales.nickname || this.queue.sales.firstName || this.queue.sales.name || 'N/A'
+      if (!this.queue?.sales) return 'ไม่ระบุพนักงานขาย'
+      return this.queue.sales.nickname || this.queue.sales.firstName || this.queue.sales.name || 'ไม่ระบุพนักงานขาย'
     },
     salesInitial() {
-      return this.salesName.charAt(0).toUpperCase()
+      const name = this.salesName
+      if (!name || name === 'ไม่ระบุพนักงานขาย') return 'พ'
+      return name.charAt(0).toUpperCase()
     },
     formattedDate() {
-      const date = this.queue?.appointmentDate || this.queue?.appointment_date
-      if (!date) return 'N/A'
+      const date = this.queue?.appointmentDate || this.queue?.appointment_date || this.queue?.start_time || this.queue?.startTime
+      if (!date) return '-'
       try {
         return new Date(date).toLocaleDateString('th-TH', {
           year: 'numeric',
@@ -249,12 +251,24 @@ export default {
     },
     formattedTime() {
       const time = this.queue?.appointmentTime || this.queue?.appointment_time
-      if (!time) return 'N/A'
-      return time
+      if (time) return time
+
+      // Try to extract time from start_time or startTime
+      const datetime = this.queue?.start_time || this.queue?.startTime
+      if (!datetime) return '-'
+
+      try {
+        return new Date(datetime).toLocaleTimeString('th-TH', {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      } catch (e) {
+        return '-'
+      }
     },
     formattedCreatedAt() {
       const date = this.queue?.createdAt || this.queue?.created_at
-      if (!date) return 'N/A'
+      if (!date) return '-'
       try {
         return new Date(date).toLocaleString('th-TH')
       } catch (e) {
@@ -263,7 +277,7 @@ export default {
     },
     formattedUpdatedAt() {
       const date = this.queue?.updatedAt || this.queue?.updated_at
-      if (!date) return 'N/A'
+      if (!date) return '-'
       try {
         return new Date(date).toLocaleString('th-TH')
       } catch (e) {

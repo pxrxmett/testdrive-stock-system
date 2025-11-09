@@ -108,11 +108,20 @@ export default {
   computed: {
     salesName() {
       if (!this.salesPerson) return '⚠️ ไม่ระบุพนักงานขาย'
-      return this.salesPerson.nickname || this.salesPerson.firstName || this.salesPerson.name || 'N/A'
+      return this.salesPerson.nickname || this.salesPerson.firstName || this.salesPerson.name || 'ไม่ระบุพนักงานขาย'
     },
     salesInitial() {
-      if (!this.salesPerson) return '?'
+      if (!this.salesPerson) return 'พ'
       const name = this.salesName
+      if (!name || name === 'ไม่ระบุพนักงานขาย') return 'พ'
+
+      // Try to get the second word (last name) first
+      const parts = name.trim().split(' ')
+      if (parts.length > 1 && parts[1]) {
+        return parts[1].charAt(0).toUpperCase()
+      }
+
+      // Otherwise use first character
       return name.charAt(0).toUpperCase()
     },
     queueCount() {

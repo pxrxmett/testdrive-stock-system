@@ -16,17 +16,18 @@
         <div class="flex items-center space-x-3">
           <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
             <span class="text-white text-xs font-medium">
-              {{ queue.customerName.split(' ')[1]?.charAt(0) || 'ค' }}
+              {{ getInitial(queue.customerName) }}
             </span>
           </div>
           <div>
-            <p class="text-sm font-medium text-gray-900">{{ queue.customerName }}</p>
-            <p class="text-xs text-gray-500">{{ queue.carModel }}</p>
+            <p class="text-sm font-medium text-gray-900">{{ queue.customerName || 'ไม่ระบุชื่อ' }}</p>
+            <p class="text-xs text-gray-500">{{ queue.carModel || 'ไม่ระบุรุ่นรถ' }}</p>
           </div>
         </div>
 
         <div class="text-right">
-          <p class="text-sm text-gray-900">{{ queue.timeSlot }}</p>
+          <p class="text-xs text-gray-500 mb-1">{{ queue.date || '-' }}</p>
+          <p class="text-sm font-medium text-gray-900">{{ queue.timeSlot || '-' }}</p>
           <StatusBadge :status="queue.status" />
         </div>
       </div>
@@ -54,6 +55,20 @@ export default {
     ...mapState('dashboard', ['queues']),
     recentQueues() {
       return this.queues.slice(0, 5)
+    }
+  },
+  methods: {
+    getInitial(name) {
+      if (!name || name === 'ไม่ระบุชื่อ') return 'ค'
+
+      // Try to get the second word (last name) first
+      const parts = name.trim().split(' ')
+      if (parts.length > 1 && parts[1]) {
+        return parts[1].charAt(0).toUpperCase()
+      }
+
+      // Otherwise use first character
+      return name.charAt(0).toUpperCase()
     }
   }
 }

@@ -28,7 +28,7 @@
               </button>
               <div>
                 <h1 class="text-xl font-semibold text-gray-900">เอกสารทดลองขับ</h1>
-                <p class="text-sm text-gray-600">{{ testDrive.customer_name }}</p>
+                <p class="text-sm text-gray-600">{{ testDrive.customer_name || testDrive.customerName || 'ไม่ระบุชื่อ' }}</p>
               </div>
             </div>
 
@@ -176,7 +176,7 @@ export default {
 
   head() {
     return {
-      title: `เอกสารทดลองขับ - ${this.testDrive?.customer_name || 'ISUZU'}`
+      title: `เอกสารทดลองขับ - ${this.testDrive?.customer_name || this.testDrive?.customerName || 'ISUZU'}`
     }
   }
 }
