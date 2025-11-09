@@ -161,8 +161,17 @@ export default {
     }
   },
 
-  mounted() {
-    this.loadTestDrive()
+  async mounted() {
+    await this.loadTestDrive()
+
+    // Auto-print if query parameter is set
+    if (this.$route.query.print === 'true') {
+      // Wait for component to render
+      await this.$nextTick()
+      setTimeout(() => {
+        window.print()
+      }, 500)
+    }
   },
 
   head() {
