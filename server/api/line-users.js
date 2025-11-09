@@ -1,9 +1,6 @@
 // Mock API endpoints for LINE Users Management
 // These are development endpoints - replace with real backend implementation
 
-const express = require('express')
-const app = express()
-
 // Mock data
 let pendingUsers = [
   {
@@ -50,98 +47,134 @@ const staffList = [
   { id: 'staff-4', name: 'นางสาวอรุณี สดใส', role: 'Customer Service' }
 ]
 
-// Middleware
-app.use(express.json())
-
-// Get pending users
-app.get('/api/line-users/pending', (req, res) => {
-  console.log('📥 GET /api/line-users/pending')
-  res.json(pendingUsers)
-})
-
-// Get linked users
-app.get('/api/line-users/linked', (req, res) => {
-  console.log('📥 GET /api/line-users/linked')
-  res.json(linkedUsers)
-})
-
-// Get staff list
-app.get('/api/staff', (req, res) => {
-  console.log('📥 GET /api/staff')
-  res.json(staffList)
-})
-
-// Link user to staff
-app.post('/api/line-users/:id/link', (req, res) => {
-  const { id } = req.params
-  const { staffId } = req.body
-
-  console.log(`📥 POST /api/line-users/${id}/link`, { staffId })
-
-  // Find pending user
-  const userIndex = pendingUsers.findIndex(u => u.id === id)
-  if (userIndex === -1) {
-    return res.status(404).json({ error: 'User not found' })
-  }
-
-  // Find staff
-  const staff = staffList.find(s => s.id === staffId)
-  if (!staff) {
-    return res.status(404).json({ error: 'Staff not found' })
-  }
-
-  // Move from pending to linked
-  const user = pendingUsers[userIndex]
-  pendingUsers.splice(userIndex, 1)
-
-  const linkedUser = {
-    ...user,
-    staffId,
-    staffName: staff.name,
-    staffRole: staff.role,
-    linkedAt: new Date().toISOString()
-  }
-
-  linkedUsers.push(linkedUser)
-
-  res.json({
-    success: true,
-    message: 'User linked successfully',
-    data: linkedUser
+// Helper to parse request body
+function parseBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = ''
+    req.on('data', chunk => {
+      body += chunk.toString()
+    })
+    req.on('end', () => {
+      try {
+        resolve(body ? JSON.parse(body) : {})
+      } catch (e) {
+        resolve({})
+      }
+    })
+    req.on('error', reject)
   })
-})
+}
 
-// Unlink user
-app.post('/api/line-users/:id/unlink', (req, res) => {
-  const { id } = req.params
+// Helper to send JSON response
+function sendJSON(res, data, statusCode = 200) {
+  res.statusCode = statusCode
+  res.setHeader('Content-Type', 'application/json')
+  res.end(JSON.stringify(data))
+}
 
-  console.log(`📥 POST /api/line-users/${id}/unlink`)
+// Main middleware handler
+module.exports = async function (req, res, next) {
+  const url = req.url
+  const method = req.method
 
-  // Find linked user
-  const userIndex = linkedUsers.findIndex(u => u.id === id)
-  if (userIndex === -1) {
-    return res.status(404).json({ error: 'User not found' })
+  console.log(`📥 ${method} ${url}`)
+
+  // CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+
+  if (method === 'OPTIONS') {
+    res.statusCode = 200
+    res.end()
+    return
   }
 
-  // Move from linked to pending
-  const user = linkedUsers[userIndex]
-  linkedUsers.splice(userIndex, 1)
-
-  const pendingUser = {
-    id: user.id,
-    lineUserId: user.lineUserId,
-    displayName: user.displayName,
-    pictureUrl: user.pictureUrl,
-    createdAt: user.createdAt
+  // Get pending users
+  if (url === '/api/line-users/pending' && method === 'GET') {
+    return sendJSON(res, pendingUsers)
   }
 
-  pendingUsers.push(pendingUser)
+  // Get linked users
+  if (url === '/api/line-users/linked' && method === 'GET') {
+    return sendJSON(res, linkedUsers)
+  }
 
-  res.json({
-    success: true,
-    message: 'User unlinked successfully',
-    data: pendingUser
-  })
-})
+  // Get staff list
+  if (url === '/api/staff' && method === 'GET') {
+    return sendJSON(res, staffList)
+  }
 
-module.exports = app
+  // Link user to staff
+  if (url.match(/^\/api\/line-users\/[^/]+\/link$/) && method === 'POST') {
+    const id = url.split('/')[3]
+    const body = await parseBody(req)
+    const { staffId } = body
+
+    // Find pending user
+    const userIndex = pendingUsers.findIndex(u => u.id === id)
+    if (userIndex === -1) {
+      return sendJSON(res, { error: 'User not found' }, 404)
+    }
+
+    // Find staff
+    const staff = staffList.find(s => s.id === staffId)
+    if (!staff) {
+      return sendJSON(res, { error: 'Staff not found' }, 404)
+    }
+
+    // Move from pending to linked
+    const user = pendingUsers[userIndex]
+    pendingUsers.splice(userIndex, 1)
+
+    const linkedUser = {
+      ...user,
+      staffId,
+      staffName: staff.name,
+      staffRole: staff.role,
+      linkedAt: new Date().toISOString()
+    }
+
+    linkedUsers.push(linkedUser)
+
+    return sendJSON(res, {
+      success: true,
+      message: 'User linked successfully',
+      data: linkedUser
+    })
+  }
+
+  // Unlink user
+  if (url.match(/^\/api\/line-users\/[^/]+\/unlink$/) && method === 'POST') {
+    const id = url.split('/')[3]
+
+    // Find linked user
+    const userIndex = linkedUsers.findIndex(u => u.id === id)
+    if (userIndex === -1) {
+      return sendJSON(res, { error: 'User not found' }, 404)
+    }
+
+    // Move from linked to pending
+    const user = linkedUsers[userIndex]
+    linkedUsers.splice(userIndex, 1)
+
+    const pendingUser = {
+      id: user.id,
+      lineUserId: user.lineUserId,
+      displayName: user.displayName,
+      pictureUrl: user.pictureUrl,
+      createdAt: user.createdAt
+    }
+
+    pendingUsers.push(pendingUser)
+
+    return sendJSON(res, {
+      success: true,
+      message: 'User unlinked successfully',
+      data: pendingUser
+    })
+  }
+
+  // If no route matched, pass to next middleware
+  next()
+}
