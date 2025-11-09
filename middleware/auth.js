@@ -8,7 +8,9 @@ export default function ({ store, redirect, route, app }) {
 
   // Public routes that don't require authentication
   const publicRoutes = ['/login']
-  const isPublicRoute = publicRoutes.includes(route.path)
+  const isPublicRoute = publicRoutes.includes(route.path) ||
+                        route.path.startsWith('/dashboard/isuzu/') ||
+                        route.path.startsWith('/dashboard/byd/')
 
   // If not authenticated and trying to access protected route
   if (!isAuthenticated && !token && !isPublicRoute) {
