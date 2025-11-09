@@ -286,12 +286,67 @@
           </div>
         </section>
 
+        <!-- Bulk Actions Bar -->
+        <div v-if="selectedDocuments.length > 0" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span class="text-sm font-medium text-blue-900">เลือกแล้ว {{ selectedDocuments.length }} รายการ</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button
+                @click="exportSelected"
+                class="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <span>Export ที่เลือก</span>
+              </button>
+              <button
+                @click="printSelected"
+                :disabled="!canPrintSelected"
+                :class="[
+                  'flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors text-sm',
+                  canPrintSelected
+                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                ]"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                </svg>
+                <span>พิมพ์ที่เลือก</span>
+              </button>
+              <button
+                @click="clearSelection"
+                class="flex items-center space-x-2 px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                <span>ยกเลิก</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Table -->
         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
           <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
+                  <th class="px-6 py-3 text-left">
+                    <input
+                      type="checkbox"
+                      :checked="isAllSelected"
+                      @change="toggleSelectAll"
+                      class="w-4 h-4 text-red-600 rounded focus:ring-red-500"
+                    />
+                  </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เลขที่เอกสาร</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">วันที่-เวลา</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ชื่อลูกค้า</th>
@@ -303,6 +358,16 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="testDrive in paginatedTestDrives" :key="testDrive.id" class="hover:bg-gray-50">
+                  <!-- Checkbox -->
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      :checked="isSelected(testDrive.id)"
+                      @change="toggleSelect(testDrive.id)"
+                      class="w-4 h-4 text-red-600 rounded focus:ring-red-500"
+                    />
+                  </td>
+
                   <!-- Document Number -->
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
@@ -519,6 +584,7 @@ export default {
       perPage: 20,
       showAdvancedSearch: false,
       recentSearches: [],
+      selectedDocuments: [],
       quickFilters: [
         { label: 'ทั้งหมด', value: '' },
         { label: 'วันนี้', value: 'today' },
@@ -661,6 +727,19 @@ export default {
 
     notReadyDocuments() {
       return this.testDrives.filter(td => this.getDocStatus(td) === 'not_ready').length
+    },
+
+    isAllSelected() {
+      return this.paginatedTestDrives.length > 0 &&
+             this.paginatedTestDrives.every(td => this.selectedDocuments.includes(td.id))
+    },
+
+    canPrintSelected() {
+      return this.selectedDocuments.length > 0 &&
+             this.selectedDocuments.every(id => {
+               const td = this.testDrives.find(t => t.id === id)
+               return td && this.isDocReady(td)
+             })
     }
   },
 
@@ -970,6 +1049,99 @@ export default {
       document.body.removeChild(link)
 
       this.$toast?.success('Export Excel เรียบร้อย')
+    },
+
+    // Bulk Actions Methods
+    toggleSelect(id) {
+      const index = this.selectedDocuments.indexOf(id)
+      if (index > -1) {
+        this.selectedDocuments.splice(index, 1)
+      } else {
+        this.selectedDocuments.push(id)
+      }
+    },
+
+    toggleSelectAll() {
+      if (this.isAllSelected) {
+        // Unselect all in current page
+        this.paginatedTestDrives.forEach(td => {
+          const index = this.selectedDocuments.indexOf(td.id)
+          if (index > -1) {
+            this.selectedDocuments.splice(index, 1)
+          }
+        })
+      } else {
+        // Select all in current page
+        this.paginatedTestDrives.forEach(td => {
+          if (!this.selectedDocuments.includes(td.id)) {
+            this.selectedDocuments.push(td.id)
+          }
+        })
+      }
+    },
+
+    isSelected(id) {
+      return this.selectedDocuments.includes(id)
+    },
+
+    clearSelection() {
+      this.selectedDocuments = []
+    },
+
+    exportSelected() {
+      const selected = this.testDrives.filter(td => this.selectedDocuments.includes(td.id))
+
+      const data = selected.map(td => ({
+        'เลขที่เอกสาร': this.getDocumentNumber(td),
+        'วันที่-เวลา': this.formatDateTime(td.start_time || td.startTime || td.scheduled_start),
+        'ชื่อลูกค้า': td.customer_name || td.customerName || '-',
+        'เบอร์โทร': td.customer_phone || td.customerPhone || td.phone || '-',
+        'รุ่นรถ': td.vehicle?.model || '-',
+        'สถานะเอกสาร': this.getDocStatusText(td).replace(/[🟢🟡🔴]/g, '').trim(),
+        'PDPA': td.pdpa_consent ? 'ยินยอม' : 'ยังไม่ยินยอม',
+        'ลายเซ็น': td.signature_data ? 'มี' : 'ยังไม่มี'
+      }))
+
+      const headers = Object.keys(data[0])
+      const csv = [
+        headers.join(','),
+        ...data.map(row => headers.map(header => {
+          const value = row[header] || ''
+          return `"${String(value).replace(/"/g, '""')}"`
+        }).join(','))
+      ].join('\n')
+
+      const BOM = '\uFEFF'
+      const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      const url = URL.createObjectURL(blob)
+      const timestamp = new Date().toISOString().split('T')[0]
+
+      link.setAttribute('href', url)
+      link.setAttribute('download', `เอกสารทดลองขับ_เลือก_${timestamp}.csv`)
+      link.style.visibility = 'hidden'
+
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+
+      this.$toast?.success(`Export ${selected.length} รายการเรียบร้อย`)
+    },
+
+    printSelected() {
+      if (!this.canPrintSelected) {
+        this.$toast?.error('มีเอกสารบางรายการยังไม่พร้อม กรุณาเลือกเฉพาะเอกสารที่พร้อมพิมพ์')
+        return
+      }
+
+      this.$toast?.info(`กำลังพิมพ์ ${this.selectedDocuments.length} เอกสาร...`)
+
+      // Open each document in a new tab for printing
+      this.selectedDocuments.forEach((id, index) => {
+        setTimeout(() => {
+          window.open(`/dashboard/documents/${id}?print=true`, '_blank')
+        }, index * 500) // Delay to prevent browser blocking
+      })
     }
   },
 
