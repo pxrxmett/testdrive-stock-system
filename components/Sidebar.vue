@@ -17,61 +17,135 @@
 
     <!-- Navigation -->
     <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
-      <!-- Main Navigation -->
-      <div class="space-y-1">
-        <NavItem 
-          icon="queue"
-          label="จัดการคิวทดลองขับ"
-          :active="isActive('/dashboard/queue')"
-          :collapsed="collapsed"
-          @click="navigateTo('/dashboard/queue')"
-        />
-        <NavItem 
-          icon="stock"
-          label="จัดการสต็อกรถยนต์"
-          :active="isActive('/dashboard/stock')"
-          :collapsed="collapsed"
-          @click="navigateTo('/dashboard/stock')"
-        />
+      <!-- Dashboard -->
+      <div class="space-y-1 mb-2">
         <NavItem
-          icon="calendar"
-          label="จัดการอีเวนต์"
-          :active="isActive('/dashboard/events')"
+          icon="chart"
+          label="Dashboard"
+          :active="isActive('/dashboard') && $route.path === '/dashboard'"
           :collapsed="collapsed"
-          @click="navigateTo('/dashboard/events')"
-        />
-        <NavItem
-          icon="document"
-          label="เอกสารทดลองขับ"
-          :active="isActive('/dashboard/documents')"
-          :collapsed="collapsed"
-          @click="navigateTo('/dashboard/documents')"
+          @click="navigateTo('/dashboard')"
         />
       </div>
 
-      <!-- Data Management Section -->
+      <!-- ISUZU Section -->
+      <div class="pt-2">
+        <div v-if="!collapsed" class="flex items-center space-x-2 text-xs font-bold text-red-600 uppercase tracking-wider mb-2 px-2">
+          <span>🚗</span>
+          <span>รถยนต์ ISUZU</span>
+        </div>
+        <div v-else class="border-t-2 border-red-500 my-2"></div>
+
+        <div class="space-y-1">
+          <NavItem
+            icon="queue"
+            label="คิวทดลองขับ ISUZU"
+            :active="isActive('/dashboard/isuzu/queue')"
+            :collapsed="collapsed"
+            :brand-color="#E31E24"
+            @click="navigateTo('/dashboard/isuzu/queue')"
+          />
+          <NavItem
+            icon="stock"
+            label="สต็อครถยนต์ ISUZU"
+            :active="isActive('/dashboard/isuzu/stock')"
+            :collapsed="collapsed"
+            :brand-color="#E31E24"
+            @click="navigateTo('/dashboard/isuzu/stock')"
+          />
+          <NavItem
+            icon="document"
+            label="เอกสาร ISUZU"
+            :active="isActive('/dashboard/isuzu/documents')"
+            :collapsed="collapsed"
+            :brand-color="#E31E24"
+            @click="navigateTo('/dashboard/isuzu/documents')"
+          />
+          <NavItem
+            icon="users"
+            label="พนักงาน ISUZU"
+            :active="isActive('/dashboard/isuzu/staff')"
+            :collapsed="collapsed"
+            :brand-color="#E31E24"
+            @click="navigateTo('/dashboard/isuzu/staff')"
+          />
+        </div>
+      </div>
+
+      <!-- BYD Section -->
+      <div class="pt-4">
+        <div v-if="!collapsed" class="flex items-center space-x-2 text-xs font-bold text-green-600 uppercase tracking-wider mb-2 px-2">
+          <span>⚡</span>
+          <span>รถไฟฟ้า BYD</span>
+        </div>
+        <div v-else class="border-t-2 border-green-500 my-2"></div>
+
+        <div class="space-y-1">
+          <NavItem
+            icon="queue"
+            label="คิวทดลองขับ BYD"
+            :active="isActive('/dashboard/byd/queue')"
+            :collapsed="collapsed"
+            :brand-color="#00A651"
+            @click="navigateTo('/dashboard/byd/queue')"
+          />
+          <NavItem
+            icon="stock"
+            label="สต็อครถไฟฟ้า BYD"
+            :active="isActive('/dashboard/byd/stock')"
+            :collapsed="collapsed"
+            :brand-color="#00A651"
+            @click="navigateTo('/dashboard/byd/stock')"
+          />
+          <NavItem
+            icon="document"
+            label="เอกสาร BYD"
+            :active="isActive('/dashboard/byd/documents')"
+            :collapsed="collapsed"
+            :brand-color="#00A651"
+            @click="navigateTo('/dashboard/byd/documents')"
+          />
+          <NavItem
+            icon="users"
+            label="พนักงาน BYD"
+            :active="isActive('/dashboard/byd/staff')"
+            :collapsed="collapsed"
+            :brand-color="#00A651"
+            @click="navigateTo('/dashboard/byd/staff')"
+          />
+        </div>
+      </div>
+
+      <!-- Common Section -->
       <div class="pt-4">
         <div v-if="!collapsed" class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 px-2">
-          ข้อมูล
+          ข้อมูลทั่วไป
         </div>
         <div v-else class="border-t border-gray-200 my-2"></div>
-        
+
         <div class="space-y-1">
-          <NavItem 
+          <NavItem
             icon="chart"
-            label="รายงาน"
+            label="รายงานเปรียบเทียบ"
             :active="isActive('/dashboard/analytics')"
             :collapsed="collapsed"
             @click="navigateTo('/dashboard/analytics')"
           />
-          <NavItem 
+          <NavItem
             icon="calendar"
-            label="ปฏิทิน"
+            label="ปฏิทินรวม"
             :active="isActive('/dashboard/calendar')"
             :collapsed="collapsed"
             @click="navigateTo('/dashboard/calendar')"
           />
-          <NavItem 
+          <NavItem
+            icon="calendar"
+            label="จัดการอีเวนต์"
+            :active="isActive('/dashboard/events')"
+            :collapsed="collapsed"
+            @click="navigateTo('/dashboard/events')"
+          />
+          <NavItem
             icon="settings"
             label="ตั้งค่า"
             :active="isActive('/dashboard/settings')"
@@ -168,6 +242,19 @@ export default {
     },
     
     getViewFromPath(path) {
+      // ISUZU paths
+      if (path.includes('/isuzu/queue')) return 'isuzu-queue'
+      if (path.includes('/isuzu/stock')) return 'isuzu-stock'
+      if (path.includes('/isuzu/documents')) return 'isuzu-documents'
+      if (path.includes('/isuzu/staff')) return 'isuzu-staff'
+
+      // BYD paths
+      if (path.includes('/byd/queue')) return 'byd-queue'
+      if (path.includes('/byd/stock')) return 'byd-stock'
+      if (path.includes('/byd/documents')) return 'byd-documents'
+      if (path.includes('/byd/staff')) return 'byd-staff'
+
+      // Common paths
       if (path.includes('/documents')) return 'documents'
       if (path.includes('/queue')) return 'queue'
       if (path.includes('/stock')) return 'stock'
@@ -175,7 +262,9 @@ export default {
       if (path.includes('/analytics')) return 'analytics'
       if (path.includes('/calendar')) return 'calendar'
       if (path.includes('/settings')) return 'settings'
-      return 'queue'
+      if (path.includes('/staff')) return 'staff'
+
+      return 'dashboard'
     },
     
     isActive(path) {
@@ -186,10 +275,20 @@ export default {
       if (this.$route.path === path) return true
 
       // สำหรับ nested routes
-      if (path !== '/' && this.$route.path.startsWith(path + '/')) return true
+      if (path !== '/' && path !== '/dashboard' && this.$route.path.startsWith(path + '/')) return true
+
+      // สำหรับ ISUZU brand paths
+      if (path.includes('/isuzu/')) {
+        return this.$route.path.startsWith(path) || this.$route.path.startsWith(path + '/')
+      }
+
+      // สำหรับ BYD brand paths
+      if (path.includes('/byd/')) {
+        return this.$route.path.startsWith(path) || this.$route.path.startsWith(path + '/')
+      }
 
       // สำหรับ stock page - รองรับทั้ง /stock และ /dashboard/stock
-      if (path.includes('/stock')) {
+      if (path.includes('/stock') && !path.includes('/isuzu/') && !path.includes('/byd/')) {
         return this.$route.path === '/stock' ||
                this.$route.path === '/dashboard/stock' ||
                this.$route.path.startsWith('/stock/') ||
@@ -204,8 +303,8 @@ export default {
                this.$route.path.startsWith('/dashboard/events/')
       }
 
-      // สำหรับ documents page
-      if (path.includes('/documents')) {
+      // สำหรับ documents page (legacy)
+      if (path.includes('/documents') && !path.includes('/isuzu/') && !path.includes('/byd/')) {
         return this.$route.path === '/documents' ||
                this.$route.path === '/dashboard/documents' ||
                this.$route.path.startsWith('/documents/') ||

@@ -1,16 +1,95 @@
 <template>
   <div class="space-y-6">
     <!-- Welcome Section -->
-    <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-lg p-6 text-white">
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-lg p-6 text-white">
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-2xl font-bold mb-2">ยินดีต้อนรับสู่ระบบจัดการคิว ISUZU</h1>
-          <p class="text-red-100">จัดการคิวทดลองขับและติดตามสถิติได้อย่างมีประสิทธิภาพ</p>
+          <h1 class="text-2xl font-bold mb-2">ยินดีต้อนรับสู่ระบบจัดการคิว Multi-Brand</h1>
+          <p class="text-blue-100">จัดการคิวทดลองขับ ISUZU และ BYD ได้อย่างมีประสิทธิภาพ</p>
         </div>
-        <div class="hidden md:block">
-          <svg class="w-16 h-16 text-red-200" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
-          </svg>
+        <div class="hidden md:flex items-center space-x-4">
+          <div class="text-center">
+            <div class="text-3xl mb-1">🚗</div>
+            <div class="text-xs text-blue-200">ISUZU</div>
+          </div>
+          <div class="text-2xl text-blue-200">+</div>
+          <div class="text-center">
+            <div class="text-3xl mb-1">⚡</div>
+            <div class="text-xs text-blue-200">BYD</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brand Statistics Cards -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- ISUZU Card -->
+      <div class="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
+              <span class="text-2xl">🚗</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-900">ISUZU รถยนต์</h3>
+              <p class="text-sm text-gray-600">รถกระบะ, รถบรรทุก, PPV</p>
+            </div>
+          </div>
+          <nuxt-link
+            to="/dashboard/isuzu/queue"
+            class="px-3 py-1 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
+          >
+            ดูรายละเอียด →
+          </nuxt-link>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-red-600">0</div>
+            <div class="text-xs text-gray-600">คิวทั้งหมด</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-red-600">0</div>
+            <div class="text-xs text-gray-600">สต็อกรถ</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-red-600">0</div>
+            <div class="text-xs text-gray-600">พนักงาน</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BYD Card -->
+      <div class="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
+              <span class="text-2xl">⚡</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-900">BYD รถไฟฟ้า</h3>
+              <p class="text-sm text-gray-600">รถยนต์ไฟฟ้า 100%</p>
+            </div>
+          </div>
+          <nuxt-link
+            to="/dashboard/byd/queue"
+            class="px-3 py-1 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+          >
+            ดูรายละเอียด →
+          </nuxt-link>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-green-600">0</div>
+            <div class="text-xs text-gray-600">คิวทั้งหมด</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-green-600">0</div>
+            <div class="text-xs text-gray-600">สต็อกรถ</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-green-600">0</div>
+            <div class="text-xs text-gray-600">พนักงาน</div>
+          </div>
         </div>
       </div>
     </div>

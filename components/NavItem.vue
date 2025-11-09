@@ -2,28 +2,38 @@
   <button
     @click="$emit('click')"
     :class="buttonClasses"
+    :style="buttonStyle"
     :title="collapsed ? label : ''"
   >
     <!-- Icon -->
     <div class="flex-shrink-0">
-      <svg class="w-5 h-5" :class="iconClasses" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg
+        class="w-5 h-5"
+        :class="iconClasses"
+        :style="iconStyle"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="iconPath" />
       </svg>
     </div>
-    
+
     <!-- Label -->
-    <span 
-      v-if="!collapsed" 
+    <span
+      v-if="!collapsed"
       class="text-sm font-medium truncate transition-opacity duration-200"
       :class="labelClasses"
+      :style="labelStyle"
     >
       {{ label }}
     </span>
-    
+
     <!-- Active Indicator -->
-    <div 
+    <div
       v-if="active && !collapsed"
-      class="w-2 h-2 bg-red-500 rounded-full ml-auto flex-shrink-0 animate-pulse"
+      class="w-2 h-2 rounded-full ml-auto flex-shrink-0 animate-pulse"
+      :style="{ backgroundColor: activeColor }"
     ></div>
   </button>
 </template>
@@ -47,37 +57,78 @@ export default {
     collapsed: {
       type: Boolean,
       default: false
+    },
+    brandColor: {
+      type: String,
+      default: null
     }
   },
   computed: {
+    activeColor() {
+      return this.brandColor || '#E31E24' // Default to ISUZU red
+    },
+
+    lightBgColor() {
+      if (!this.brandColor) return 'bg-red-50'
+
+      // Convert hex to light background
+      if (this.brandColor === '#E31E24') return 'bg-red-50'
+      if (this.brandColor === '#00A651') return 'bg-green-50'
+      return 'bg-gray-50'
+    },
+
     buttonClasses() {
       const baseClasses = [
         'w-full flex items-center px-2 py-2.5 rounded-lg transition-all duration-200 group relative',
-        'hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50',
-        'transform hover:scale-105'
+        'hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-opacity-50'
       ]
-      
+
       if (this.active) {
-        baseClasses.push('bg-red-50 border-r-2 border-red-500 shadow-sm')
+        baseClasses.push(this.lightBgColor)
+        baseClasses.push('border-r-2 shadow-sm')
       }
-      
+
       if (this.collapsed) {
         baseClasses.push('justify-center')
       } else {
         baseClasses.push('space-x-3')
       }
-      
+
       return baseClasses
     },
-    
-    iconClasses() {
-      return this.active 
-        ? 'text-red-600' 
-        : 'text-gray-500 group-hover:text-gray-700 transition-colors duration-200'
+
+    buttonStyle() {
+      if (this.active && this.brandColor) {
+        return {
+          borderRightColor: this.brandColor
+        }
+      }
+      return {}
     },
-    
+
+    iconClasses() {
+      if (this.active) {
+        return ''
+      }
+      return 'text-gray-500 group-hover:text-gray-700 transition-colors duration-200'
+    },
+
+    iconStyle() {
+      if (this.active && this.brandColor) {
+        return { color: this.brandColor }
+      }
+      return {}
+    },
+
     labelClasses() {
-      return this.active ? 'text-red-700' : 'text-gray-700'
+      return this.active ? '' : 'text-gray-700'
+    },
+
+    labelStyle() {
+      if (this.active && this.brandColor) {
+        return { color: this.brandColor }
+      }
+      return {}
     },
     
     iconPath() {
