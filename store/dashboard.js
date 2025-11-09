@@ -86,26 +86,43 @@ export const actions = {
       // อาจจะเป็น response.data หรือ response โดยตรง
       const apiData = Array.isArray(response) ? response : (response.data || [])
 
-      const queues = apiData.map(item => ({
-        id: item.id,
-        customerName: item.customer_name || item.customerName,
-        phone: item.customer_phone || item.phone,
-        email: item.email,
-        carModel: item.vehicleModel || item.vehicle?.model || 'N/A',
-        timeSlot: item.start_time ? new Date(item.start_time).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) : item.timeSlot,
-        date: item.start_time ? new Date(item.start_time).toISOString().split('T')[0] : item.date,
-        duration: item.duration,
-        status: item.status,
-        priority: item.priority || 'medium',
-        location: item.test_route || item.location || 'N/A',
-        salesRep: item.staff_name || item.salesRep || 'N/A',
-        leadSource: item.leadSource,
-        expectedRevenue: item.expectedRevenue,
-        customerType: item.customerType || 'Standard',
-        notes: item.notes,
-        createdAt: item.created_at || item.createdAt,
-        updatedAt: item.updated_at || item.updatedAt
-      }))
+      const queues = apiData.map(item => {
+        // Helper function to get value from multiple possible field names
+        const getValue = (...fieldNames) => {
+          for (const field of fieldNames) {
+            if (field && field !== 'N/A' && field !== null && field !== undefined) {
+              return field
+            }
+          }
+          return null
+        }
+
+        // Format date and time
+        const startTime = item.start_time || item.startTime || item.scheduled_start
+        const formattedDate = startTime ? new Date(startTime).toLocaleDateString('th-TH') : (item.date || '-')
+        const formattedTime = startTime ? new Date(startTime).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) : (item.timeSlot || '-')
+
+        return {
+          id: item.id,
+          customerName: getValue(item.customer_name, item.customerName) || 'ไม่ระบุชื่อ',
+          phone: getValue(item.customer_phone, item.customerPhone, item.phone) || 'ไม่ระบุเบอร์',
+          email: getValue(item.customer_email, item.customerEmail, item.email) || '',
+          carModel: getValue(item.vehicle?.model, item.vehicleModel, item.car_model) || 'ไม่ระบุรุ่นรถ',
+          timeSlot: formattedTime,
+          date: formattedDate,
+          duration: item.duration || item.expected_duration || 60,
+          status: item.status || 'scheduled',
+          priority: item.priority || 'medium',
+          location: getValue(item.test_route, item.location, item.test_location) || 'ไม่ระบุสถานที่',
+          salesRep: getValue(item.staff_name, item.salesRep, item.sales_rep) || 'ไม่ระบุพนักงานขาย',
+          leadSource: item.leadSource || item.lead_source || '',
+          expectedRevenue: item.expectedRevenue || item.expected_revenue || 0,
+          customerType: item.customerType || item.customer_type || 'Standard',
+          notes: item.notes || '',
+          createdAt: item.created_at || item.createdAt || new Date().toISOString(),
+          updatedAt: item.updated_at || item.updatedAt || new Date().toISOString()
+        }
+      })
 
       commit('setQueues', queues)
     } catch (error) {
