@@ -9,8 +9,8 @@
       </div>
       <h1 class="text-3xl font-bold text-gray-900 mb-2">ใบขออนุญาตทดลองขับรถยนต์</h1>
       <h2 class="text-lg text-gray-700">Test Drive Application Form</h2>
-      <p class="text-sm text-gray-600 mt-2">เลขที่เอกสาร: TD-{{ testDrive.id }}-{{ formatDate(testDrive.created_at, 'short') }}</p>
-      <p class="text-xs text-gray-500">วันที่ออกเอกสาร: {{ formatDate(testDrive.created_at) }}</p>
+      <p class="text-sm font-mono font-medium text-gray-700 mt-2 bg-gray-100 inline-block px-4 py-1 rounded">เลขที่เอกสาร: {{ getDocumentNumber() }}</p>
+      <p class="text-xs text-gray-500 mt-1">วันที่ออกเอกสาร: {{ formatDate(testDrive.created_at) }}</p>
     </div>
 
     <!-- Customer Information (Full) -->
@@ -206,6 +206,19 @@ export default {
     }
   },
   methods: {
+    getDocumentNumber() {
+      // Generate document number: TD-YYYYMMDD-XXXX
+      const datetime = this.testDrive.start_time || this.testDrive.startTime || this.testDrive.scheduled_start || this.testDrive.created_at
+      if (!datetime) return `TD-${this.testDrive.id}`
+
+      const date = new Date(datetime)
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      const sequence = String(this.testDrive.id).padStart(4, '0')
+
+      return `TD-${year}${month}${day}-${sequence}`
+    },
     formatDate(date, format = 'full') {
       if (!date) return '-'
       const d = new Date(date)
