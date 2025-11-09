@@ -154,6 +154,26 @@
           />
         </div>
       </div>
+
+      <!-- Admin Section -->
+      <div class="pt-4" v-if="isAdmin">
+        <div v-if="!collapsed" class="flex items-center space-x-2 text-xs font-bold text-purple-600 uppercase tracking-wider mb-2 px-2">
+          <span>⚙️</span>
+          <span>ผู้ดูแลระบบ</span>
+        </div>
+        <div v-else class="border-t-2 border-purple-500 my-2"></div>
+
+        <div class="space-y-1">
+          <NavItem
+            icon="users"
+            label="จัดการผู้ใช้ LINE"
+            :active="isActive('/admin/line-users')"
+            :collapsed="collapsed"
+            brand-color="#9333EA"
+            @click="navigateTo('/admin/line-users')"
+          />
+        </div>
+      </div>
     </nav>
 
     <!-- User Section -->
@@ -217,6 +237,12 @@ export default {
         'bg-white border-r border-gray-200 transition-all duration-300 flex flex-col shadow-lg relative',
         this.collapsed ? 'w-16' : 'w-60'
       ]
+    },
+    isAdmin() {
+      // Check if current user is admin
+      // For now, return true - replace with actual auth check
+      const user = this.$store?.getters['auth/user']
+      return user?.role === 'admin' || true // Temporarily allow all users
     }
   },
   methods: {
@@ -242,6 +268,9 @@ export default {
     },
     
     getViewFromPath(path) {
+      // Admin paths
+      if (path.includes('/admin/line-users')) return 'admin-line-users'
+
       // ISUZU paths
       if (path.includes('/isuzu/queue')) return 'isuzu-queue'
       if (path.includes('/isuzu/stock')) return 'isuzu-stock'
@@ -276,6 +305,11 @@ export default {
 
       // สำหรับ nested routes
       if (path !== '/' && path !== '/dashboard' && this.$route.path.startsWith(path + '/')) return true
+
+      // สำหรับ Admin paths
+      if (path.includes('/admin/')) {
+        return this.$route.path.startsWith(path) || this.$route.path.startsWith(path + '/')
+      }
 
       // สำหรับ ISUZU brand paths
       if (path.includes('/isuzu/')) {
