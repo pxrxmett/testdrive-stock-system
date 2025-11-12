@@ -34,36 +34,106 @@ export default function ({ $axios, app }, inject) {
     return Promise.reject(error)
   })
 
-  // Test Drives API
+  // Test Drives API - Brand-based + Admin
   const testDrives = {
-    create(data) {
+    // Brand-specific endpoints
+    create(brandCode, data) {
+      return api.$post(`/${brandCode}/test-drives`, data)
+    },
+
+    getAll(brandCode, params = {}) {
+      return api.$get(`/${brandCode}/test-drives`, { params })
+    },
+
+    getById(brandCode, id) {
+      return api.$get(`/${brandCode}/test-drives/${id}`)
+    },
+
+    update(brandCode, id, data) {
+      return api.$patch(`/${brandCode}/test-drives/${id}`, data)
+    },
+
+    delete(brandCode, id) {
+      return api.$delete(`/${brandCode}/test-drives/${id}`)
+    },
+
+    assignStaff(brandCode, id, staffId) {
+      return api.$patch(`/${brandCode}/test-drives/${id}/assign`, { staffId })
+    },
+
+    // Admin cross-brand endpoints
+    admin: {
+      getAll(params = {}) {
+        return api.$get('/admin/test-drives/all', { params })
+      },
+
+      getById(id) {
+        return api.$get(`/admin/test-drives/${id}`)
+      }
+    },
+
+    // Legacy endpoints (for backward compatibility)
+    createLegacy(data) {
       return api.$post('/test-drives', data)
     },
 
-    getAll(params = {}) {
+    getAllLegacy(params = {}) {
       return api.$get('/test-drives', { params })
     },
 
-    getById(id) {
+    getByIdLegacy(id) {
       return api.$get(`/test-drives/${id}`)
     },
 
-    update(id, data) {
+    updateLegacy(id, data) {
       return api.$patch(`/test-drives/${id}`, data)
     },
 
-    delete(id) {
+    deleteLegacy(id) {
       return api.$delete(`/test-drives/${id}`)
     }
   }
 
-  // Stock API
+  // Stock API - Brand-based + Admin
   const stock = {
-    create(data) {
+    // Brand-specific endpoints
+    create(brandCode, data) {
+      return api.$post(`/${brandCode}/stock`, data)
+    },
+
+    getAll(brandCode, params = {}) {
+      return api.$get(`/${brandCode}/stock`, { params })
+    },
+
+    getByCode(brandCode, vehicleCode) {
+      return api.$get(`/${brandCode}/stock/${vehicleCode}`)
+    },
+
+    update(brandCode, vehicleCode, data) {
+      return api.$patch(`/${brandCode}/stock/${vehicleCode}`, data)
+    },
+
+    delete(brandCode, vehicleCode) {
+      return api.$delete(`/${brandCode}/stock/${vehicleCode}`)
+    },
+
+    // Admin cross-brand endpoints
+    admin: {
+      getAll(params = {}) {
+        return api.$get('/admin/stock/all', { params })
+      },
+
+      compare(params = {}) {
+        return api.$get('/admin/stock/compare', { params })
+      }
+    },
+
+    // Legacy endpoints (for backward compatibility)
+    createLegacy(data) {
       return api.$post('/stock', data)
     },
 
-    getAll(params = {}) {
+    getAllLegacy(params = {}) {
       return api.$get('/stock', { params })
     },
 
@@ -75,7 +145,7 @@ export default function ({ $axios, app }, inject) {
       return api.$get(`/stock/${id}`)
     },
 
-    update(id, data) {
+    updateLegacy(id, data) {
       return api.$patch(`/stock/${id}`, data)
     },
 
@@ -83,7 +153,7 @@ export default function ({ $axios, app }, inject) {
       return api.$patch(`/stock/vehicles/${id}/status`, { status })
     },
 
-    delete(id) {
+    deleteLegacy(id) {
       return api.$delete(`/stock/vehicles/${id}`)
     },
 
@@ -104,25 +174,58 @@ export default function ({ $axios, app }, inject) {
     }
   }
 
-  // Events API
+  // Events API - Brand-based + Admin
   const events = {
-    create(data) {
+    // Brand-specific endpoints
+    create(brandCode, data) {
+      return api.$post(`/${brandCode}/events`, data)
+    },
+
+    getAll(brandCode, params = {}) {
+      return api.$get(`/${brandCode}/events`, { params })
+    },
+
+    getById(brandCode, id) {
+      return api.$get(`/${brandCode}/events/${id}`)
+    },
+
+    update(brandCode, id, data) {
+      return api.$patch(`/${brandCode}/events/${id}`, data)
+    },
+
+    delete(brandCode, id) {
+      return api.$delete(`/${brandCode}/events/${id}`)
+    },
+
+    // Admin cross-brand endpoints
+    admin: {
+      getAll(params = {}) {
+        return api.$get('/admin/events/all', { params })
+      },
+
+      getById(id) {
+        return api.$get(`/admin/events/${id}`)
+      }
+    },
+
+    // Legacy endpoints (for backward compatibility)
+    createLegacy(data) {
       return api.$post('/events', data)
     },
 
-    getAll(params = {}) {
+    getAllLegacy(params = {}) {
       return api.$get('/events', { params })
     },
 
-    getById(id) {
+    getByIdLegacy(id) {
       return api.$get(`/events/${id}`)
     },
 
-    update(id, data) {
+    updateLegacy(id, data) {
       return api.$patch(`/events/${id}`, data)
     },
 
-    delete(id) {
+    deleteLegacy(id) {
       return api.$delete(`/events/${id}`)
     },
 
@@ -195,18 +298,51 @@ export default function ({ $axios, app }, inject) {
     }
   }
 
-  // Staffs API
+  // Staffs API - Brand-based + Admin
   const staffs = {
-    create(data) {
-      return api.$post('/staffs', data)
+    // Brand-specific endpoints
+    create(brandCode, data) {
+      return api.$post(`/${brandCode}/staff`, data)
     },
 
-    getAll(params = {}) {
+    getAll(brandCode, params = {}) {
+      return api.$get(`/${brandCode}/staff`, { params })
+    },
+
+    getById(brandCode, id) {
+      return api.$get(`/${brandCode}/staff/${id}`)
+    },
+
+    update(brandCode, id, data) {
+      return api.$patch(`/${brandCode}/staff/${id}`, data)
+    },
+
+    delete(brandCode, id) {
+      return api.$delete(`/${brandCode}/staff/${id}`)
+    },
+
+    getAvailableSales(brandCode) {
+      return api.$get(`/${brandCode}/staff/available-sales`)
+    },
+
+    // Admin cross-brand endpoints
+    admin: {
+      getAll(params = {}) {
+        return api.$get('/admin/staff/all', { params })
+      },
+
+      getById(id) {
+        return api.$get(`/admin/staff/${id}`)
+      },
+
+      getPerformance(params = {}) {
+        return api.$get('/admin/staff/performance', { params })
+      }
+    },
+
+    // Legacy endpoint (for backward compatibility)
+    getAllLegacy(params = {}) {
       return api.$get('/staffs', { params })
-    },
-
-    getById(id) {
-      return api.$get(`/staffs/${id}`)
     }
   }
 
