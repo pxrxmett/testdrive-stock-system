@@ -3,57 +3,145 @@
     <!-- Page Header -->
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-          <span class="text-2xl">🔋</span>
+        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+          </svg>
         </div>
         <div>
           <div class="flex items-center space-x-2">
             <h1 class="text-2xl font-bold text-gray-900">สต็อครถไฟฟ้า BYD</h1>
-            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
-              รถไฟฟ้า
-            </span>
+            <BrandBadge brand-code="byd" size="sm" />
           </div>
           <p class="text-gray-600">จัดการสต็อครถยนต์ไฟฟ้า BYD ทุกรุ่น</p>
         </div>
       </div>
+      <NuxtLink
+        to="/admin/stock"
+        class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-all duration-150"
+      >
+        ดูทุกแบรนด์
+      </NuxtLink>
     </div>
 
-    <!-- Brand Info -->
-    <div class="bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-lg p-4">
-      <div class="flex items-center space-x-3">
-        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-        <p class="text-sm text-green-800">
-          <strong>แบรนด์ BYD:</strong> รถยนต์ไฟฟ้า 100% พร้อมเทคโนโลยี Blade Battery
-        </p>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="bg-white p-6 rounded-lg border border-gray-200">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">รถทั้งหมด</p>
+            <p class="text-2xl font-semibold text-gray-900 mt-1">{{ stats.total }}</p>
+          </div>
+          <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg border border-gray-200">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">พร้อมใช้</p>
+            <p class="text-2xl font-semibold text-gray-900 mt-1">{{ stats.available }}</p>
+          </div>
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg border border-gray-200">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">กำลังใช้งาน</p>
+            <p class="text-2xl font-semibold text-gray-900 mt-1">{{ stats.inUse }}</p>
+          </div>
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg border border-gray-200">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">บำรุงรักษา</p>
+            <p class="text-2xl font-semibold text-gray-900 mt-1">{{ stats.maintenance }}</p>
+          </div>
+          <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Placeholder -->
-    <div class="bg-white rounded-lg border border-gray-200 p-12 text-center">
-      <div class="max-w-md mx-auto">
-        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-          </svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-2">สต็อครถไฟฟ้า BYD</h3>
-        <p class="text-gray-600 mb-4">
-          จัดการสต็อครถยนต์ไฟฟ้า BYD ทุกรุ่น พร้อมข้อมูลแบตเตอรี่และระยะทาง
-        </p>
-        <div class="grid grid-cols-3 gap-4 mt-6">
-          <div class="text-center">
-            <div class="text-2xl font-bold text-green-600">0</div>
-            <div class="text-sm text-gray-600">Atto 3</div>
-          </div>
-          <div class="text-center">
-            <div class="text-2xl font-bold text-green-600">0</div>
-            <div class="text-sm text-gray-600">Dolphin</div>
-          </div>
-          <div class="text-center">
-            <div class="text-2xl font-bold text-green-600">0</div>
-            <div class="text-sm text-gray-600">Seal</div>
+    <!-- Loading State -->
+    <div v-if="loading" class="bg-white rounded-lg border border-gray-200 p-12 text-center">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <p class="mt-2 text-gray-600">กำลังโหลดข้อมูล...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div v-else-if="vehicles.length === 0" class="bg-white rounded-lg border border-gray-200 p-12 text-center">
+      <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">ยังไม่มีสต็อกรถยนต์</h3>
+      <p class="text-sm text-gray-600 mb-4">เริ่มต้นเพิ่มรถยนต์ไฟฟ้า BYD เข้าสู่ระบบ</p>
+      <NuxtLink
+        to="/admin/stock/create"
+        class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        เพิ่มรถใหม่
+      </NuxtLink>
+    </div>
+
+    <!-- Vehicle List -->
+    <div v-else class="bg-white rounded-lg border border-gray-200">
+      <div class="p-6 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">รายการรถยนต์ไฟฟ้า ({{ vehicles.length }})</h3>
+      </div>
+      <div class="divide-y divide-gray-200">
+        <div
+          v-for="vehicle in vehicles"
+          :key="vehicle.id"
+          class="p-6 hover:bg-gray-50 transition-colors duration-150"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <div class="flex items-center space-x-3">
+                <h4 class="text-base font-semibold text-gray-900">{{ vehicle.model }}</h4>
+                <span :class="getStatusBadgeClasses(vehicle.status)" class="px-2.5 py-1 text-xs font-semibold rounded-full border">
+                  {{ getStatusDisplayName(vehicle.status) }}
+                </span>
+              </div>
+              <div class="mt-1 flex items-center space-x-4 text-sm text-gray-600">
+                <span>ทะเบียน: {{ vehicle.plateNumber || 'ไม่มีทะเบียน' }}</span>
+                <span>•</span>
+                <span>สี: {{ vehicle.color }}</span>
+                <span>•</span>
+                <span>ปี: {{ vehicle.year }}</span>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <NuxtLink
+                :to="`/admin/stock/${vehicle.id}`"
+                class="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                ดูรายละเอียด
+              </NuxtLink>
+            </div>
           </div>
         </div>
       </div>
@@ -62,10 +150,72 @@
 </template>
 
 <script>
+import { formatStockFromAPI } from '~/utils/brand'
+
 export default {
   name: 'BydStockPage',
   layout: 'dashboard',
   middleware: false,
+  data() {
+    return {
+      vehicles: [],
+      loading: false,
+      stats: {
+        total: 0,
+        available: 0,
+        inUse: 0,
+        maintenance: 0
+      }
+    }
+  },
+  mounted() {
+    this.loadStock()
+  },
+  methods: {
+    async loadStock() {
+      this.loading = true
+      try {
+        const response = await this.$api.stock.getAll('byd', {})
+        this.vehicles = (response.data || response).map(formatStockFromAPI)
+        this.updateStats()
+      } catch (error) {
+        console.error('Error loading BYD stock:', error)
+        this.$toast.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสต็อก')
+        this.vehicles = []
+      } finally {
+        this.loading = false
+      }
+    },
+
+    updateStats() {
+      this.stats = {
+        total: this.vehicles.length,
+        available: this.vehicles.filter(v => v.status === 'available').length,
+        inUse: this.vehicles.filter(v => v.status === 'in_use').length,
+        maintenance: this.vehicles.filter(v => v.status === 'maintenance').length
+      }
+    },
+
+    getStatusDisplayName(status) {
+      const statusMap = {
+        'available': 'พร้อมใช้',
+        'in_use': 'กำลังใช้งาน',
+        'maintenance': 'บำรุงรักษา',
+        'locked': 'ล็อกสำหรับอีเวนต์'
+      }
+      return statusMap[status] || status
+    },
+
+    getStatusBadgeClasses(status) {
+      const classMap = {
+        'available': 'bg-green-50 text-green-700 border-green-200',
+        'in_use': 'bg-blue-50 text-blue-700 border-blue-200',
+        'maintenance': 'bg-amber-50 text-amber-700 border-amber-200',
+        'locked': 'bg-purple-50 text-purple-700 border-purple-200'
+      }
+      return classMap[status] || 'bg-gray-50 text-gray-700 border-gray-200'
+    }
+  },
   head() {
     return {
       title: 'สต็อครถไฟฟ้า BYD - BYD EV System'

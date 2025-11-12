@@ -218,6 +218,70 @@ export function getStatusDisplayName(status) {
   return names[status] || status
 }
 
+/**
+ * Format stock/vehicle data from API response
+ * Handles snake_case to camelCase conversion
+ * @param {object} vehicle - Vehicle object from API
+ * @returns {object} Formatted vehicle object
+ */
+export function formatStockFromAPI(vehicle) {
+  if (!vehicle) return null
+
+  return {
+    id: Number(vehicle.id), // Ensure number type
+    model: vehicle.model || vehicle.modelGeneral || '',
+    plateNumber: vehicle.plateNumber || vehicle.plate_number || vehicle.carCard || '',
+    color: vehicle.color || '',
+    year: Number(vehicle.year || vehicle.model_year || new Date().getFullYear()),
+    price: vehicle.price ? Number(vehicle.price) : null,
+    status: vehicle.status || 'available',
+    type: vehicle.type || vehicle.category || '',
+    fuelType: vehicle.fuelType || vehicle.fuel_type || '',
+    vin: vehicle.vin || vehicle.chassisNo || vehicle.chassis_number || '',
+    chassisNumber: vehicle.chassisNumber || vehicle.chassis_number || vehicle.chassisNo || '',
+    engineNumber: vehicle.engineNumber || vehicle.engine_number || vehicle.engineNo || '',
+    motorNumber: vehicle.motorNumber || vehicle.motor_number || '',
+    notes: vehicle.notes || '',
+    brandId: Number(vehicle.brandId || vehicle.brand_id || 0),
+    brandCode: vehicle.brandCode || vehicle.brand_code || getBrandCode(vehicle.brandId || vehicle.brand_id) || '',
+    eventStatus: vehicle.eventStatus || vehicle.event_status || null,
+    eventDetails: vehicle.eventDetails || vehicle.event_details || null,
+    createdAt: vehicle.createdAt || vehicle.created_at || null,
+    updatedAt: vehicle.updatedAt || vehicle.updated_at || null
+  }
+}
+
+/**
+ * Format stock/vehicle data for API request
+ * Excludes brandId (comes from URL path)
+ * @param {object} vehicle - Vehicle object to format
+ * @returns {object} Formatted vehicle object for API
+ */
+export function formatStockForAPI(vehicle) {
+  if (!vehicle) return null
+
+  const data = {
+    model: vehicle.model,
+    plateNumber: vehicle.plateNumber,
+    color: vehicle.color,
+    year: Number(vehicle.year),
+    status: vehicle.status || 'available'
+  }
+
+  // Add optional fields if present
+  if (vehicle.price) data.price = Number(vehicle.price)
+  if (vehicle.type) data.type = vehicle.type
+  if (vehicle.fuelType) data.fuelType = vehicle.fuelType
+  if (vehicle.vin) data.vin = vehicle.vin
+  if (vehicle.chassisNumber) data.chassisNumber = vehicle.chassisNumber
+  if (vehicle.engineNumber) data.engineNumber = vehicle.engineNumber
+  if (vehicle.motorNumber) data.motorNumber = vehicle.motorNumber
+  if (vehicle.notes) data.notes = vehicle.notes
+
+  // NEVER include brandId - it comes from URL path
+  return data
+}
+
 export default {
   BRAND_IDS,
   getBrandId,
@@ -230,6 +294,8 @@ export default {
   getBrandColors,
   formatStaffFromAPI,
   formatStaffForAPI,
+  formatStockFromAPI,
+  formatStockForAPI,
   getBrandBadgeClasses,
   getStatusBadgeClasses,
   getRoleDisplayName,
