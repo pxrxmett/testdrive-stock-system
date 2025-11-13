@@ -17,69 +17,99 @@
       </div>
 
       <div class="flex items-center space-x-2">
-        <!-- Notifications Dropdown -->
-        <Dropdown align="right" width="w-80">
+        <!-- Notifications Dropdown (Facebook Style) -->
+        <Dropdown align="right" width="w-96">
           <template #trigger="{ isOpen }">
             <button
               :class="[
-                'p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded relative transition-colors',
+                'relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors',
                 isOpen && 'bg-gray-100 text-gray-700'
               ]"
             >
-              <Icon name="bell" icon-class="w-5 h-5" />
-              <div v-if="unreadNotifications > 0" class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+              <Icon name="bell" icon-class="w-6 h-6" />
+              <!-- Badge Counter (Facebook style) -->
+              <span
+                v-if="unreadNotifications > 0"
+                class="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[11px] font-bold rounded-full border-2 border-white"
+              >
+                {{ unreadNotifications > 9 ? '9+' : unreadNotifications }}
+              </span>
             </button>
           </template>
 
           <!-- Notifications Header -->
-          <div class="px-4 py-3 border-b border-gray-200">
-            <div class="flex items-center justify-between">
-              <h3 class="text-sm font-semibold text-gray-900">การแจ้งเตือน</h3>
-              <span v-if="unreadNotifications > 0" class="px-2 py-0.5 bg-red-100 text-red-600 text-xs font-semibold rounded-full">
-                {{ unreadNotifications }}
-              </span>
-            </div>
+          <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="text-base font-semibold text-gray-900">การแจ้งเตือน</h3>
+            <button
+              @click="navigateTo('/dashboard/settings')"
+              class="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+              title="ตั้งค่าการแจ้งเตือน"
+            >
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
           </div>
 
           <!-- Notifications List -->
-          <div class="max-h-96 overflow-y-auto">
+          <div class="max-h-[480px] overflow-y-auto">
             <template v-if="notifications.length > 0">
               <div
                 v-for="notification in notifications"
                 :key="notification.id"
                 @click="handleNotificationClick(notification)"
-                class="px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-100"
+                :class="[
+                  'px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-100',
+                  !notification.read && 'bg-blue-50'
+                ]"
               >
                 <div class="flex items-start space-x-3">
+                  <!-- Icon with Background -->
                   <div
                     :class="[
-                      'w-2 h-2 rounded-full mt-2 flex-shrink-0',
-                      notification.read ? 'bg-gray-300' : 'bg-blue-500'
+                      'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
+                      getNotificationIconBg(notification.type)
                     ]"
-                  ></div>
+                  >
+                    <span class="text-lg">{{ getNotificationIcon(notification.type) }}</span>
+                  </div>
+
+                  <!-- Content -->
                   <div class="flex-1 min-w-0">
-                    <p :class="['text-sm', notification.read ? 'text-gray-600' : 'text-gray-900 font-medium']">
-                      {{ notification.title }}
-                    </p>
+                    <div class="flex items-start justify-between gap-2">
+                      <p :class="['text-sm leading-snug', notification.read ? 'text-gray-700' : 'text-gray-900 font-medium']">
+                        {{ notification.title }}
+                      </p>
+                      <!-- Unread Dot -->
+                      <div
+                        v-if="!notification.read"
+                        class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1.5"
+                      ></div>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-1">{{ notification.subtitle }}</p>
                     <p class="text-xs text-gray-500 mt-1">{{ notification.time }}</p>
                   </div>
                 </div>
               </div>
             </template>
-            <div v-else class="px-4 py-8 text-center">
-              <Icon name="bell" icon-class="w-8 h-8 text-gray-300 mx-auto mb-2" />
-              <p class="text-sm text-gray-500">ไม่มีการแจ้งเตือน</p>
+            <div v-else class="px-4 py-12 text-center">
+              <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Icon name="bell" icon-class="w-8 h-8 text-gray-300" />
+              </div>
+              <p class="text-sm font-medium text-gray-900">ไม่มีการแจ้งเตือน</p>
+              <p class="text-xs text-gray-500 mt-1">คุณไม่มีการแจ้งเตือนใหม่ในขณะนี้</p>
             </div>
           </div>
 
           <!-- Notifications Footer -->
-          <div v-if="notifications.length > 0" class="px-4 py-2 border-t border-gray-200 bg-gray-50">
-            <button
-              @click="markAllAsRead"
-              class="w-full text-center text-xs font-medium text-blue-600 hover:text-blue-700 py-1"
+          <div v-if="notifications.length > 0" class="border-t border-gray-200">
+            <NuxtLink
+              to="/dashboard/notifications"
+              class="block px-4 py-3 text-center text-sm font-medium text-blue-600 hover:bg-gray-50 transition-colors"
             >
-              ทำเครื่องหมายว่าอ่านทั้งหมด
-            </button>
+              ดูการแจ้งเตือนทั้งหมด →
+            </NuxtLink>
           </div>
         </Dropdown>
 
@@ -168,21 +198,39 @@ export default {
       notifications: [
         {
           id: 1,
+          type: 'isuzu_queue',
           title: 'มีคิวใหม่จาก ISUZU ที่ต้องดำเนินการ',
+          subtitle: '5 รายการรอดำเนินการ',
           time: '5 นาทีที่แล้ว',
-          read: false
+          read: false,
+          link: '/dashboard/isuzu/queue'
         },
         {
           id: 2,
-          title: 'การทดลองขับ BYD ของวันนี้เสร็จสิ้นแล้ว',
-          time: '1 ชั่วโมงที่แล้ว',
-          read: false
+          type: 'byd_queue',
+          title: 'การทดลองขับ BYD เสร็จสิ้นแล้ว',
+          subtitle: '1 รายการเสร็จสมบูรณ์',
+          time: '3 ชั่วโมงที่แล้ว',
+          read: false,
+          link: '/dashboard/byd/queue'
         },
         {
           id: 3,
+          type: 'document',
           title: 'มีเอกสารใหม่รอการอนุมัติ',
-          time: '3 ชั่วโมงที่แล้ว',
-          read: true
+          subtitle: '3 เอกสารจากลูกค้า',
+          time: 'เมื่อวาน',
+          read: true,
+          link: '/dashboard/documents'
+        },
+        {
+          id: 4,
+          type: 'warning',
+          title: 'สต็อกรถยนต์ใกล้หมด',
+          subtitle: 'ISUZU D-MAX เหลือ 2 คัน',
+          time: '2 วันที่แล้ว',
+          read: true,
+          link: '/dashboard/isuzu/stock'
         }
       ]
     }
@@ -235,13 +283,37 @@ export default {
       // Mark as read
       notification.read = true
 
-      // Navigate based on notification type (implement routing logic)
-      console.log('Notification clicked:', notification)
+      // Navigate to related page
+      if (notification.link) {
+        this.$router.push(notification.link)
+      }
     },
     markAllAsRead() {
       this.notifications.forEach(n => {
         n.read = true
       })
+    },
+    getNotificationIcon(type) {
+      const icons = {
+        isuzu_queue: '🚗',
+        byd_queue: '⚡',
+        document: '📄',
+        warning: '⚠️',
+        success: '✅',
+        info: 'ℹ️'
+      }
+      return icons[type] || '🔔'
+    },
+    getNotificationIconBg(type) {
+      const backgrounds = {
+        isuzu_queue: 'bg-red-100',
+        byd_queue: 'bg-green-100',
+        document: 'bg-gray-100',
+        warning: 'bg-yellow-100',
+        success: 'bg-green-100',
+        info: 'bg-blue-100'
+      }
+      return backgrounds[type] || 'bg-gray-100'
     },
     handleHelp() {
       // Open help modal or navigate to help page
