@@ -62,7 +62,7 @@ export default {
   },
 
   router: {
-    middleware: ['auth']
+    middleware: ['auth', 'redirect-legacy']
   },
 
   build: {}
