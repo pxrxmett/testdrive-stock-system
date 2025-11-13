@@ -329,9 +329,33 @@ export default {
       try {
         const id = this.$route.params.id
 
-        // Use admin endpoint to get vehicle regardless of brand
-        const response = await this.$api.stock.admin.getById(id)
+        // Try fetching from both brands (admin endpoint doesn't exist)
+        let response = null
+        let brandCode = null
+
+        try {
+          response = await this.$api.stock.getByCode('ISUZU', id)
+          brandCode = 'ISUZU'
+        } catch (error) {
+          if (error.response?.status === 404) {
+            // Try BYD if ISUZU returned 404
+            try {
+              response = await this.$api.stock.getByCode('BYD', id)
+              brandCode = 'BYD'
+            } catch (bydError) {
+              throw bydError
+            }
+          } else {
+            throw error
+          }
+        }
+
         this.vehicleData = formatStockFromAPI(response)
+
+        // Ensure brandCode is set
+        if (!this.vehicleData.brandCode && brandCode) {
+          this.vehicleData.brandCode = brandCode
+        }
 
         // Populate form
         this.form = {
