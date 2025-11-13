@@ -85,27 +85,31 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="bg-white rounded-lg border border-gray-200 p-12 text-center">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      <p class="mt-2 text-gray-600">กำลังโหลดข้อมูล...</p>
-    </div>
+    <LoadingSkeleton
+      v-if="loading"
+      variant="card"
+      :count="3"
+      grid
+      :cols="1"
+    />
 
     <!-- Empty State -->
-    <div v-else-if="vehicles.length === 0" class="bg-white rounded-lg border border-gray-200 p-12 text-center">
-      <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-        </svg>
-      </div>
-      <h3 class="text-lg font-medium text-gray-900 mb-2">ยังไม่มีสต็อกรถยนต์</h3>
-      <p class="text-sm text-gray-600 mb-4">เริ่มต้นเพิ่มรถยนต์ไฟฟ้า BYD เข้าสู่ระบบ</p>
-      <NuxtLink
-        to="/admin/stock/create"
-        class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-      >
-        เพิ่มรถใหม่
-      </NuxtLink>
-    </div>
+    <EmptyState
+      v-else-if="!loading && vehicles.length === 0"
+      title="ยังไม่มีสต็อกรถยนต์"
+      description="เริ่มต้นเพิ่มรถยนต์ไฟฟ้า BYD เข้าสู่ระบบ สต็อกจะแสดงที่นี่เมื่อมีการเพิ่มเข้ามา"
+      actionLabel="เพิ่มรถใหม่"
+      actionVariant="primary"
+      @action="handleAddStock"
+    >
+      <template #icon>
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+          </svg>
+        </div>
+      </template>
+    </EmptyState>
 
     <!-- Vehicle List -->
     <div v-else class="bg-white rounded-lg border border-gray-200">
@@ -214,6 +218,10 @@ export default {
         'locked': 'bg-purple-50 text-purple-700 border-purple-200'
       }
       return classMap[status] || 'bg-gray-50 text-gray-700 border-gray-200'
+    },
+
+    handleAddStock() {
+      this.$router.push('/admin/stock/create?brand=byd')
     }
   },
   head() {

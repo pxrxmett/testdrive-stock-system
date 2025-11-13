@@ -4,7 +4,9 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-          <span class="text-2xl">⚡</span>
+          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
         </div>
         <div>
           <div class="flex items-center space-x-2">
@@ -13,57 +15,90 @@
               รถไฟฟ้า
             </span>
           </div>
-          <p class="text-gray-600">จัดการคิวทดลองขับรถยนต์ไฟฟ้า BYD</p>
+          <p class="text-gray-600">จัดการคิวทดลองขับรถไฟฟ้า BYD</p>
         </div>
       </div>
-      <button
+      <Button
+        variant="primary"
         @click="handleAddQueue"
-        class="flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors text-white"
-        style="background-color: #00A651"
+        class="bg-green-600 hover:bg-green-700"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        <span>เพิ่มคิวใหม่</span>
-      </button>
+        เพิ่มคิวใหม่
+      </Button>
     </div>
 
     <!-- Brand Info Card -->
-    <div class="bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-lg p-4">
+    <Card variant="gradient" class="bg-gradient-to-r from-green-50 to-green-100 border border-green-200">
       <div class="flex items-center space-x-3">
         <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <p class="text-sm text-green-800">
           <strong>แบรนด์ BYD:</strong> คุณกำลังดูคิวทดลองขับสำหรับรถยนต์ไฟฟ้า BYD เท่านั้น
-          (รถเก๋ง, SUV, รถไฟฟ้า)
+          (ATTO 3, Dolphin, Seal)
         </p>
       </div>
-    </div>
+    </Card>
 
-    <!-- Placeholder Content -->
-    <div class="bg-white rounded-lg border border-gray-200 p-12 text-center">
-      <div class="max-w-md mx-auto">
-        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" />
+    <!-- Loading State -->
+    <LoadingSkeleton
+      v-if="loading"
+      variant="card"
+      :count="3"
+      grid
+      :cols="1"
+    />
+
+    <!-- Empty State -->
+    <EmptyState
+      v-else-if="!loading && queues.length === 0"
+      icon="clipboard"
+      title="ยังไม่มีคิวทดลองขับ"
+      description="เริ่มต้นสร้างคิวทดลองขับรถยนต์ไฟฟ้า BYD คิวแรกของคุณ คิวจะแสดงที่นี่เมื่อมีการสร้าง"
+      actionLabel="สร้างคิวใหม่"
+      actionVariant="primary"
+      @action="handleAddQueue"
+    >
+      <template #icon>
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
         </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-2">ระบบคิว BYD</h3>
-        <p class="text-gray-600 mb-6">
-          หน้านี้จะแสดงคิวทดลองขับสำหรับรถยนต์ไฟฟ้า BYD โดยเฉพาะ<br />
-          ซึ่งจะแยกออกจากคิวของ ISUZU เพื่อความชัดเจนในการจัดการ
-        </p>
-        <div class="bg-gray-50 rounded-lg p-4 text-left">
-          <p class="text-sm font-semibold text-gray-900 mb-2">ฟีเจอร์ที่จะมี:</p>
-          <ul class="text-sm text-gray-600 space-y-1">
-            <li>✓ กรองเฉพาะรถ BYD (Atto 3, Dolphin, Seal, etc.)</li>
-            <li>✓ พนักงานขาย BYD เท่านั้น</li>
-            <li>✓ สถิติเฉพาะแบรนด์ BYD</li>
-            <li>✓ ข้อมูลแบตเตอรี่และ charging time</li>
-          </ul>
+      </template>
+    </EmptyState>
+
+    <!-- Queue List -->
+    <div v-else class="space-y-4">
+      <Card
+        v-for="queue in queues"
+        :key="queue.id"
+        hover
+        padding="lg"
+      >
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+              <span class="text-green-600 font-bold">{{ queue.number }}</span>
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-900">{{ queue.customerName }}</h3>
+              <p class="text-sm text-gray-600">{{ queue.phone }}</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-3">
+            <span :class="['px-3 py-1 text-xs font-semibold rounded-full', getStatusClass(queue.status)]">
+              {{ getStatusLabel(queue.status) }}
+            </span>
+            <Button variant="ghost" size="sm">
+              ดูรายละเอียด
+            </Button>
+          </div>
         </div>
-      </div>
+      </Card>
     </div>
   </div>
 </template>
@@ -75,18 +110,58 @@ export default {
   middleware: false,
   data() {
     return {
-      brand: 'byd'
+      brand: 'byd',
+      loading: true,
+      queues: []
     }
   },
   head() {
     return {
-      title: 'คิวทดลองขับ BYD - BYD EV System'
+      title: 'คิวทดลองขับ BYD - Multi-Brand TestDrive System'
     }
   },
+  async mounted() {
+    await this.fetchQueues()
+  },
   methods: {
+    async fetchQueues() {
+      try {
+        this.loading = true
+
+        // Fetch queues from API
+        if (this.$axios) {
+          const response = await this.$axios.get('/api/queues', {
+            params: { brand: 'byd' }
+          })
+          this.queues = response.data || []
+        }
+      } catch (error) {
+        console.error('Error fetching queues:', error)
+        this.queues = []
+      } finally {
+        this.loading = false
+      }
+    },
     handleAddQueue() {
-      // Navigate to add queue page with brand preset
       this.$router.push('/dashboard/queue/add?brand=byd')
+    },
+    getStatusClass(status) {
+      const classes = {
+        pending: 'bg-yellow-100 text-yellow-700',
+        confirmed: 'bg-blue-100 text-blue-700',
+        completed: 'bg-green-100 text-green-700',
+        cancelled: 'bg-red-100 text-red-700'
+      }
+      return classes[status] || 'bg-gray-100 text-gray-700'
+    },
+    getStatusLabel(status) {
+      const labels = {
+        pending: 'รอดำเนินการ',
+        confirmed: 'ยืนยันแล้ว',
+        completed: 'เสร็จสิ้น',
+        cancelled: 'ยกเลิก'
+      }
+      return labels[status] || status
     }
   }
 }
