@@ -1,99 +1,60 @@
 <template>
-  <div class="space-y-4">
-    <!-- Compact Page Header -->
+  <div class="space-y-6">
+    <!-- Page Header -->
     <div class="flex items-center justify-between">
-      <div class="flex items-center space-x-2.5">
-        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-          </svg>
-        </div>
-        <div>
-          <div class="flex items-center space-x-2">
-            <h1 class="text-xl font-bold text-gray-900">คิวทดลองขับ BYD</h1>
-            <span class="px-2.5 py-0.5 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
-              รถไฟฟ้า
-            </span>
-          </div>
-          <p class="text-sm text-gray-600 mt-0.5">จัดการคิวทดลองขับรถไฟฟ้า BYD</p>
-        </div>
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">จัดการคิวทดลองขับ</h1>
+        <p class="text-sm text-gray-600 mt-1">จัดการและติดตามคิวทดลองขับรถยนต์ BYD ทุกสาขา</p>
       </div>
-      <Button
-        variant="success"
+      <button
         @click="handleAddQueue"
+        class="px-4 py-2.5 bg-gradient-to-r from-[#00A4E4] to-[#0284C7] text-white text-sm font-medium rounded-lg hover:from-[#0284C7] hover:to-[#0369A1] transition-all duration-150 shadow-sm hover:shadow-md flex items-center space-x-2"
       >
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        เพิ่มคิวใหม่
-      </Button>
+        <span>เพิ่มคิวใหม่</span>
+      </button>
     </div>
 
     <!-- Loading State -->
     <LoadingSkeleton
       v-if="loading"
       variant="card"
-      :count="3"
+      :count="5"
       grid
       :cols="1"
     />
 
-    <!-- Empty State -->
-    <EmptyState
-      v-else-if="!loading && queues.length === 0"
-      icon="clipboard"
-      title="ยังไม่มีคิวทดลองขับ"
-      description="เริ่มต้นสร้างคิวทดลองขับรถยนต์ไฟฟ้า BYD คิวแรกของคุณ คิวจะแสดงที่นี่เมื่อมีการสร้าง"
-      actionLabel="สร้างคิวใหม่"
-      actionVariant="primary"
-      @action="handleAddQueue"
-    >
-      <template #icon>
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
-          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-        </div>
-      </template>
-    </EmptyState>
+    <!-- Content -->
+    <template v-else>
+      <!-- Stats Cards -->
+      <QueueStatsCards :stats="stats" />
 
-    <!-- Queue List -->
-    <div v-else class="space-y-4">
-      <Card
-        v-for="queue in queues"
-        :key="queue.id"
-        hover
-        padding="lg"
-      >
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-              <span class="text-green-600 font-bold">{{ queue.number }}</span>
-            </div>
-            <div>
-              <h3 class="font-semibold text-gray-900">{{ queue.customerName }}</h3>
-              <p class="text-sm text-gray-600">{{ queue.phone }}</p>
-            </div>
-          </div>
-          <div class="flex items-center space-x-3">
-            <span :class="['px-3 py-1 text-xs font-semibold rounded-full', getStatusClass(queue.status)]">
-              {{ getStatusLabel(queue.status) }}
-            </span>
-            <Button variant="ghost" size="sm">
-              ดูรายละเอียด
-            </Button>
-          </div>
-        </div>
-      </Card>
-    </div>
+      <!-- Queue Table -->
+      <QueueTableAdvanced
+        :queues="enrichedQueues"
+        @view="handleViewQueue"
+        @edit="handleEditQueue"
+        @delete="handleDeleteQueue"
+        @status-click="handleStatusClick"
+      />
+    </template>
   </div>
 </template>
 
 <script>
+import QueueStatsCards from '~/components/queue/StatsCards.vue'
+import QueueTableAdvanced from '~/components/queue/TableAdvanced.vue'
+
 export default {
   name: 'BydQueuePage',
   layout: 'dashboard',
   middleware: false,
+  components: {
+    QueueStatsCards,
+    QueueTableAdvanced
+  },
   data() {
     return {
       brand: 'byd',
@@ -103,7 +64,52 @@ export default {
   },
   head() {
     return {
-      title: 'คิวทดลองขับ BYD - Multi-Brand TestDrive System'
+      title: 'จัดการคิวทดลองขับ BYD - Multi-Brand TestDrive System'
+    }
+  },
+  computed: {
+    stats() {
+      return {
+        total: this.queues.length,
+        inProgress: this.queues.filter(q => q.status === 'in_progress').length,
+        waiting: this.queues.filter(q => q.status === 'pending' || q.status === 'confirmed').length,
+        completed: this.queues.filter(q => q.status === 'completed').length
+      }
+    },
+
+    enrichedQueues() {
+      // Enrich queues with additional data for display
+      return this.queues.map((queue, index) => {
+        // Determine customer type based on name or random for demo
+        const customerTypes = ['vip', 'family', 'business', null]
+        const customerType = index % 4 === 0 ? customerTypes[index % 4] : null
+
+        // Sample sales persons
+        const salesPersons = [
+          { name: 'สมชาย ใจดี', position: 'เซลล์อาวุโส' },
+          { name: 'สมหญิง รักงาน', position: 'เซลล์' },
+          { name: 'วิชัย ขยัน', position: 'หัวหน้าเซลล์' },
+          null
+        ]
+        const salesPerson = salesPersons[index % salesPersons.length]
+
+        // Sample branches
+        const branches = ['กรุงเทพ', 'เชียงใหม่', 'ภูเก็ต', 'ขอนแก่น']
+
+        return {
+          ...queue,
+          customerType,
+          salesPerson: salesPerson?.name,
+          salesPosition: salesPerson?.position,
+          branch: branches[index % branches.length],
+          duration: 60, // Default duration in minutes
+          testDriveDate: queue.test_drive_date || queue.testDriveDate || queue.appointmentDate || new Date().toISOString(),
+          testDriveTime: queue.test_drive_time || queue.testDriveTime || queue.appointmentTime || '10:00',
+          customerName: queue.customer_name || queue.customerName || 'ไม่ระบุ',
+          customerPhone: queue.customer_phone || queue.customerPhone || queue.phone || '-',
+          vehicleModel: queue.vehicle_model || queue.vehicleModel || queue.carModel || 'BYD ATTO 3'
+        }
+      })
     }
   },
   async mounted() {
@@ -114,11 +120,21 @@ export default {
       try {
         this.loading = true
 
-        // Fetch queues from API (uppercase brand code required by backend)
-        if (this.$axios) {
-          const response = await this.$axios.get('/BYD/test-drives')
-          this.queues = response.data || []
+        // Fetch queues from API
+        const response = await this.$api.testDrives.getAll('BYD')
+
+        // Handle different response formats
+        if (Array.isArray(response)) {
+          this.queues = response
+        } else if (response.data) {
+          this.queues = response.data
+        } else if (response.testDrives) {
+          this.queues = response.testDrives
+        } else {
+          this.queues = []
         }
+
+        console.log('✅ Fetched BYD queues:', this.queues.length)
       } catch (error) {
         console.error('Error fetching queues:', error)
         this.queues = []
@@ -126,26 +142,37 @@ export default {
         this.loading = false
       }
     },
+
     handleAddQueue() {
       this.$router.push('/dashboard/queue/add?brand=byd')
     },
-    getStatusClass(status) {
-      const classes = {
-        pending: 'bg-yellow-100 text-yellow-700',
-        confirmed: 'bg-blue-100 text-blue-700',
-        completed: 'bg-green-100 text-green-700',
-        cancelled: 'bg-red-100 text-red-700'
-      }
-      return classes[status] || 'bg-gray-100 text-gray-700'
+
+    handleViewQueue(queue) {
+      this.$router.push(`/dashboard/queue/${queue.id}`)
     },
-    getStatusLabel(status) {
-      const labels = {
-        pending: 'รอดำเนินการ',
-        confirmed: 'ยืนยันแล้ว',
-        completed: 'เสร็จสิ้น',
-        cancelled: 'ยกเลิก'
+
+    handleEditQueue(queue) {
+      this.$router.push(`/dashboard/queue/${queue.id}/edit`)
+    },
+
+    async handleDeleteQueue(queue) {
+      if (!confirm(`ต้องการลบคิวของ ${queue.customerName} ใช่หรือไม่?`)) {
+        return
       }
-      return labels[status] || status
+
+      try {
+        await this.$api.testDrives.delete('BYD', queue.id)
+        console.log('Success:', 'ลบคิวเรียบร้อยแล้ว')
+        await this.fetchQueues()
+      } catch (error) {
+        console.error('Error deleting queue:', error)
+        console.error('ไม่สามารถลบคิวได้')
+      }
+    },
+
+    handleStatusClick(queue) {
+      // TODO: Implement status change dialog
+      console.log('Status clicked for queue:', queue.id)
     }
   }
 }
