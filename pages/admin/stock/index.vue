@@ -148,20 +148,30 @@
 
       <!-- Stock List -->
       <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div v-if="loading" class="p-12 text-center">
-          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
-          <p class="mt-2 text-gray-600">กำลังโหลด...</p>
-        </div>
+        <!-- Loading State -->
+        <LoadingSkeleton
+          v-if="loading"
+          variant="table"
+          :count="5"
+        />
 
-        <div v-else-if="stock.length === 0" class="p-12 text-center">
-          <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-            </svg>
-          </div>
-          <p class="text-gray-500 font-medium">ไม่พบสต็อกรถยนต์</p>
-          <p class="text-sm text-gray-400 mt-1">ลองปรับเปลี่ยนตัวกรองหรือเพิ่มรถใหม่</p>
-        </div>
+        <!-- Empty State -->
+        <EmptyState
+          v-else-if="!loading && stock.length === 0"
+          title="ไม่พบสต็อกรถยนต์"
+          description="ลองปรับเปลี่ยนตัวกรองหรือเพิ่มรถยนต์ใหม่เข้าสู่ระบบสต็อก"
+          actionLabel="เพิ่มรถใหม่"
+          actionVariant="primary"
+          @action="() => $router.push('/admin/stock/create')"
+        >
+          <template #icon>
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 rounded-full">
+              <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+              </svg>
+            </div>
+          </template>
+        </EmptyState>
 
         <div v-else class="overflow-x-auto">
           <table class="min-w-full">

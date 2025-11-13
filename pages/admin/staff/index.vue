@@ -63,20 +63,30 @@
 
       <!-- Staff List -->
       <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div v-if="loading" class="p-12 text-center">
-          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
-          <p class="mt-2 text-gray-600">กำลังโหลด...</p>
-        </div>
+        <!-- Loading State -->
+        <LoadingSkeleton
+          v-if="loading"
+          variant="table"
+          :count="5"
+        />
 
-        <div v-else-if="staff.length === 0" class="p-12 text-center">
-          <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-          </div>
-          <p class="text-gray-500 font-medium">ไม่พบพนักงาน</p>
-          <p class="text-sm text-gray-400 mt-1">ลองปรับเปลี่ยนตัวกรองหรือเพิ่มพนักงานใหม่</p>
-        </div>
+        <!-- Empty State -->
+        <EmptyState
+          v-else-if="!loading && staff.length === 0"
+          title="ไม่พบพนักงาน"
+          description="ลองปรับเปลี่ยนตัวกรองหรือเพิ่มพนักงานใหม่เข้าสู่ระบบ"
+          actionLabel="เพิ่มพนักงาน"
+          actionVariant="primary"
+          @action="() => $router.push('/admin/staff/create')"
+        >
+          <template #icon>
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+          </template>
+        </EmptyState>
 
         <div v-else class="overflow-x-auto">
           <table class="min-w-full">
