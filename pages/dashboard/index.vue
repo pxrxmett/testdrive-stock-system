@@ -201,46 +201,46 @@ export default {
       try {
         this.loading = true
 
-        // Fetch ISUZU stats (using correct API endpoints)
+        // Fetch ISUZU stats (using correct API endpoints with uppercase brand code)
         if (this.$axios) {
           try {
-            const isuzuQueues = await this.$axios.get('/isuzu/test-drives')
+            const isuzuQueues = await this.$axios.get('/ISUZU/test-drives')
             this.isuzuStats.queues = isuzuQueues.data?.length || 0
           } catch (e) {
             console.log('ISUZU queues not available')
           }
 
           try {
-            const isuzuStock = await this.$axios.get('/isuzu/stock')
+            const isuzuStock = await this.$axios.get('/ISUZU/stock')
             this.isuzuStats.stock = isuzuStock.data?.length || 0
           } catch (e) {
             console.log('ISUZU stock not available')
           }
 
           try {
-            const isuzuStaff = await this.$axios.get('/isuzu/staff')
+            const isuzuStaff = await this.$axios.get('/ISUZU/staff')
             this.isuzuStats.staff = isuzuStaff.data?.length || 0
           } catch (e) {
             console.log('ISUZU staff not available')
           }
 
-          // Fetch BYD stats (using correct API endpoints)
+          // Fetch BYD stats (using correct API endpoints with uppercase brand code)
           try {
-            const bydQueues = await this.$axios.get('/byd/test-drives')
+            const bydQueues = await this.$axios.get('/BYD/test-drives')
             this.bydStats.queues = bydQueues.data?.length || 0
           } catch (e) {
             console.log('BYD queues not available')
           }
 
           try {
-            const bydStock = await this.$axios.get('/byd/stock')
+            const bydStock = await this.$axios.get('/BYD/stock')
             this.bydStats.stock = bydStock.data?.length || 0
           } catch (e) {
             console.log('BYD stock not available')
           }
 
           try {
-            const bydStaff = await this.$axios.get('/byd/staff')
+            const bydStaff = await this.$axios.get('/BYD/staff')
             this.bydStats.staff = bydStaff.data?.length || 0
           } catch (e) {
             console.log('BYD staff not available')
