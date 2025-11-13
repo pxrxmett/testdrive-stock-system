@@ -115,11 +115,9 @@ export default {
       try {
         this.loading = true
 
-        // Fetch queues from API
+        // Fetch queues from API (uppercase brand code required by backend)
         if (this.$axios) {
-          const response = await this.$axios.get('/api/queues', {
-            params: { brand: 'isuzu' }
-          })
+          const response = await this.$axios.get('/ISUZU/test-drives')
           this.queues = response.data || []
         }
       } catch (error) {

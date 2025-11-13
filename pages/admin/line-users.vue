@@ -353,11 +353,11 @@ export default {
       this.loading = true
       try {
         // Fetch pending users
-        const pendingResponse = await this.$axios.get('/api/line-users/pending')
+        const pendingResponse = await this.$axios.get('/line-users/pending')
         this.pendingUsers = pendingResponse.data || []
 
         // Fetch linked users
-        const linkedResponse = await this.$axios.get('/api/line-users/linked')
+        const linkedResponse = await this.$axios.get('/line-users/linked')
         this.linkedUsers = linkedResponse.data || []
       } catch (error) {
         console.error('Error fetching LINE users:', error)
@@ -368,7 +368,7 @@ export default {
     },
     async fetchStaffList() {
       try {
-        const response = await this.$axios.get('/api/staff')
+        const response = await this.$axios.get('/staff')
         this.staffList = response.data || []
       } catch (error) {
         console.error('Error fetching staff list:', error)
@@ -392,7 +392,7 @@ export default {
 
       this.linking = true
       try {
-        await this.$axios.post(`/api/line-users/${this.selectedUser.id}/link`, {
+        await this.$axios.post(`/line-users/${this.selectedUser.id}/link`, {
           staffId: this.selectedStaffId
         })
 
@@ -412,7 +412,7 @@ export default {
       }
 
       try {
-        await this.$axios.post(`/api/line-users/${user.id}/unlink`)
+        await this.$axios.post(`/line-users/${user.id}/unlink`)
         this.$toast.success('ยกเลิกการเชื่อมโยงสำเร็จ')
         await this.fetchData()
       } catch (error) {
