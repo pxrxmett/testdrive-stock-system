@@ -204,21 +204,21 @@ export default {
         // Fetch ISUZU stats (using correct API endpoints)
         if (this.$axios) {
           try {
-            const isuzuQueues = await this.$axios.get('/api/isuzu/test-drives')
+            const isuzuQueues = await this.$axios.get('/isuzu/test-drives')
             this.isuzuStats.queues = isuzuQueues.data?.length || 0
           } catch (e) {
             console.log('ISUZU queues not available')
           }
 
           try {
-            const isuzuStock = await this.$axios.get('/api/isuzu/stock')
+            const isuzuStock = await this.$axios.get('/isuzu/stock')
             this.isuzuStats.stock = isuzuStock.data?.length || 0
           } catch (e) {
             console.log('ISUZU stock not available')
           }
 
           try {
-            const isuzuStaff = await this.$axios.get('/api/isuzu/staff')
+            const isuzuStaff = await this.$axios.get('/isuzu/staff')
             this.isuzuStats.staff = isuzuStaff.data?.length || 0
           } catch (e) {
             console.log('ISUZU staff not available')
@@ -226,21 +226,21 @@ export default {
 
           // Fetch BYD stats (using correct API endpoints)
           try {
-            const bydQueues = await this.$axios.get('/api/byd/test-drives')
+            const bydQueues = await this.$axios.get('/byd/test-drives')
             this.bydStats.queues = bydQueues.data?.length || 0
           } catch (e) {
             console.log('BYD queues not available')
           }
 
           try {
-            const bydStock = await this.$axios.get('/api/byd/stock')
+            const bydStock = await this.$axios.get('/byd/stock')
             this.bydStats.stock = bydStock.data?.length || 0
           } catch (e) {
             console.log('BYD stock not available')
           }
 
           try {
-            const bydStaff = await this.$axios.get('/api/byd/staff')
+            const bydStaff = await this.$axios.get('/byd/staff')
             this.bydStats.staff = bydStaff.data?.length || 0
           } catch (e) {
             console.log('BYD staff not available')

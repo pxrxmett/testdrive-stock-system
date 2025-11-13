@@ -117,9 +117,7 @@ export default {
 
         // Fetch queues from API
         if (this.$axios) {
-          const response = await this.$axios.get('/api/queues', {
-            params: { brand: 'isuzu' }
-          })
+          const response = await this.$axios.get('/isuzu/test-drives')
           this.queues = response.data || []
         }
       } catch (error) {

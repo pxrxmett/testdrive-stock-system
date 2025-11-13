@@ -432,7 +432,7 @@ export default {
 
     async fetchPendingLineUsersCount() {
       try {
-        const response = await this.$axios.get('/api/line-integration/pending-users')
+        const response = await this.$axios.get('/line-integration/pending-users')
         this.pendingLineUsersCount = response.data?.length || 0
       } catch (error) {
         console.error('Error fetching pending LINE users count:', error)

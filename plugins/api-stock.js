@@ -4,7 +4,7 @@ export default function ({ $axios, store, $toast }, inject) {
     // Stock/Vehicle Management
     async getAllVehicles(filters = {}) {
       try {
-        const { data } = await $axios.get('/api/stock/vehicles', { params: filters })
+        const { data } = await $axios.get('/stock/vehicles', { params: filters })
         return data
       } catch (error) {
         console.error('Error fetching vehicles:', error)
@@ -15,7 +15,7 @@ export default function ({ $axios, store, $toast }, inject) {
 
     async getVehicleById(id) {
       try {
-        const { data } = await $axios.get(`/api/stock/${id}`)
+        const { data } = await $axios.get(`/stock/${id}`)
         return data
       } catch (error) {
         console.error('Error fetching vehicle:', error)
@@ -26,7 +26,7 @@ export default function ({ $axios, store, $toast }, inject) {
 
     async createVehicle(vehicleData) {
       try {
-        const { data } = await $axios.post('/api/stock', vehicleData)
+        const { data } = await $axios.post('/stock', vehicleData)
         $toast.success('เพิ่มรถยนต์เรียบร้อยแล้ว')
         return data
       } catch (error) {
@@ -38,7 +38,7 @@ export default function ({ $axios, store, $toast }, inject) {
 
     async updateVehicleStatus(id, statusData) {
       try {
-        const { data } = await $axios.patch(`/api/stock/vehicles/${id}/status`, statusData)
+        const { data } = await $axios.patch(`/stock/vehicles/${id}/status`, statusData)
         $toast.success('อัพเดทสถานะเรียบร้อยแล้ว')
         return data
       } catch (error) {
@@ -50,7 +50,7 @@ export default function ({ $axios, store, $toast }, inject) {
 
     async deleteVehicle(id) {
       try {
-        const { data } = await $axios.delete(`/api/stock/vehicles/${id}`)
+        const { data } = await $axios.delete(`/stock/vehicles/${id}`)
         $toast.success('ลบรถยนต์เรียบร้อยแล้ว')
         return data
       } catch (error) {
@@ -64,8 +64,8 @@ export default function ({ $axios, store, $toast }, inject) {
       try {
         const formData = new FormData()
         formData.append('file', file)
-        
-        const { data } = await $axios.post('/api/stock/upload', formData, {
+
+        const { data } = await $axios.post('/stock/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           },
@@ -74,7 +74,7 @@ export default function ({ $axios, store, $toast }, inject) {
             store.commit('stock/SET_UPLOAD_PROGRESS', percentCompleted)
           }
         })
-        
+
         $toast.success('อัพโหลดไฟล์เรียบร้อยแล้ว')
         return data
       } catch (error) {
@@ -87,7 +87,7 @@ export default function ({ $axios, store, $toast }, inject) {
     // Test Drive Management
     async getAllTestDrives(filters = {}) {
       try {
-        const { data } = await $axios.get('/api/test-drives', { params: filters })
+        const { data } = await $axios.get('/test-drives', { params: filters })
         return data
       } catch (error) {
         console.error('Error fetching test drives:', error)
@@ -98,7 +98,7 @@ export default function ({ $axios, store, $toast }, inject) {
 
     async createTestDrive(testDriveData) {
       try {
-        const { data } = await $axios.post('/api/test-drives', testDriveData)
+        const { data } = await $axios.post('/test-drives', testDriveData)
         $toast.success('สร้างการจองทดลองขับเรียบร้อยแล้ว')
         return data
       } catch (error) {
@@ -110,7 +110,7 @@ export default function ({ $axios, store, $toast }, inject) {
 
     async updateTestDrive(id, updateData) {
       try {
-        const { data } = await $axios.patch(`/api/test-drives/${id}`, updateData)
+        const { data } = await $axios.patch(`/test-drives/${id}`, updateData)
         $toast.success('แก้ไขการทดลองขับเรียบร้อยแล้ว')
         return data
       } catch (error) {
@@ -122,7 +122,7 @@ export default function ({ $axios, store, $toast }, inject) {
 
     async deleteTestDrive(id) {
       try {
-        const { data } = await $axios.delete(`/api/test-drives/${id}`)
+        const { data } = await $axios.delete(`/test-drives/${id}`)
         $toast.success('ยกเลิกการทดลองขับเรียบร้อยแล้ว')
         return data
       } catch (error) {
@@ -135,7 +135,7 @@ export default function ({ $axios, store, $toast }, inject) {
     // Staff Management
     async getAllStaffs() {
       try {
-        const { data } = await $axios.get('/api/staffs')
+        const { data } = await $axios.get('/staffs')
         return data
       } catch (error) {
         console.error('Error fetching staffs:', error)
@@ -146,7 +146,7 @@ export default function ({ $axios, store, $toast }, inject) {
 
     async createStaff(staffData) {
       try {
-        const { data } = await $axios.post('/api/staffs', staffData)
+        const { data } = await $axios.post('/staffs', staffData)
         $toast.success('สร้างข้อมูลพนักงานเรียบร้อยแล้ว')
         return data
       } catch (error) {
