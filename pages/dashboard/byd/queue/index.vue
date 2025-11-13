@@ -78,36 +78,21 @@ export default {
     },
 
     enrichedQueues() {
-      // Enrich queues with additional data for display
-      return this.queues.map((queue, index) => {
-        // Determine customer type based on name or random for demo
-        const customerTypes = ['vip', 'family', 'business', null]
-        const customerType = index % 4 === 0 ? customerTypes[index % 4] : null
-
-        // Sample sales persons
-        const salesPersons = [
-          { name: 'สมชาย ใจดี', position: 'เซลล์อาวุโส' },
-          { name: 'สมหญิง รักงาน', position: 'เซลล์' },
-          { name: 'วิชัย ขยัน', position: 'หัวหน้าเซลล์' },
-          null
-        ]
-        const salesPerson = salesPersons[index % salesPersons.length]
-
-        // Sample branches
-        const branches = ['กรุงเทพ', 'เชียงใหม่', 'ภูเก็ต', 'ขอนแก่น']
-
+      // Map API data to display format
+      return this.queues.map((queue) => {
         return {
           ...queue,
-          customerType,
-          salesPerson: salesPerson?.name,
-          salesPosition: salesPerson?.position,
-          branch: branches[index % branches.length],
-          duration: 60, // Default duration in minutes
-          testDriveDate: queue.test_drive_date || queue.testDriveDate || queue.appointmentDate || new Date().toISOString(),
-          testDriveTime: queue.test_drive_time || queue.testDriveTime || queue.appointmentTime || '10:00',
+          // Use real data from API
+          customerType: queue.customer_type || queue.customerType || null,
+          salesPerson: queue.sales_person || queue.salesPerson || queue.assigned_staff || null,
+          salesPosition: queue.sales_position || queue.salesPosition || (queue.sales_person ? 'เซลล์' : null),
+          branch: queue.branch || queue.location || null,
+          duration: queue.duration || queue.test_drive_duration || 60,
+          testDriveDate: queue.test_drive_date || queue.testDriveDate || queue.appointmentDate || queue.appointment_date || new Date().toISOString(),
+          testDriveTime: queue.test_drive_time || queue.testDriveTime || queue.appointmentTime || queue.appointment_time || '10:00',
           customerName: queue.customer_name || queue.customerName || 'ไม่ระบุ',
           customerPhone: queue.customer_phone || queue.customerPhone || queue.phone || '-',
-          vehicleModel: queue.vehicle_model || queue.vehicleModel || queue.carModel || 'BYD ATTO 3'
+          vehicleModel: queue.vehicle_model || queue.vehicleModel || queue.carModel || queue.model || 'BYD ATTO 3'
         }
       })
     }
