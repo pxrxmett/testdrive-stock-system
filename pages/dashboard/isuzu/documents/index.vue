@@ -1,20 +1,20 @@
 <template>
-  <div class="space-y-6">
-    <!-- Page Header -->
-    <div class="flex items-center space-x-3">
-      <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+  <div class="space-y-4">
+    <!-- Compact Page Header -->
+    <div class="flex items-center space-x-2.5">
+      <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
       </div>
       <div>
         <div class="flex items-center space-x-2">
-          <h1 class="text-2xl font-bold text-gray-900">เอกสาร ISUZU</h1>
-          <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded-full">
+          <h1 class="text-xl font-bold text-gray-900">เอกสาร ISUZU</h1>
+          <span class="px-2.5 py-0.5 bg-red-100 text-red-700 text-xs font-semibold rounded-full">
             รถยนต์
           </span>
         </div>
-        <p class="text-gray-600">เอกสารทดลองขับและสัญญาสำหรับ ISUZU</p>
+        <p class="text-sm text-gray-600 mt-0.5">เอกสารทดลองขับและสัญญาสำหรับ ISUZU</p>
       </div>
     </div>
 

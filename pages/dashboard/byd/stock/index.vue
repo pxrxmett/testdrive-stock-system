@@ -1,24 +1,24 @@
 <template>
-  <div class="space-y-6">
-    <!-- Page Header -->
+  <div class="space-y-4">
+    <!-- Compact Page Header -->
     <div class="flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
           </svg>
         </div>
         <div>
           <div class="flex items-center space-x-2">
-            <h1 class="text-2xl font-bold text-gray-900">สต็อครถไฟฟ้า BYD</h1>
+            <h1 class="text-xl font-bold text-gray-900">สต็อครถไฟฟ้า BYD</h1>
             <BrandBadge brand-code="byd" size="sm" />
           </div>
-          <p class="text-gray-600">จัดการสต็อครถยนต์ไฟฟ้า BYD ทุกรุ่น</p>
+          <p class="text-sm text-gray-600 mt-0.5">จัดการสต็อครถยนต์ไฟฟ้า BYD ทุกรุ่น</p>
         </div>
       </div>
       <NuxtLink
         to="/admin/stock"
-        class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-all duration-150"
+        class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 shadow-sm transition-all duration-150"
       >
         ดูทุกแบรนด์
       </NuxtLink>
