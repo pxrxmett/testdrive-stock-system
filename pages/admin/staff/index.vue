@@ -9,7 +9,7 @@
         </div>
         <NuxtLink
           to="/admin/staff/create"
-          class="px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-medium rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-150 shadow-sm hover:shadow-md"
+          class="px-4 py-2.5 bg-gradient-to-r from-[#D52B1E] to-[#B91C1C] text-white text-sm font-medium rounded-lg hover:from-[#B91C1C] hover:to-[#991B1B] transition-all duration-150 shadow-sm hover:shadow-md"
         >
           + เพิ่มพนักงาน
         </NuxtLink>
@@ -25,7 +25,7 @@
             <select
               v-model="filters.status"
               @change="loadStaff"
-              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
             >
               <option value="">ทั้งหมด</option>
               <option value="active">ใช้งานอยู่</option>
@@ -39,7 +39,7 @@
             <select
               v-model="filters.role"
               @change="loadStaff"
-              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
             >
               <option value="">ทั้งหมด</option>
               <option value="admin">ผู้ดูแลระบบ</option>
@@ -55,7 +55,7 @@
               @input="debouncedSearch"
               type="text"
               placeholder="ชื่อ, รหัส, อีเมล..."
-              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
             >
           </div>
         </div>
