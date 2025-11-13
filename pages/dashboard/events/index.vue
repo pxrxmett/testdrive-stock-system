@@ -772,7 +772,8 @@ export default {
         this.loading = true
         this.error = null
 
-        const response = await this.$api.events.getAll()
+        // Fetch all events from admin endpoint
+        const response = await this.$api.events.admin.getAll()
         const apiData = Array.isArray(response) ? response : (response.data || [])
 
         console.log('📋 API Events Response:', apiData)
@@ -1013,7 +1014,8 @@ export default {
         console.log('📤 Creating event with data:', JSON.stringify(eventData, null, 2))
 
         try {
-          const response = await this.$api.events.create(eventData)
+          // Use ISUZU as default brand for admin events
+          const response = await this.$api.events.create('ISUZU', eventData)
           console.log('✅ Event created successfully:', response)
         } catch (apiError) {
           // Check if it's a network error or backend is down
@@ -1096,7 +1098,8 @@ export default {
           description: 'สร้างอีเวนต์ฉุกเฉิน'
         }
 
-        const response = await this.$api.events.create(eventData)
+        // Use ISUZU as default brand for admin events
+        const response = await this.$api.events.create('ISUZU', eventData)
         await this.fetchEvents() // Refresh events list
         this.$toast?.success(`สร้างอีเวนต์ฉุกเฉิน "${eventName}" เรียบร้อยแล้ว`)
       } catch (error) {
@@ -1299,8 +1302,8 @@ export default {
       try {
         this.deleting = true
 
-        // Call API to delete event
-        await this.$api.events.delete(this.eventToDelete.id)
+        // Call API to delete event - use ISUZU as default brand
+        await this.$api.events.delete('ISUZU', this.eventToDelete.id)
 
         // Remove from local array
         const index = this.events.findIndex(e => e.id === this.eventToDelete.id)

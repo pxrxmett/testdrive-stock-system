@@ -213,7 +213,7 @@ export default {
     getStatusBadgeClasses(status) {
       const classMap = {
         'available': 'bg-green-50 text-green-700 border-green-200',
-        'in_use': 'bg-red-50 text-[#B91C1C] border-red-200',
+        'in_use': 'bg-blue-50 text-blue-700 border-blue-200',
         'maintenance': 'bg-amber-50 text-amber-700 border-amber-200',
         'locked': 'bg-purple-50 text-purple-700 border-purple-200'
       }

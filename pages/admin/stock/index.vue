@@ -338,18 +338,39 @@ export default {
           limit: this.pageSize
         }
 
-        // Add filters
-        if (this.filters.brandCode) params.brandCode = this.filters.brandCode
+        // Add filters (excluding brandCode which is used for fetching)
         if (this.filters.status) params.status = this.filters.status
         if (this.filters.type) params.type = this.filters.type
         if (this.filters.fuelType) params.fuelType = this.filters.fuelType
         if (this.filters.search) params.search = this.filters.search
 
-        const response = await this.$api.stock.admin.getAll(params)
+        let allStock = []
+
+        // If brand filter is specified, fetch only that brand
+        if (this.filters.brandCode) {
+          const response = await this.$api.stock.getAll(this.filters.brandCode.toUpperCase(), params)
+          allStock = (response.data || response).map(formatStockFromAPI)
+        } else {
+          // Fetch from both brands and merge
+          const [isuzuResponse, bydResponse] = await Promise.all([
+            this.$api.stock.getAll('ISUZU', params).catch(err => {
+              console.error('Error fetching ISUZU stock:', err)
+              return { data: [] }
+            }),
+            this.$api.stock.getAll('BYD', params).catch(err => {
+              console.error('Error fetching BYD stock:', err)
+              return { data: [] }
+            })
+          ])
+
+          const isuzuStock = (isuzuResponse.data || isuzuResponse).map(formatStockFromAPI)
+          const bydStock = (bydResponse.data || bydResponse).map(formatStockFromAPI)
+          allStock = [...isuzuStock, ...bydStock]
+        }
 
         // Format stock data
-        this.stock = (response.data || response).map(formatStockFromAPI)
-        this.totalRecords = response.total || this.stock.length
+        this.stock = allStock
+        this.totalRecords = this.stock.length
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize)
 
         // Update stats
