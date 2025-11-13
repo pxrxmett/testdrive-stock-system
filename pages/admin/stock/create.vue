@@ -306,7 +306,7 @@ export default {
 
     async handleSubmit() {
       if (!this.validateForm()) {
-        this.$toast.error('กรุณาตรวจสอบข้อมูลให้ครบถ้วน')
+        console.error('กรุณาตรวจสอบข้อมูลให้ครบถ้วน')
         return
       }
 
@@ -317,7 +317,7 @@ export default {
 
         await this.$api.stock.create(brandCode, data)
 
-        this.$toast.success('เพิ่มรถยนต์เรียบร้อยแล้ว')
+        console.log('Success:', 'เพิ่มรถยนต์เรียบร้อยแล้ว')
         this.$router.push('/admin/stock')
 
       } catch (error) {
@@ -326,11 +326,11 @@ export default {
         if (error.response?.status === 400) {
           const serverErrors = error.response.data?.errors || {}
           this.errors = { ...this.errors, ...serverErrors }
-          this.$toast.error(error.response.data?.message || 'ข้อมูลไม่ถูกต้อง')
+          console.error(error.response.data?.message || 'ข้อมูลไม่ถูกต้อง')
         } else if (error.response?.status === 409) {
-          this.$toast.error('ทะเบียนรถนี้มีอยู่ในระบบแล้ว')
+          console.error('ทะเบียนรถนี้มีอยู่ในระบบแล้ว')
         } else {
-          this.$toast.error('เกิดข้อผิดพลาดในการบันทึกข้อมูล')
+          console.error('เกิดข้อผิดพลาดในการบันทึกข้อมูล')
         }
       } finally {
         this.submitting = false

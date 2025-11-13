@@ -258,7 +258,7 @@ export default {
 
       } catch (error) {
         console.error('Error loading staff:', error)
-        this.$toast.error('เกิดข้อผิดพลาดในการโหลดข้อมูลพนักงาน')
+        console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลพนักงาน')
         this.staff = []
       } finally {
         this.loading = false
@@ -287,11 +287,11 @@ export default {
 
       try {
         await this.$api.staffs.delete(member.brandCode, member.id)
-        this.$toast.success('ลบพนักงานเรียบร้อยแล้ว')
+        console.log('Success:', 'ลบพนักงานเรียบร้อยแล้ว')
         await this.loadStaff()
       } catch (error) {
         console.error('Error deleting staff:', error)
-        this.$toast.error('เกิดข้อผิดพลาดในการลบพนักงาน')
+        console.error('เกิดข้อผิดพลาดในการลบพนักงาน')
       }
     }
   },

@@ -412,14 +412,14 @@ export default {
         this.$router.push('/login')
 
         if (this.$toast) {
-          this.$toast.success('ออกจากระบบเรียบร้อยแล้ว')
+          console.log('Success:', 'ออกจากระบบเรียบร้อยแล้ว')
         }
 
         console.log('User logged out successfully')
       } catch (error) {
         console.error('Logout error:', error)
         if (this.$toast) {
-          this.$toast.error('เกิดข้อผิดพลาดในการออกจากระบบ')
+          console.error('เกิดข้อผิดพลาดในการออกจากระบบ')
         }
       }
     },

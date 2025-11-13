@@ -357,7 +357,7 @@ export default {
 
       } catch (error) {
         console.error('Error loading stock:', error)
-        this.$toast.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสต็อก')
+        console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสต็อก')
         this.stock = []
       } finally {
         this.loading = false
@@ -417,11 +417,11 @@ export default {
 
       try {
         await this.$api.stock.delete(vehicle.brandCode, vehicle.id)
-        this.$toast.success('ลบรถยนต์เรียบร้อยแล้ว')
+        console.log('Success:', 'ลบรถยนต์เรียบร้อยแล้ว')
         await this.loadStock()
       } catch (error) {
         console.error('Error deleting vehicle:', error)
-        this.$toast.error('เกิดข้อผิดพลาดในการลบรถยนต์')
+        console.error('เกิดข้อผิดพลาดในการลบรถยนต์')
       }
     }
   },

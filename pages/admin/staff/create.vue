@@ -222,7 +222,7 @@ export default {
 
     async handleSubmit() {
       if (!this.validateForm()) {
-        this.$toast.error('กรุณาตรวจสอบข้อมูลให้ครบถ้วน')
+        console.error('กรุณาตรวจสอบข้อมูลให้ครบถ้วน')
         return
       }
 
@@ -233,7 +233,7 @@ export default {
 
         await this.$api.staffs.create(brandCode, data)
 
-        this.$toast.success('เพิ่มพนักงานเรียบร้อยแล้ว')
+        console.log('Success:', 'เพิ่มพนักงานเรียบร้อยแล้ว')
         this.$router.push('/admin/staff')
 
       } catch (error) {
@@ -243,11 +243,11 @@ export default {
           // Validation errors from backend
           const serverErrors = error.response.data?.errors || {}
           this.errors = { ...this.errors, ...serverErrors }
-          this.$toast.error(error.response.data?.message || 'ข้อมูลไม่ถูกต้อง')
+          console.error(error.response.data?.message || 'ข้อมูลไม่ถูกต้อง')
         } else if (error.response?.status === 409) {
-          this.$toast.error('รหัสพนักงานหรืออีเมลนี้มีอยู่ในระบบแล้ว')
+          console.error('รหัสพนักงานหรืออีเมลนี้มีอยู่ในระบบแล้ว')
         } else {
-          this.$toast.error('เกิดข้อผิดพลาดในการเพิ่มพนักงาน')
+          console.error('เกิดข้อผิดพลาดในการเพิ่มพนักงาน')
         }
       } finally {
         this.submitting = false

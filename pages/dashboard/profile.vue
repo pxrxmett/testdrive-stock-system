@@ -287,14 +287,14 @@ export default {
 
         // Show success message
         if (this.$toast) {
-          this.$toast.success('บันทึกข้อมูลเรียบร้อยแล้ว')
+          console.log('Success:', 'บันทึกข้อมูลเรียบร้อยแล้ว')
         } else {
           alert('บันทึกข้อมูลเรียบร้อยแล้ว')
         }
       } catch (error) {
         console.error('Error saving user data:', error)
         if (this.$toast) {
-          this.$toast.error('เกิดข้อผิดพลาดในการบันทึกข้อมูล')
+          console.error('เกิดข้อผิดพลาดในการบันทึกข้อมูล')
         } else {
           alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล')
         }
@@ -304,7 +304,7 @@ export default {
       // TODO: Implement avatar upload
       console.log('Edit avatar clicked')
       if (this.$toast) {
-        this.$toast.info('ฟีเจอร์นี้กำลังพัฒนา')
+        console.log('Info:', 'ฟีเจอร์นี้กำลังพัฒนา')
       } else {
         alert('ฟีเจอร์นี้กำลังพัฒนา')
       }
@@ -313,7 +313,7 @@ export default {
       // TODO: Implement password change
       console.log('Change password clicked')
       if (this.$toast) {
-        this.$toast.info('ฟีเจอร์นี้กำลังพัฒนา')
+        console.log('Info:', 'ฟีเจอร์นี้กำลังพัฒนา')
       } else {
         alert('ฟีเจอร์นี้กำลังพัฒนา')
       }
@@ -325,7 +325,7 @@ export default {
         : 'ปิดใช้งานการยืนยันตัวตนแบบสองขั้นตอนแล้ว'
 
       if (this.$toast) {
-        this.$toast.success(message)
+        console.log('Success:', message)
       } else {
         alert(message)
       }
