@@ -15,7 +15,7 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <!-- Avatar -->
           <div class="flex flex-col items-center">
-            <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+            <div class="w-32 h-32 rounded-full bg-gradient-to-br from-[#D52B1E] to-[#B91C1C] flex items-center justify-center text-white text-4xl font-bold shadow-lg">
               {{ userInitials }}
             </div>
             <h2 class="mt-4 text-xl font-bold text-gray-900">{{ user.name || 'ไม่ระบุชื่อ' }}</h2>
@@ -47,7 +47,7 @@
           <!-- Action Button -->
           <button
             @click="handleEditAvatar"
-            class="mt-6 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
+            class="mt-6 w-full px-4 py-2 bg-[#D52B1E] text-white rounded-lg hover:bg-[#B91C1C] transition-colors font-medium text-sm"
           >
             เปลี่ยนรูปโปรไฟล์
           </button>
@@ -63,7 +63,7 @@
             <button
               @click="toggleEdit"
               class="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
-              :class="isEditing ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'"
+              :class="isEditing ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-red-50 text-[#D52B1E] hover:bg-red-100'"
             >
               {{ isEditing ? 'ยกเลิก' : 'แก้ไข' }}
             </button>
@@ -77,7 +77,7 @@
                 v-model="formData.name"
                 type="text"
                 :disabled="!isEditing"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] disabled:bg-gray-50 disabled:text-gray-500"
                 placeholder="กรอกชื่อ-นามสกุล"
               />
             </div>
@@ -89,7 +89,7 @@
                 v-model="formData.email"
                 type="email"
                 :disabled="!isEditing"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] disabled:bg-gray-50 disabled:text-gray-500"
                 placeholder="กรอกอีเมล"
               />
             </div>
