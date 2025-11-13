@@ -65,20 +65,20 @@ export default {
         'disabled:opacity-50 disabled:cursor-not-allowed'
       ]
 
-      // Size
+      // Size - Updated to match design system (40px/48px heights)
       if (this.size === 'sm') {
-        base.push('px-3 py-1.5 text-sm')
+        base.push('h-8 px-3 text-sm')  // 32px height
       } else if (this.size === 'lg') {
-        base.push('px-6 py-3 text-base')
+        base.push('h-12 px-6 text-base')  // 48px height
       } else {
-        base.push('px-4 py-2 text-sm')
+        base.push('h-10 px-4 text-sm')  // 40px height (default)
       }
 
-      // Variant
+      // Variant - Updated to use Isuzu Red (#D52B1E) as primary
       if (this.variant === 'primary') {
-        base.push('bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500')
+        base.push('bg-[#D52B1E] text-white hover:bg-[#B91C1C] focus:ring-[#DC2626] shadow-sm')
       } else if (this.variant === 'secondary') {
-        base.push('bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-blue-500')
+        base.push('bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-[#D52B1E]')
       } else if (this.variant === 'danger') {
         base.push('bg-red-600 text-white hover:bg-red-700 focus:ring-red-500')
       } else if (this.variant === 'ghost') {

@@ -1,16 +1,16 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-50">
     <!-- Login Card -->
     <div class="w-full max-w-md">
       <!-- Logo & Title -->
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-[#D52B1E] rounded-full mb-4 shadow-lg">
           <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
         </div>
         <h1 class="text-3xl font-bold text-gray-900">Multi-Brand TestDrive System</h1>
-<p class="text-gray-600 mt-2">ระบบจัดการคิวและทดลองขับ ISUZU & BYD</p>
+        <p class="text-gray-600 mt-2">ระบบจัดการคิวและทดลองขับ ISUZU & BYD</p>
       </div>
 
       <!-- Login Form Card -->
@@ -47,7 +47,7 @@
                 type="text"
                 required
                 autocomplete="username"
-                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                class="block w-full h-10 pl-10 pr-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] transition-colors"
                 placeholder="กรอกชื่อผู้ใช้"
                 :disabled="loading"
               >
@@ -71,7 +71,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 required
                 autocomplete="current-password"
-                class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                class="block w-full h-10 pl-10 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] transition-colors"
                 placeholder="กรอกรหัสผ่าน"
                 :disabled="loading"
               >
@@ -99,14 +99,14 @@
                 id="remember"
                 v-model="rememberMe"
                 type="checkbox"
-                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                class="h-4 w-4 text-[#D52B1E] focus:ring-[#D52B1E] border-gray-300 rounded"
                 :disabled="loading"
               >
               <label for="remember" class="ml-2 block text-sm text-gray-700">
                 จำฉันไว้
               </label>
             </div>
-            <a href="#" class="text-sm text-blue-600 hover:text-blue-500">
+            <a href="#" class="text-sm text-[#D52B1E] hover:text-[#B91C1C]">
               ลืมรหัสผ่าน?
             </a>
           </div>
@@ -115,7 +115,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="w-full flex items-center justify-center px-4 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="w-full h-12 flex items-center justify-center px-4 bg-[#D52B1E] text-white font-medium rounded-lg hover:bg-[#B91C1C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DC2626] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
           >
             <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -142,7 +142,7 @@
         <button
           type="button"
           @click="loginWithLine"
-          class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          class="w-full h-12 flex items-center justify-center px-4 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D52B1E] transition-colors"
           :disabled="loading"
         >
           <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="#00B900">
@@ -155,7 +155,7 @@
       <!-- Footer -->
       <p class="mt-8 text-center text-sm text-gray-600">
         ยังไม่มีบัญชี?
-        <a href="#" class="text-blue-600 hover:text-blue-500 font-medium">ติดต่อผู้ดูแลระบบ</a>
+        <a href="#" class="text-[#D52B1E] hover:text-[#B91C1C] font-medium">ติดต่อผู้ดูแลระบบ</a>
       </p>
     </div>
   </div>
