@@ -169,60 +169,77 @@
           <Icon name="settings" icon-class="w-5 h-5" />
         </button>
 
-        <!-- User Menu Dropdown -->
-        <Dropdown align="right" width="w-56">
-          <template #trigger="{ isOpen }">
-            <button
-              :class="[
-                'flex items-center space-x-2 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors',
-                isOpen && 'bg-gray-100 text-gray-700'
-              ]"
-            >
-              <div class="w-7 h-7 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-                <span class="text-white font-semibold text-xs">{{ userInitials }}</span>
-              </div>
-              <span class="hidden md:block text-sm text-gray-700 font-medium">{{ userName }}</span>
-              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-          </template>
+        <!-- User Menu Dropdown (Native HTML) -->
+        <div class="relative">
+          <button
+            @click="toggleUserMenu"
+            :class="[
+              'flex items-center space-x-2 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors',
+              showUserMenu && 'bg-gray-100 text-gray-700'
+            ]"
+          >
+            <div class="w-7 h-7 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+              <span class="text-white font-semibold text-xs">{{ userInitials }}</span>
+            </div>
+            <span class="hidden md:block text-sm text-gray-700 font-medium">{{ userName }}</span>
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
 
-          <!-- User Info Header -->
-          <div class="px-4 py-3 border-b border-gray-200">
-            <p class="text-sm font-semibold text-gray-900">{{ userName }}</p>
-            <p class="text-xs text-gray-500 mt-0.5">{{ userEmail }}</p>
+          <!-- User Menu Panel -->
+          <div
+            v-if="showUserMenu"
+            v-click-outside="closeUserMenu"
+            class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-50 animate-fade-in"
+          >
+            <!-- User Info Header -->
+            <div class="px-4 py-3 border-b border-gray-200">
+              <p class="text-sm font-semibold text-gray-900">{{ userName }}</p>
+              <p class="text-xs text-gray-500 mt-0.5">{{ userEmail }}</p>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="py-1">
+              <NuxtLink
+                to="/dashboard/profile"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                @click.native="closeUserMenu"
+              >
+                <Icon name="user" icon-class="w-4 h-4 mr-3 text-gray-500" />
+                <span>โปรไฟล์</span>
+              </NuxtLink>
+              <NuxtLink
+                to="/dashboard/settings"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                @click.native="closeUserMenu"
+              >
+                <Icon name="settings" icon-class="w-4 h-4 mr-3 text-gray-500" />
+                <span>ตั้งค่า</span>
+              </NuxtLink>
+
+              <div class="border-t border-gray-200 my-1"></div>
+
+              <button
+                @click="handleHelp"
+                class="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors text-left"
+              >
+                <Icon name="help" icon-class="w-4 h-4 mr-3 text-gray-500" />
+                <span>ช่วยเหลือ</span>
+              </button>
+
+              <div class="border-t border-gray-200 my-1"></div>
+
+              <button
+                @click="handleLogout"
+                class="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+              >
+                <Icon name="logOut" icon-class="w-4 h-4 mr-3 text-red-600" />
+                <span>ออกจากระบบ</span>
+              </button>
+            </div>
           </div>
-
-          <!-- Menu Items -->
-          <DropdownItem
-            icon="user"
-            label="โปรไฟล์"
-            to="/dashboard/profile"
-          />
-          <DropdownItem
-            icon="settings"
-            label="ตั้งค่า"
-            to="/dashboard/settings"
-          />
-
-          <DropdownDivider />
-
-          <DropdownItem
-            icon="help"
-            label="ช่วยเหลือ"
-            @click="handleHelp"
-          />
-
-          <DropdownDivider />
-
-          <DropdownItem
-            icon="logOut"
-            label="ออกจากระบบ"
-            danger
-            @click="handleLogout"
-          />
-        </Dropdown>
+        </div>
       </div>
     </div>
   </div>
@@ -244,6 +261,7 @@ export default {
   data() {
     return {
       showNotifications: false,
+      showUserMenu: false,
       activeTab: 'all', // 'all' or 'unread'
       notifications: [
         {
@@ -403,6 +421,12 @@ export default {
     closeNotifications() {
       this.showNotifications = false
     },
+    toggleUserMenu() {
+      this.showUserMenu = !this.showUserMenu
+    },
+    closeUserMenu() {
+      this.showUserMenu = false
+    },
     navigateTo(path) {
       this.$router.push(path)
     },
@@ -446,10 +470,15 @@ export default {
       return backgrounds[type] || 'bg-gray-100'
     },
     handleHelp() {
+      // Close user menu
+      this.showUserMenu = false
       // Open help modal or navigate to help page
       alert('ติดต่อฝ่ายสนับสนุน: support@testdrive.com')
     },
     async handleLogout() {
+      // Close user menu
+      this.showUserMenu = false
+
       try {
         if (!confirm('ต้องการออกจากระบบหรือไม่?')) {
           return
