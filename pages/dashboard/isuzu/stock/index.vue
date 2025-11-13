@@ -184,7 +184,7 @@ export default {
         this.updateStats()
       } catch (error) {
         console.error('Error loading ISUZU stock:', error)
-        this.$toast.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสต็อก')
+        console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสต็อก')
         this.vehicles = []
       } finally {
         this.loading = false

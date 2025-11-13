@@ -361,7 +361,7 @@ export default {
         this.linkedUsers = linkedResponse.data || []
       } catch (error) {
         console.error('Error fetching LINE users:', error)
-        this.$toast.error('เกิดข้อผิดพลาดในการโหลดข้อมูล')
+        console.error('เกิดข้อผิดพลาดในการโหลดข้อมูล')
       } finally {
         this.loading = false
       }
@@ -386,7 +386,7 @@ export default {
     },
     async linkUser() {
       if (!this.selectedStaffId) {
-        this.$toast.error('กรุณาเลือกพนักงาน')
+        console.error('กรุณาเลือกพนักงาน')
         return
       }
 
@@ -396,12 +396,12 @@ export default {
           staffId: this.selectedStaffId
         })
 
-        this.$toast.success('เชื่อมโยงสำเร็จ')
+        console.log('Success:', 'เชื่อมโยงสำเร็จ')
         this.closeLinkModal()
         await this.fetchData()
       } catch (error) {
         console.error('Error linking user:', error)
-        this.$toast.error('เกิดข้อผิดพลาดในการเชื่อมโยง')
+        console.error('เกิดข้อผิดพลาดในการเชื่อมโยง')
       } finally {
         this.linking = false
       }
@@ -413,11 +413,11 @@ export default {
 
       try {
         await this.$axios.post(`/line-users/${user.id}/unlink`)
-        this.$toast.success('ยกเลิกการเชื่อมโยงสำเร็จ')
+        console.log('Success:', 'ยกเลิกการเชื่อมโยงสำเร็จ')
         await this.fetchData()
       } catch (error) {
         console.error('Error unlinking user:', error)
-        this.$toast.error('เกิดข้อผิดพลาดในการยกเลิกการเชื่อมโยง')
+        console.error('เกิดข้อผิดพลาดในการยกเลิกการเชื่อมโยง')
       }
     },
     formatDate(dateString) {
