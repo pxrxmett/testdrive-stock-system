@@ -13,7 +13,7 @@
           <select
             v-model="selectedPeriod"
             @change="handlePeriodChange"
-            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           >
             <option value="7days">7 วันที่ผ่านมา</option>
             <option value="30days">30 วันที่ผ่านมา</option>
@@ -74,7 +74,7 @@
           <button
             @click="refreshData"
             :disabled="loading"
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex items-center space-x-2 disabled:opacity-50"
+            class="px-4 py-2 bg-[#D52B1E] text-white rounded-lg text-sm font-medium hover:bg-[#B91C1C] transition-colors flex items-center space-x-2 disabled:opacity-50"
           >
             <svg
               :class="loading ? 'animate-spin' : ''"

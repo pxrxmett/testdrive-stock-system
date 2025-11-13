@@ -9,7 +9,7 @@
       <button
         v-if="hasChanges"
         @click="saveAllSettings"
-        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+        class="px-4 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors"
       >
         บันทึกการเปลี่ยนแปล
       </button>
@@ -26,7 +26,7 @@
             :class="[
               'py-4 px-1 border-b-2 font-medium text-sm transition-colors',
               currentTab === tab.id
-                ? 'border-blue-500 text-blue-600'
+                ? 'border-[#D52B1E] text-[#D52B1E]'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             ]"
           >
@@ -42,7 +42,7 @@
 
           <div class="space-y-4">
             <div class="flex items-center space-x-4">
-              <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+              <div class="w-20 h-20 bg-gradient-to-br from-[#D52B1E] to-[#B91C1C] rounded-full flex items-center justify-center text-white text-2xl font-bold">
                 {{ userInitial }}
               </div>
               <div>
@@ -59,7 +59,7 @@
                 <input
                   v-model="profileForm.firstName"
                   type="text"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                   placeholder="กรอกชื่อ"
                 >
               </div>
@@ -69,7 +69,7 @@
                 <input
                   v-model="profileForm.lastName"
                   type="text"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                   placeholder="กรอกนามสกุล"
                 >
               </div>
@@ -79,7 +79,7 @@
                 <input
                   v-model="profileForm.nickname"
                   type="text"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                   placeholder="กรอกชื่อเล่น"
                 >
               </div>
@@ -89,7 +89,7 @@
                 <input
                   v-model="profileForm.email"
                   type="email"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                   placeholder="example@company.com"
                 >
               </div>
