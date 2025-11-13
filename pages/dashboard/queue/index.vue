@@ -96,7 +96,7 @@
             <p class="text-2xl font-bold text-[#D52B1E]">{{ statsData.completed }}</p>
             <p class="text-sm text-gray-600">เสร็จสิ้น</p>
           </div>
-          <Icon name="check" icon-class="w-8 h-8 text-blue-400" />
+          <Icon name="check" icon-class="w-8 h-8 text-red-400" />
         </div>
       </div>
     </div>

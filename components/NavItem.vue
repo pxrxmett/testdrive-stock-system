@@ -85,7 +85,7 @@ export default {
       }
 
       if (this.active) {
-        baseClasses.push('bg-blue-50 border-l-3 border-l-blue-600 shadow-sm')
+        baseClasses.push('bg-red-50 border-l-3 border-l-[#D52B1E] shadow-sm')
       }
 
       if (this.collapsed) {
@@ -105,7 +105,7 @@ export default {
     },
 
     labelClasses() {
-      return this.active ? 'text-blue-700 font-semibold' : 'text-gray-700 group-hover:text-gray-900'
+      return this.active ? 'text-[#B91C1C] font-semibold' : 'text-gray-700 group-hover:text-gray-900'
     },
 
     badgeClasses() {

@@ -3,7 +3,7 @@
     <!-- Logo Section -->
     <div class="p-4 h-16 flex items-center border-b border-gray-200">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+        <div class="w-10 h-10 bg-gradient-to-br from-[#D52B1E] to-[#B91C1C] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
           <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path d="M19 7h-3V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12l4-4V9a2 2 0 0 0-2-2zM10 4h4v3h-4V4zM4 5h4v4H4V5zm0 6h6v5H4v-5zm8 5v-3h3l-3 3z"/>
           </svg>

@@ -36,14 +36,14 @@ export default {
         },
         in_progress: {
           label: 'กำลังทดลองขับ',
-          textColor: 'text-blue-800',
-          bgColor: 'bg-blue-100',
+          textColor: 'text-[#991B1B]',
+          bgColor: 'bg-red-100',
           dotColor: 'bg-[#D52B1E]'
         },
         'in-progress': {
           label: 'กำลังทดลองขับ',
-          textColor: 'text-blue-800',
-          bgColor: 'bg-blue-100',
+          textColor: 'text-[#991B1B]',
+          bgColor: 'bg-red-100',
           dotColor: 'bg-[#D52B1E]'
         },
         completed: {

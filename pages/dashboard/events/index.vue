@@ -106,7 +106,7 @@
                 <span class="text-xs text-gray-600">ดำเนินการอยู่</span>
               </div>
             </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
               <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
@@ -353,7 +353,7 @@
                 <button 
                   v-if="isEventOverdue(event)"
                   @click="extendEvent(event)"
-                  class="p-2 text-[#D52B1E] hover:bg-blue-50 rounded transition-colors"
+                  class="p-2 text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                   title="ขยายอีเวนต์"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -387,7 +387,7 @@
                 
                 <button 
                   @click="editEvent(event)"
-                  class="p-2 text-gray-400 hover:text-[#D52B1E] hover:bg-blue-50 rounded transition-colors"
+                  class="p-2 text-gray-400 hover:text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                   title="แก้ไขอีเวนต์"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -898,7 +898,7 @@ export default {
       switch (status) {
         case 'วางแผน': return 'text-gray-700 bg-gray-100 border border-gray-300'
         case 'เตรียมการ': return 'text-orange-700 bg-orange-100 border border-orange-300'
-        case 'กำลังดำเนินการ': return 'text-blue-700 bg-blue-100 border border-blue-300'
+        case 'กำลังดำเนินการ': return 'text-[#B91C1C] bg-red-100 border border-red-300'
         case 'เสร็จสิ้น': return 'text-green-700 bg-green-100 border border-green-300'
         case 'เลยกำหนด': return 'text-red-700 bg-red-100 border border-red-300'
         default: return 'text-gray-700 bg-gray-100 border border-gray-300'

@@ -178,7 +178,7 @@
               showUserMenu && 'bg-gray-100 text-gray-700'
             ]"
           >
-            <div class="w-7 h-7 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+            <div class="w-7 h-7 bg-gradient-to-br from-[#D52B1E] to-[#B91C1C] rounded-full flex items-center justify-center">
               <span class="text-white font-semibold text-xs">{{ userInitials }}</span>
             </div>
             <span class="hidden md:block text-sm text-gray-700 font-medium">{{ userName }}</span>
@@ -465,7 +465,7 @@ export default {
         document: 'bg-[#F3F4F6]',
         warning: 'bg-[#FEF3C7]',
         success: 'bg-[#D1FAE5]',
-        info: 'bg-blue-100'
+        info: 'bg-red-100'
       }
       return backgrounds[type] || 'bg-gray-100'
     },

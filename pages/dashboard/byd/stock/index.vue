@@ -60,8 +60,8 @@
             <p class="text-sm font-medium text-gray-600">กำลังใช้งาน</p>
             <p class="text-2xl font-semibold text-gray-900 mt-1">{{ stats.inUse }}</p>
           </div>
-          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
@@ -213,7 +213,7 @@ export default {
     getStatusBadgeClasses(status) {
       const classMap = {
         'available': 'bg-green-50 text-green-700 border-green-200',
-        'in_use': 'bg-blue-50 text-blue-700 border-blue-200',
+        'in_use': 'bg-red-50 text-[#B91C1C] border-red-200',
         'maintenance': 'bg-amber-50 text-amber-700 border-amber-200',
         'locked': 'bg-purple-50 text-purple-700 border-purple-200'
       }

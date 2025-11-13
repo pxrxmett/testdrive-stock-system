@@ -298,7 +298,7 @@ export default {
       const map = {
         'planning': 'text-gray-700 bg-gray-100 border border-gray-300',
         'preparing': 'text-orange-700 bg-orange-100 border border-orange-300',
-        'in_progress': 'text-blue-700 bg-blue-100 border border-blue-300',
+        'in_progress': 'text-[#B91C1C] bg-red-100 border border-red-300',
         'completed': 'text-green-700 bg-green-100 border border-green-300',
       }
       return map[status] || 'text-gray-700 bg-gray-100'

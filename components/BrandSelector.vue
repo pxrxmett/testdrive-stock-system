@@ -99,7 +99,7 @@ export default {
         // Apply brand color when selected
         const brandClasses = {
           isuzu: 'border-red-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]',
-          byd: 'border-blue-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]'
+          byd: 'border-red-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]'
         }
         classes.push(brandClasses[this.value] || 'border-gray-300 focus:ring-gray-500 focus:border-gray-500')
       } else {

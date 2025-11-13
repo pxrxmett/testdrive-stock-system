@@ -97,7 +97,7 @@
             </div>
             <div class="flex items-center justify-between">
               <span class="text-sm text-gray-600">เสร็จสิ้น</span>
-              <span class="font-semibold text-blue-600">{{ completedQueues }}</span>
+              <span class="font-semibold text-[#D52B1E]">{{ completedQueues }}</span>
             </div>
           </div>
         </div>
@@ -619,7 +619,7 @@ export default {
       const classes = {
         'in-progress': 'bg-green-100 text-green-800',
         'scheduled': 'bg-yellow-100 text-yellow-800',
-        'completed': 'bg-blue-100 text-blue-800',
+        'completed': 'bg-red-100 text-[#991B1B]',
         'cancelled': 'bg-red-100 text-red-800'
       }
       return classes[status] || 'bg-gray-100 text-gray-800'
@@ -639,7 +639,7 @@ export default {
       const classes = {
         'in-progress': 'bg-green-50 border border-green-200',
         'scheduled': 'bg-yellow-50 border border-yellow-200',
-        'completed': 'bg-blue-50 border border-blue-200',
+        'completed': 'bg-red-50 border border-red-200',
         'cancelled': 'bg-red-50 border border-red-200'
       }
       return classes[status] || 'bg-gray-50 border border-gray-200'

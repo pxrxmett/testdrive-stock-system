@@ -326,9 +326,9 @@
         </div>
 
         <!-- Tips -->
-        <div class="card p-6 bg-blue-50 border-blue-200">
-          <h3 class="text-sm font-semibold text-blue-900 mb-2">เคล็ดลับ</h3>
-          <ul class="text-xs text-blue-800 space-y-1">
+        <div class="card p-6 bg-red-50 border-red-200">
+          <h3 class="text-sm font-semibold text-gray-900 mb-2">เคล็ดลับ</h3>
+          <ul class="text-xs text-[#991B1B] space-y-1">
             <li>• ตรวจสอบความพร้อมของรถก่อนจองคิว</li>
             <li>• ยืนยันเบอร์โทรศัพท์ลูกค้าให้ถูกต้อง</li>
             <li>• แจ้งข้อมูลสาขาและเวลาให้ชัดเจน</li>

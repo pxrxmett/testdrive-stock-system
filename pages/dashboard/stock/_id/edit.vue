@@ -20,7 +20,7 @@
 
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#D52B1E]"></div>
       <p class="text-gray-600 mt-2">กำลังโหลดข้อมูล...</p>
     </div>
 

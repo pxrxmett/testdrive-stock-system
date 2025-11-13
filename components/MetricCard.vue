@@ -51,7 +51,7 @@ export default {
     iconContainerClasses() {
       const colorMap = {
         green: 'bg-green-100',
-        blue: 'bg-blue-100',
+        blue: 'bg-red-100',
         purple: 'bg-purple-100',
         red: 'bg-red-100',
         gray: 'bg-gray-100'

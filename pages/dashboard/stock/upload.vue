@@ -19,14 +19,14 @@
     </div>
 
     <!-- Download Template Section -->
-    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
       <div class="flex items-start space-x-3">
         <svg class="w-5 h-5 text-[#D52B1E] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
         <div class="flex-1">
-          <h3 class="text-sm font-medium text-blue-800">ดาวน์โหลดเทมเพลต</h3>
-          <p class="text-xs text-blue-700 mt-1">ดาวน์โหลดไฟล์ตัวอย่างเพื่อให้แน่ใจว่าข้อมูลของคุณอยู่ในรูปแบบที่ถูกต้อง</p>
+          <h3 class="text-sm font-medium text-[#991B1B]">ดาวน์โหลดเทมเพลต</h3>
+          <p class="text-xs text-[#B91C1C] mt-1">ดาวน์โหลดไฟล์ตัวอย่างเพื่อให้แน่ใจว่าข้อมูลของคุณอยู่ในรูปแบบที่ถูกต้อง</p>
           <button
             @click="downloadTemplate"
             class="mt-2 inline-flex items-center space-x-2 px-3 py-1.5 bg-[#D52B1E] text-white rounded text-sm hover:bg-[#B91C1C] transition-colors"
@@ -49,7 +49,7 @@
         <div class="flex items-center justify-center w-full">
           <label
             class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
-            :class="{ 'border-[#D52B1E] bg-blue-50': isDragging }"
+            :class="{ 'border-[#D52B1E] bg-red-50': isDragging }"
             @dragover.prevent="isDragging = true"
             @dragleave.prevent="isDragging = false"
             @drop.prevent="handleFileDrop"

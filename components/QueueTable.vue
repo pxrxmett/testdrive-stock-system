@@ -41,7 +41,7 @@
                 <div>
                   <p class="text-sm font-medium text-gray-900">{{ queue.customerName }}</p>
                   <p class="text-xs text-gray-500">{{ queue.phone }}</p>
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-[#991B1B]">
                     {{ queue.customerType || 'Standard' }}
                   </span>
                 </div>
@@ -78,7 +78,7 @@
               <div class="flex items-center space-x-1">
                 <button 
                   @click="$emit('view', queue.id)"
-                  class="p-1.5 text-[#D52B1E] hover:bg-blue-50 rounded transition-colors"
+                  class="p-1.5 text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                   title="ดู"
                 >
                   <Icon name="eye" class="w-4 h-4" />

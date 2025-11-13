@@ -37,7 +37,7 @@
 
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#D52B1E]"></div>
       <p class="text-gray-600 mt-2">กำลังโหลดข้อมูล...</p>
     </div>
 
@@ -124,7 +124,7 @@
         <div class="bg-white rounded-lg border border-gray-200 p-6">
           <h2 class="text-lg font-bold text-gray-900 mb-4">พนักงานขายที่รับผิดชอบ</h2>
           <div v-if="queue.sales" class="flex items-center space-x-3">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-[#B91C1C] flex items-center justify-center text-white font-bold text-lg">
               {{ salesInitial }}
             </div>
             <div>

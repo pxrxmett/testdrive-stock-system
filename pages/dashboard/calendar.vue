@@ -39,7 +39,7 @@
             <p class="text-2xl font-bold text-[#D52B1E]">{{ todayAppointments.length }}</p>
             <p class="text-sm text-gray-600">นัดหมายวันนี้</p>
           </div>
-          <Icon name="calendar" icon-class="w-8 h-8 text-blue-400" />
+          <Icon name="calendar" icon-class="w-8 h-8 text-red-400" />
         </div>
       </div>
 
@@ -233,7 +233,7 @@
           <div 
             v-for="appointment in todayAppointments" 
             :key="appointment.id"
-            class="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors"
+            class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg cursor-pointer hover:bg-red-100 transition-colors"
             @click="handleAppointmentSelected(appointment)"
           >
             <div class="flex items-center space-x-3">

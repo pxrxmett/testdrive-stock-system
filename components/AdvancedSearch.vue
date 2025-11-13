@@ -162,17 +162,17 @@
     </div>
 
     <!-- Active Filters Display -->
-    <div v-if="activeFilters.length > 0" class="p-3 bg-blue-50 border-b border-gray-200">
+    <div v-if="activeFilters.length > 0" class="p-3 bg-red-50 border-b border-gray-200">
       <div class="flex items-center space-x-2 flex-wrap">
-        <span class="text-sm text-blue-700 font-medium">ตัวกรองที่ใช้:</span>
+        <span class="text-sm text-[#B91C1C] font-medium">ตัวกรองที่ใช้:</span>
         <div class="flex items-center space-x-1 flex-wrap">
           <span 
             v-for="filter in activeFilters" 
             :key="filter.key"
-            class="inline-flex items-center space-x-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+            class="inline-flex items-center space-x-1 px-2 py-1 bg-red-100 text-[#991B1B] text-xs rounded-full"
           >
             <span>{{ filter.label }}</span>
-            <button @click="removeFilter(filter.key)" class="hover:text-blue-900">
+            <button @click="removeFilter(filter.key)" class="hover:text-gray-900">
               <Icon name="close" icon-class="w-3 h-3" />
             </button>
           </span>
