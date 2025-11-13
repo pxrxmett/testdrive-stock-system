@@ -17,101 +17,149 @@
       </div>
 
       <div class="flex items-center space-x-2">
-        <!-- Notifications Dropdown (Facebook Style) -->
-        <Dropdown align="right" width="w-96">
-          <template #trigger="{ isOpen }">
-            <button
-              :class="[
-                'relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors',
-                isOpen && 'bg-gray-100 text-gray-700'
-              ]"
+        <!-- Notifications Dropdown (Facebook Style - Full Spec) -->
+        <div class="relative">
+          <button
+            @click="toggleNotifications"
+            :class="[
+              'relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors',
+              showNotifications && 'bg-gray-100 text-gray-700'
+            ]"
+          >
+            <Icon name="bell" icon-class="w-5 h-5" />
+            <!-- Badge Counter (20x20px) -->
+            <span
+              v-if="unreadNotifications > 0"
+              class="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[20px] h-[20px] px-1 bg-[#EF4444] text-white text-[11px] font-bold rounded-full border-2 border-white"
             >
-              <Icon name="bell" icon-class="w-6 h-6" />
-              <!-- Badge Counter (Facebook style) -->
-              <span
-                v-if="unreadNotifications > 0"
-                class="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[11px] font-bold rounded-full border-2 border-white"
+              {{ unreadNotifications > 9 ? '9+' : unreadNotifications }}
+            </span>
+          </button>
+
+          <!-- Dropdown Panel (360px width) -->
+          <div
+            v-if="showNotifications"
+            v-click-outside="closeNotifications"
+            class="absolute right-0 mt-2 w-[360px] bg-white rounded-lg shadow-xl border border-gray-200 z-50 animate-fade-in"
+            style="max-height: calc(100vh - 80px);"
+          >
+            <!-- Header with 3-dots menu -->
+            <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+              <h3 class="text-xl font-bold text-gray-900">การแจ้งเตือน</h3>
+              <button
+                @click="navigateTo('/dashboard/settings')"
+                class="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                title="ตั้งค่าการแจ้งเตือน"
               >
-                {{ unreadNotifications > 9 ? '9+' : unreadNotifications }}
-              </span>
-            </button>
-          </template>
+                <!-- 3 dots menu -->
+                <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                </svg>
+              </button>
+            </div>
 
-          <!-- Notifications Header -->
-          <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-            <h3 class="text-base font-semibold text-gray-900">การแจ้งเตือน</h3>
-            <button
-              @click="navigateTo('/dashboard/settings')"
-              class="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
-              title="ตั้งค่าการแจ้งเตือน"
-            >
-              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- Notifications List -->
-          <div class="max-h-[480px] overflow-y-auto">
-            <template v-if="notifications.length > 0">
-              <div
-                v-for="notification in notifications"
-                :key="notification.id"
-                @click="handleNotificationClick(notification)"
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200">
+              <button
+                @click="activeTab = 'all'"
                 :class="[
-                  'px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-100',
-                  !notification.read && 'bg-blue-50'
+                  'flex-1 px-4 py-3 text-sm font-medium transition-colors',
+                  activeTab === 'all'
+                    ? 'text-[#D52B1E] border-b-2 border-[#D52B1E]'
+                    : 'text-gray-600 hover:bg-gray-50'
                 ]"
               >
-                <div class="flex items-start space-x-3">
-                  <!-- Icon with Background -->
+                ทั้งหมด
+              </button>
+              <button
+                @click="activeTab = 'unread'"
+                :class="[
+                  'flex-1 px-4 py-3 text-sm font-medium transition-colors',
+                  activeTab === 'unread'
+                    ? 'text-[#D52B1E] border-b-2 border-[#D52B1E]'
+                    : 'text-gray-600 hover:bg-gray-50'
+                ]"
+              >
+                ยังไม่ได้อ่าน
+              </button>
+            </div>
+
+            <!-- Notifications List with Section Headers -->
+            <div class="overflow-y-auto" style="max-height: 480px;">
+              <template v-if="filteredNotifications.length > 0">
+                <template v-for="(group, sectionName) in groupedNotifications">
+                  <!-- Section Header (Sticky) -->
                   <div
+                    :key="`section-${sectionName}`"
+                    class="sticky top-0 bg-[#F9FAFB] px-4 py-2 text-sm font-semibold text-gray-700 z-10"
+                  >
+                    {{ sectionName }}
+                  </div>
+
+                  <!-- Notification Items (72px min height, 56x56px icon, 12x12px dot) -->
+                  <div
+                    v-for="notification in group"
+                    :key="notification.id"
+                    @click="handleNotificationClick(notification)"
                     :class="[
-                      'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
-                      getNotificationIconBg(notification.type)
+                      'px-4 py-3 min-h-[72px] flex items-start hover:bg-[#F9FAFB] cursor-pointer transition-colors border-b border-gray-100',
+                      !notification.read && 'bg-[#EFF6FF]'
                     ]"
                   >
-                    <span class="text-lg">{{ getNotificationIcon(notification.type) }}</span>
-                  </div>
-
-                  <!-- Content -->
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-start justify-between gap-2">
-                      <p :class="['text-sm leading-snug', notification.read ? 'text-gray-700' : 'text-gray-900 font-medium']">
-                        {{ notification.title }}
-                      </p>
-                      <!-- Unread Dot -->
-                      <div
-                        v-if="!notification.read"
-                        class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1.5"
-                      ></div>
+                    <!-- Icon (56x56px) -->
+                    <div
+                      :class="[
+                        'w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0',
+                        getNotificationIconBg(notification.type)
+                      ]"
+                    >
+                      <span class="text-2xl">{{ getNotificationIcon(notification.type) }}</span>
                     </div>
-                    <p class="text-xs text-gray-600 mt-1">{{ notification.subtitle }}</p>
-                    <p class="text-xs text-gray-500 mt-1">{{ notification.time }}</p>
+
+                    <!-- Content -->
+                    <div class="flex-1 min-w-0 ml-3">
+                      <div class="flex items-start justify-between gap-2">
+                        <div class="flex-1">
+                          <p :class="['text-sm leading-snug', notification.read ? 'text-gray-700' : 'text-gray-900 font-medium']">
+                            {{ notification.title }}
+                          </p>
+                          <p class="text-xs text-gray-600 mt-1">{{ notification.subtitle }}</p>
+                          <p class="text-xs text-gray-500 mt-1">{{ notification.time }}</p>
+                        </div>
+                        <!-- Unread Dot (12x12px) -->
+                        <div
+                          v-if="!notification.read"
+                          class="w-3 h-3 bg-[#3B82F6] rounded-full flex-shrink-0 mt-1"
+                        ></div>
+                      </div>
+                    </div>
                   </div>
+                </template>
+              </template>
+
+              <!-- Empty State -->
+              <div v-else class="px-4 py-12 text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Icon name="bell" icon-class="w-8 h-8 text-gray-300" />
                 </div>
+                <p class="text-sm font-medium text-gray-900">ไม่มีการแจ้งเตือน</p>
+                <p class="text-xs text-gray-500 mt-1">
+                  {{ activeTab === 'unread' ? 'คุณได้อ่านการแจ้งเตือนทั้งหมดแล้ว' : 'คุณไม่มีการแจ้งเตือนในขณะนี้' }}
+                </p>
               </div>
-            </template>
-            <div v-else class="px-4 py-12 text-center">
-              <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Icon name="bell" icon-class="w-8 h-8 text-gray-300" />
-              </div>
-              <p class="text-sm font-medium text-gray-900">ไม่มีการแจ้งเตือน</p>
-              <p class="text-xs text-gray-500 mt-1">คุณไม่มีการแจ้งเตือนใหม่ในขณะนี้</p>
+            </div>
+
+            <!-- Footer (Isuzu Red) -->
+            <div v-if="notifications.length > 0" class="border-t border-gray-200">
+              <NuxtLink
+                to="/dashboard/notifications"
+                class="block px-4 py-3 text-center text-sm font-medium text-[#D52B1E] hover:bg-gray-50 transition-colors"
+              >
+                ดูการแจ้งเตือนทั้งหมด →
+              </NuxtLink>
             </div>
           </div>
-
-          <!-- Notifications Footer -->
-          <div v-if="notifications.length > 0" class="border-t border-gray-200">
-            <NuxtLink
-              to="/dashboard/notifications"
-              class="block px-4 py-3 text-center text-sm font-medium text-blue-600 hover:bg-gray-50 transition-colors"
-            >
-              ดูการแจ้งเตือนทั้งหมด →
-            </NuxtLink>
-          </div>
-        </Dropdown>
+        </div>
 
         <!-- Settings Button -->
         <button
@@ -195,6 +243,8 @@ export default {
   },
   data() {
     return {
+      showNotifications: false,
+      activeTab: 'all', // 'all' or 'unread'
       notifications: [
         {
           id: 1,
@@ -202,6 +252,7 @@ export default {
           title: 'มีคิวใหม่จาก ISUZU ที่ต้องดำเนินการ',
           subtitle: '5 รายการรอดำเนินการ',
           time: '5 นาทีที่แล้ว',
+          timestamp: Date.now() - 5 * 60 * 1000, // 5 minutes ago
           read: false,
           link: '/dashboard/isuzu/queue'
         },
@@ -211,6 +262,7 @@ export default {
           title: 'การทดลองขับ BYD เสร็จสิ้นแล้ว',
           subtitle: '1 รายการเสร็จสมบูรณ์',
           time: '3 ชั่วโมงที่แล้ว',
+          timestamp: Date.now() - 3 * 60 * 60 * 1000, // 3 hours ago
           read: false,
           link: '/dashboard/byd/queue'
         },
@@ -220,6 +272,7 @@ export default {
           title: 'มีเอกสารใหม่รอการอนุมัติ',
           subtitle: '3 เอกสารจากลูกค้า',
           time: 'เมื่อวาน',
+          timestamp: Date.now() - 24 * 60 * 60 * 1000, // 1 day ago
           read: true,
           link: '/dashboard/documents'
         },
@@ -229,8 +282,19 @@ export default {
           title: 'สต็อกรถยนต์ใกล้หมด',
           subtitle: 'ISUZU D-MAX เหลือ 2 คัน',
           time: '2 วันที่แล้ว',
+          timestamp: Date.now() - 2 * 24 * 60 * 60 * 1000, // 2 days ago
           read: true,
           link: '/dashboard/isuzu/stock'
+        },
+        {
+          id: 5,
+          type: 'isuzu_queue',
+          title: 'ลูกค้ายืนยันการนัดหมายทดลองขับ',
+          subtitle: 'นัดหมายวันพรุ่งนี้ 10:00 น.',
+          time: '5 วันที่แล้ว',
+          timestamp: Date.now() - 5 * 24 * 60 * 60 * 1000, // 5 days ago
+          read: true,
+          link: '/dashboard/isuzu/queue'
         }
       ]
     }
@@ -273,15 +337,81 @@ export default {
     },
     unreadNotifications() {
       return this.notifications.filter(n => !n.read).length
+    },
+    filteredNotifications() {
+      if (this.activeTab === 'unread') {
+        return this.notifications.filter(n => !n.read)
+      }
+      return this.notifications
+    },
+    groupedNotifications() {
+      const now = Date.now()
+      const oneDay = 24 * 60 * 60 * 1000
+      const sevenDays = 7 * 24 * 60 * 60 * 1000
+
+      const groups = {
+        'วันนี้': [],
+        'เมื่อวาน': [],
+        'สัปดาห์นี้': [],
+        'เก่ากว่านี้': []
+      }
+
+      this.filteredNotifications.forEach(notification => {
+        const timeDiff = now - notification.timestamp
+
+        if (timeDiff < oneDay) {
+          groups['วันนี้'].push(notification)
+        } else if (timeDiff < 2 * oneDay) {
+          groups['เมื่อวาน'].push(notification)
+        } else if (timeDiff < sevenDays) {
+          groups['สัปดาห์นี้'].push(notification)
+        } else {
+          groups['เก่ากว่านี้'].push(notification)
+        }
+      })
+
+      // Remove empty groups
+      const result = {}
+      Object.keys(groups).forEach(key => {
+        if (groups[key].length > 0) {
+          result[key] = groups[key]
+        }
+      })
+
+      return result
+    }
+  },
+  directives: {
+    clickOutside: {
+      bind(el, binding, vnode) {
+        el.clickOutsideEvent = function(event) {
+          if (!(el === event.target || el.contains(event.target))) {
+            binding.value(event)
+          }
+        }
+        document.body.addEventListener('click', el.clickOutsideEvent)
+      },
+      unbind(el) {
+        document.body.removeEventListener('click', el.clickOutsideEvent)
+      }
     }
   },
   methods: {
+    toggleNotifications() {
+      this.showNotifications = !this.showNotifications
+    },
+    closeNotifications() {
+      this.showNotifications = false
+    },
     navigateTo(path) {
       this.$router.push(path)
     },
     handleNotificationClick(notification) {
       // Mark as read
       notification.read = true
+
+      // Close dropdown
+      this.showNotifications = false
 
       // Navigate to related page
       if (notification.link) {
@@ -306,11 +436,11 @@ export default {
     },
     getNotificationIconBg(type) {
       const backgrounds = {
-        isuzu_queue: 'bg-red-100',
-        byd_queue: 'bg-green-100',
-        document: 'bg-gray-100',
-        warning: 'bg-yellow-100',
-        success: 'bg-green-100',
+        isuzu_queue: 'bg-[#FEE2E2]',
+        byd_queue: 'bg-[#D1FAE5]',
+        document: 'bg-[#F3F4F6]',
+        warning: 'bg-[#FEF3C7]',
+        success: 'bg-[#D1FAE5]',
         info: 'bg-blue-100'
       }
       return backgrounds[type] || 'bg-gray-100'
@@ -349,3 +479,20 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 150ms ease-out;
+}
+</style>
