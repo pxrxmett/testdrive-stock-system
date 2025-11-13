@@ -61,13 +61,13 @@
               :class="[
                 'py-4 text-sm font-medium border-b-2 transition-all duration-150',
                 activeTab === 'pending'
-                  ? 'border-red-600 text-red-600'
+                  ? 'border-red-600 text-[#D52B1E]'
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               ]"
             >
               <span class="flex items-center space-x-2">
                 <span>รอเชื่อมโยง</span>
-                <span v-if="pendingUsers.length > 0" class="px-2 py-0.5 bg-red-100 text-red-600 text-xs font-semibold rounded-full">
+                <span v-if="pendingUsers.length > 0" class="px-2 py-0.5 bg-red-100 text-[#D52B1E] text-xs font-semibold rounded-full">
                   {{ pendingUsers.length }}
                 </span>
               </span>
@@ -77,7 +77,7 @@
               :class="[
                 'py-4 text-sm font-medium border-b-2 transition-all duration-150',
                 activeTab === 'linked'
-                  ? 'border-red-600 text-red-600'
+                  ? 'border-red-600 text-[#D52B1E]'
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               ]"
             >
@@ -224,7 +224,7 @@
                     <td class="px-6 py-4 text-right">
                       <button
                         @click="unlinkUser(user)"
-                        class="text-sm font-medium text-red-600 hover:text-red-800 transition-colors duration-150"
+                        class="text-sm font-medium text-[#D52B1E] hover:text-red-800 transition-colors duration-150"
                       >
                         ยกเลิกการเชื่อมโยง
                       </button>

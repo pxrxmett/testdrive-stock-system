@@ -103,12 +103,12 @@
     <!-- Error State -->
     <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6">
       <div class="flex items-center space-x-3">
-        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div>
           <h3 class="text-red-800 font-medium">เกิดข้อผิดพลาด</h3>
-          <p class="text-red-600 text-sm">{{ error }}</p>
+          <p class="text-[#D52B1E] text-sm">{{ error }}</p>
         </div>
       </div>
     </div>
@@ -241,7 +241,7 @@
               :class="[
                 'px-3 py-1 rounded text-xs font-medium transition-colors',
                 revenueChartPeriod === period
-                  ? 'bg-red-600 text-white'
+                  ? 'bg-[#D52B1E] text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               ]"
             >
@@ -338,7 +338,7 @@
                     :class="[
                       'flex items-center text-xs font-medium',
                       car.trend === 'up' ? 'text-green-600' :
-                      car.trend === 'down' ? 'text-red-600' :
+                      car.trend === 'down' ? 'text-[#D52B1E]' :
                       'text-gray-600'
                     ]"
                   >

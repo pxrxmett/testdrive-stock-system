@@ -140,7 +140,7 @@
                   </NuxtLink>
                   <button
                     @click="confirmDelete(member)"
-                    class="text-sm font-medium text-red-600 hover:text-red-800 transition-colors duration-150"
+                    class="text-sm font-medium text-[#D52B1E] hover:text-red-800 transition-colors duration-150"
                   >
                     ลบ
                   </button>
@@ -167,7 +167,7 @@
               v-for="page in visiblePages"
               :key="page"
               @click="changePage(page)"
-              :class="page === currentPage ? 'bg-red-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+              :class="page === currentPage ? 'bg-[#D52B1E] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
               class="px-3 py-1 rounded border border-gray-300 text-sm"
             >
               {{ page }}

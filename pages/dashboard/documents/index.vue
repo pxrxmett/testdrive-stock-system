@@ -5,7 +5,7 @@
       <div class="px-6 py-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+            <div class="w-10 h-10 bg-[#D52B1E] rounded-lg flex items-center justify-center">
               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
@@ -47,7 +47,7 @@
         </svg>
         <h3 class="text-lg font-medium text-red-900 mb-2">เกิดข้อผิดพลาด</h3>
         <p class="text-red-700">{{ error }}</p>
-        <button @click="loadTestDrives" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+        <button @click="loadTestDrives" class="mt-4 px-4 py-2 bg-[#D52B1E] text-white rounded-lg hover:bg-[#B91C1C]">
           ลองอีกครั้ง
         </button>
       </div>
@@ -101,10 +101,10 @@
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-sm text-gray-600 mb-1">ไม่พร้อม</p>
-                <p class="text-3xl font-bold text-red-600">{{ notReadyDocuments }}</p>
+                <p class="text-3xl font-bold text-[#D52B1E]">{{ notReadyDocuments }}</p>
               </div>
               <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
               </div>
@@ -122,7 +122,7 @@
               :class="[
                 'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                 activeQuickFilter === qf.value
-                  ? 'bg-red-600 text-white'
+                  ? 'bg-[#D52B1E] text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               ]"
             >
@@ -342,7 +342,7 @@
                       type="checkbox"
                       :checked="isAllSelected"
                       @change="toggleSelectAll"
-                      class="w-4 h-4 text-red-600 rounded focus:ring-[#D52B1E]"
+                      class="w-4 h-4 text-[#D52B1E] rounded focus:ring-[#D52B1E]"
                     />
                   </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เลขที่เอกสาร</th>
@@ -362,7 +362,7 @@
                       type="checkbox"
                       :checked="isSelected(testDrive.id)"
                       @change="toggleSelect(testDrive.id)"
-                      class="w-4 h-4 text-red-600 rounded focus:ring-[#D52B1E]"
+                      class="w-4 h-4 text-[#D52B1E] rounded focus:ring-[#D52B1E]"
                     />
                   </td>
 
@@ -478,7 +478,7 @@
           >
             <template #icon>
               <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full">
-                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
               </div>
@@ -532,7 +532,7 @@
                     :class="[
                       'px-3 py-1.5 border rounded-lg text-sm font-medium',
                       currentPage === page
-                        ? 'bg-red-600 text-white border-red-600'
+                        ? 'bg-[#D52B1E] text-white border-red-600'
                         : 'border-gray-300 hover:bg-gray-50'
                     ]"
                   >

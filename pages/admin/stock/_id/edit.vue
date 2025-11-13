@@ -30,15 +30,15 @@
       <!-- Error State -->
       <div v-else-if="loadError" class="bg-white rounded-lg shadow-sm border border-red-200 p-12 text-center">
         <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
         </div>
-        <p class="text-red-600 font-medium mb-2">ไม่พบข้อมูลรถยนต์</p>
+        <p class="text-[#D52B1E] font-medium mb-2">ไม่พบข้อมูลรถยนต์</p>
         <p class="text-sm text-gray-500 mb-4">{{ loadError }}</p>
         <NuxtLink
           to="/admin/stock"
-          class="inline-block px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          class="inline-block px-6 py-2 bg-[#D52B1E] text-white rounded-lg hover:bg-[#B91C1C] transition-colors"
         >
           กลับไปหน้ารายการ
         </NuxtLink>
@@ -64,7 +64,7 @@
           <!-- Model -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              รุ่นรถ <span class="text-red-600">*</span>
+              รุ่นรถ <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.model"
@@ -73,13 +73,13 @@
               placeholder="เช่น D-Max, MU-X, ATTO 3"
               :class="inputClasses('model')"
             >
-            <p v-if="errors.model" class="mt-1 text-xs text-red-600">{{ errors.model }}</p>
+            <p v-if="errors.model" class="mt-1 text-xs text-[#D52B1E]">{{ errors.model }}</p>
           </div>
 
           <!-- Plate Number -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              ทะเบียนรถ <span class="text-red-600">*</span>
+              ทะเบียนรถ <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.plateNumber"
@@ -88,7 +88,7 @@
               placeholder="เช่น 1กก 1234"
               :class="inputClasses('plateNumber')"
             >
-            <p v-if="errors.plateNumber" class="mt-1 text-xs text-red-600">{{ errors.plateNumber }}</p>
+            <p v-if="errors.plateNumber" class="mt-1 text-xs text-[#D52B1E]">{{ errors.plateNumber }}</p>
           </div>
         </div>
 
@@ -96,7 +96,7 @@
           <!-- Color -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              สี <span class="text-red-600">*</span>
+              สี <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.color"
@@ -105,13 +105,13 @@
               placeholder="เช่น ขาว, ดำ, เงิน"
               :class="inputClasses('color')"
             >
-            <p v-if="errors.color" class="mt-1 text-xs text-red-600">{{ errors.color }}</p>
+            <p v-if="errors.color" class="mt-1 text-xs text-[#D52B1E]">{{ errors.color }}</p>
           </div>
 
           <!-- Year -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              ปี <span class="text-red-600">*</span>
+              ปี <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model.number="form.year"
@@ -122,7 +122,7 @@
               placeholder="เช่น 2024"
               :class="inputClasses('year')"
             >
-            <p v-if="errors.year" class="mt-1 text-xs text-red-600">{{ errors.year }}</p>
+            <p v-if="errors.year" class="mt-1 text-xs text-[#D52B1E]">{{ errors.year }}</p>
           </div>
         </div>
 

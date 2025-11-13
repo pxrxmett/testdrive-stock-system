@@ -397,7 +397,7 @@
                 
                 <button 
                   @click="deleteEvent(event)"
-                  class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                  class="p-2 text-gray-400 hover:text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                   title="ลบอีเวนต์"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -455,7 +455,7 @@
       <div class="relative mx-auto p-8 border w-full max-w-md shadow-2xl rounded-xl bg-white">
         <!-- Icon -->
         <div class="flex items-center justify-center w-16 h-16 mx-auto bg-red-100 rounded-full mb-4">
-          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
           </svg>
         </div>
@@ -511,7 +511,7 @@
             <button
               @click="confirmDelete"
               :disabled="deleting"
-              class="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              class="px-5 py-2.5 bg-[#D52B1E] text-white rounded-lg font-medium hover:bg-[#B91C1C] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
               <svg v-if="deleting" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

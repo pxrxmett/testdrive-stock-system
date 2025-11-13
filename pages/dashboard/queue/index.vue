@@ -124,7 +124,7 @@
       <button
         v-if="hasActiveFilters"
         @click="clearFilters"
-        class="text-sm text-red-600 hover:text-red-700 font-medium"
+        class="text-sm text-[#D52B1E] hover:text-red-700 font-medium"
       >
         ล้างตัวกรอง
       </button>

@@ -261,7 +261,7 @@
       <div class="card p-6">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-semibold text-gray-900">นัดหมายที่จะมาถึง</h3>
-          <nuxt-link to="/dashboard/queue" class="text-sm text-red-600 hover:text-red-700">
+          <nuxt-link to="/dashboard/queue" class="text-sm text-[#D52B1E] hover:text-red-700">
             ดูทั้งหมด
           </nuxt-link>
         </div>

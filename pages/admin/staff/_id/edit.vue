@@ -30,15 +30,15 @@
       <!-- Error State -->
       <div v-else-if="loadError" class="bg-white rounded-lg shadow-sm border border-red-200 p-12 text-center">
         <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
         </div>
-        <p class="text-red-600 font-medium mb-2">ไม่พบข้อมูลพนักงาน</p>
+        <p class="text-[#D52B1E] font-medium mb-2">ไม่พบข้อมูลพนักงาน</p>
         <p class="text-sm text-gray-500 mb-4">{{ loadError }}</p>
         <NuxtLink
           to="/admin/staff"
-          class="inline-block px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          class="inline-block px-6 py-2 bg-[#D52B1E] text-white rounded-lg hover:bg-[#B91C1C] transition-colors"
         >
           กลับไปหน้ารายการ
         </NuxtLink>
@@ -63,7 +63,7 @@
           <!-- Employee Code -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              รหัสพนักงาน <span class="text-red-600">*</span>
+              รหัสพนักงาน <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.employeeCode"
@@ -72,13 +72,13 @@
               placeholder="เช่น ISZ001, BYD001"
               :class="inputClasses('employeeCode')"
             >
-            <p v-if="errors.employeeCode" class="mt-1 text-xs text-red-600">{{ errors.employeeCode }}</p>
+            <p v-if="errors.employeeCode" class="mt-1 text-xs text-[#D52B1E]">{{ errors.employeeCode }}</p>
           </div>
 
           <!-- Role -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              ตำแหน่ง <span class="text-red-600">*</span>
+              ตำแหน่ง <span class="text-[#D52B1E]">*</span>
             </label>
             <select
               v-model="form.role"
@@ -90,14 +90,14 @@
               <option value="manager">ผู้จัดการ</option>
               <option value="sales">พนักงานขาย</option>
             </select>
-            <p v-if="errors.role" class="mt-1 text-xs text-red-600">{{ errors.role }}</p>
+            <p v-if="errors.role" class="mt-1 text-xs text-[#D52B1E]">{{ errors.role }}</p>
           </div>
         </div>
 
         <!-- Full Name -->
         <div class="mt-6">
           <label class="block text-sm font-medium text-gray-700 mb-2">
-            ชื่อ-นามสกุล (ไทย) <span class="text-red-600">*</span>
+            ชื่อ-นามสกุล (ไทย) <span class="text-[#D52B1E]">*</span>
           </label>
           <input
             v-model="form.fullName"
@@ -106,7 +106,7 @@
             placeholder="เช่น สมชาย ใจดี"
             :class="inputClasses('fullName')"
           >
-          <p v-if="errors.fullName" class="mt-1 text-xs text-red-600">{{ errors.fullName }}</p>
+          <p v-if="errors.fullName" class="mt-1 text-xs text-[#D52B1E]">{{ errors.fullName }}</p>
         </div>
 
         <!-- Full Name EN -->
@@ -127,7 +127,7 @@
           <!-- Email -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              อีเมล <span class="text-red-600">*</span>
+              อีเมล <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.email"
@@ -136,13 +136,13 @@
               placeholder="example@noknguekotto.com"
               :class="inputClasses('email')"
             >
-            <p v-if="errors.email" class="mt-1 text-xs text-red-600">{{ errors.email }}</p>
+            <p v-if="errors.email" class="mt-1 text-xs text-[#D52B1E]">{{ errors.email }}</p>
           </div>
 
           <!-- Phone -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              เบอร์โทรศัพท์ <span class="text-red-600">*</span>
+              เบอร์โทรศัพท์ <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.phone"
@@ -151,7 +151,7 @@
               placeholder="0812345678"
               :class="inputClasses('phone')"
             >
-            <p v-if="errors.phone" class="mt-1 text-xs text-red-600">{{ errors.phone }}</p>
+            <p v-if="errors.phone" class="mt-1 text-xs text-[#D52B1E]">{{ errors.phone }}</p>
           </div>
         </div>
 

@@ -34,7 +34,7 @@
           <!-- Model -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              รุ่นรถ <span class="text-red-600">*</span>
+              รุ่นรถ <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.model"
@@ -43,13 +43,13 @@
               placeholder="เช่น D-Max, MU-X, ATTO 3"
               :class="inputClasses('model')"
             >
-            <p v-if="errors.model" class="mt-1 text-xs text-red-600">{{ errors.model }}</p>
+            <p v-if="errors.model" class="mt-1 text-xs text-[#D52B1E]">{{ errors.model }}</p>
           </div>
 
           <!-- Plate Number -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              ทะเบียนรถ <span class="text-red-600">*</span>
+              ทะเบียนรถ <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.plateNumber"
@@ -58,7 +58,7 @@
               placeholder="เช่น 1กก 1234"
               :class="inputClasses('plateNumber')"
             >
-            <p v-if="errors.plateNumber" class="mt-1 text-xs text-red-600">{{ errors.plateNumber }}</p>
+            <p v-if="errors.plateNumber" class="mt-1 text-xs text-[#D52B1E]">{{ errors.plateNumber }}</p>
           </div>
         </div>
 
@@ -66,7 +66,7 @@
           <!-- Color -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              สี <span class="text-red-600">*</span>
+              สี <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.color"
@@ -75,13 +75,13 @@
               placeholder="เช่น ขาว, ดำ, เงิน"
               :class="inputClasses('color')"
             >
-            <p v-if="errors.color" class="mt-1 text-xs text-red-600">{{ errors.color }}</p>
+            <p v-if="errors.color" class="mt-1 text-xs text-[#D52B1E]">{{ errors.color }}</p>
           </div>
 
           <!-- Year -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              ปี <span class="text-red-600">*</span>
+              ปี <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model.number="form.year"
@@ -92,7 +92,7 @@
               placeholder="เช่น 2024"
               :class="inputClasses('year')"
             >
-            <p v-if="errors.year" class="mt-1 text-xs text-red-600">{{ errors.year }}</p>
+            <p v-if="errors.year" class="mt-1 text-xs text-[#D52B1E]">{{ errors.year }}</p>
           </div>
         </div>
 

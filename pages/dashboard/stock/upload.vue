@@ -102,7 +102,7 @@
         </div>
         <button
           @click="clearData"
-          class="text-sm text-red-600 hover:text-red-700"
+          class="text-sm text-[#D52B1E] hover:text-red-700"
         >
           ล้างข้อมูล
         </button>
@@ -173,7 +173,7 @@
         </div>
 
         <div class="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div class="text-sm text-red-600 mb-1">ล้มเหลว</div>
+          <div class="text-sm text-[#D52B1E] mb-1">ล้มเหลว</div>
           <div class="text-2xl font-bold text-red-900">{{ uploadResult.failed || 0 }}</div>
         </div>
       </div>

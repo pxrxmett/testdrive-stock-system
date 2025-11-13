@@ -28,7 +28,7 @@
         </button>
         <button
           @click="deleteVehicle"
-          class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+          class="px-4 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors"
         >
           ลบรถ
         </button>
@@ -134,7 +134,7 @@
             </button>
             <button
               @click="deleteVehicle"
-              class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+              class="w-full px-4 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors"
             >
               ลบรถ
             </button>

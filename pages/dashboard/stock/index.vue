@@ -58,7 +58,7 @@
         </svg>
         <h3 class="text-lg font-medium text-red-900 mb-2">เกิดข้อผิดพลาด</h3>
         <p class="text-red-700">{{ error }}</p>
-        <button @click="fetchVehicles" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+        <button @click="fetchVehicles" class="mt-4 px-4 py-2 bg-[#D52B1E] text-white rounded-lg hover:bg-[#B91C1C]">
           ลองอีกครั้ง
         </button>
       </div>
@@ -355,7 +355,7 @@
                 
                 <button 
                   @click="deleteVehicle(vehicle)"
-                  class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                  class="p-2 text-gray-400 hover:text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                   title="ลบข้อมูล"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -472,7 +472,7 @@
                     
                     <button 
                       @click="deleteVehicle(vehicle)"
-                      class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      class="p-1.5 text-gray-400 hover:text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                       title="ลบข้อมูล"
                     >
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
