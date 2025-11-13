@@ -152,7 +152,7 @@
           <button
             type="submit"
             :disabled="submitting"
-            class="flex-1 px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white font-medium rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-150 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+            class="flex-1 px-4 py-2.5 bg-gradient-to-r from-[#D52B1E] to-[#B91C1C] text-white font-medium rounded-lg hover:from-[#B91C1C] hover:to-[#991B1B] transition-all duration-150 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
           >
             {{ submitting ? 'กำลังบันทึก...' : 'บันทึก' }}
           </button>
@@ -189,8 +189,8 @@ export default {
     inputClasses(field) {
       const base = 'w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all duration-150'
       return this.errors[field]
-        ? `${base} border-red-300 focus:ring-red-500 focus:border-red-500`
-        : `${base} border-gray-300 focus:ring-red-500 focus:border-red-500`
+        ? `${base} border-red-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]`
+        : `${base} border-gray-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]`
     },
 
     validateForm() {

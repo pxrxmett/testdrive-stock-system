@@ -33,7 +33,7 @@
       <CollapsibleSection
         title="Brand Management"
         icon="briefcase"
-        iconColor="text-blue-600"
+        iconColor="text-[#D52B1E]"
         titleColor="text-gray-700"
         :collapsed="collapsed"
         :defaultOpen="isBrandSectionOpen"
@@ -42,7 +42,7 @@
         <CollapsibleSection
           title="ISUZU"
           icon="truck"
-          iconColor="text-red-600"
+          iconColor="text-[#D52B1E]"
           titleColor="text-gray-800"
           :collapsed="collapsed"
           :defaultOpen="isIsuzuOpen"

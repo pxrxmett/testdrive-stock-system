@@ -5,7 +5,7 @@
         <select 
           :value="selectedStatus"
           @change="$emit('status-change', $event.target.value)"
-          class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+          class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
         >
           <option value="all">ทุกสถานะ</option>
           <option value="in-progress">กำลังทดสอบ</option>
@@ -17,7 +17,7 @@
         <select 
           :value="selectedLocation"
           @change="$emit('location-change', $event.target.value)"
-          class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+          class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
         >
           <option value="all">ทุกสาขา</option>
           <option value="สาขาเซ็นทรัล บางนา">สาขาเซ็นทรัล บางนา</option>

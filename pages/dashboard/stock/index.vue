@@ -5,7 +5,7 @@
       <div class="px-6 py-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div class="w-10 h-10 bg-[#D52B1E] rounded-lg flex items-center justify-center">
               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
@@ -29,7 +29,7 @@
 
             <button
               @click="$router.push('/dashboard/stock/create')"
-              class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              class="flex items-center space-x-2 px-4 py-2 bg-[#D52B1E] text-white rounded-lg hover:bg-[#B91C1C] transition-colors"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -111,12 +111,12 @@
               <p class="text-sm font-medium text-gray-600">กำลังใช้งาน</p>
               <p class="text-2xl font-semibold text-gray-900 mt-1">{{ stats.inUse }}</p>
               <div class="flex items-center mt-2">
-                <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                <div class="w-2 h-2 bg-[#D52B1E] rounded-full mr-2"></div>
                 <span class="text-xs text-gray-600">ใช้งานอยู่</span>
               </div>
             </div>
             <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
@@ -157,13 +157,13 @@
               v-model="searchTerm"
               type="text"
               placeholder="ค้นหาโดยรหัส, รุ่น, VIN, เลขทะเบียน..."
-              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
             />
           </div>
           
           <select 
             v-model="filterCategory" 
-            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           >
             <option value="ทั้งหมด">หมวดหมู่ทั้งหมด</option>
             <option value="กระบะ">กระบะ</option>
@@ -172,7 +172,7 @@
           
           <select 
             v-model="filterType" 
-            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           >
             <option value="ทั้งหมด">ประเภททั้งหมด</option>
             <option value="น้ำมัน">น้ำมัน</option>
@@ -181,7 +181,7 @@
           
           <select 
             v-model="filterStatus" 
-            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           >
             <option value="ทั้งหมด">สถานะทั้งหมด</option>
             <option value="พร้อมใช้">พร้อมใช้</option>
@@ -235,7 +235,7 @@
               </button>
             </div>
             
-            <button class="flex items-center space-x-1 px-3 py-1 text-blue-600 hover:bg-blue-50 rounded text-sm">
+            <button class="flex items-center space-x-1 px-3 py-1 text-[#D52B1E] hover:bg-blue-50 rounded text-sm">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
@@ -255,11 +255,11 @@
             <div class="flex items-start justify-between mb-4">
               <div class="flex items-center space-x-3">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span class="text-sm font-semibold text-blue-600">{{ vehicle?.id?.toString().slice(-2) || '--' }}</span>
+                  <span class="text-sm font-semibold text-[#D52B1E]">{{ vehicle?.id?.toString().slice(-2) || '--' }}</span>
                 </div>
                 <div>
                   <div class="text-sm font-medium text-gray-900">{{ vehicle.model || 'N/A' }}</div>
-                  <div class="text-sm text-blue-600">{{ vehicle.plateNumber || 'ไม่มีทะเบียน' }}</div>
+                  <div class="text-sm text-[#D52B1E]">{{ vehicle.plateNumber || 'ไม่มีทะเบียน' }}</div>
                 </div>
               </div>
               <span :class="getStatusClass(vehicle.status)" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border">
@@ -345,7 +345,7 @@
                 
                 <button 
                   @click="editVehicle(vehicle)"
-                  class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                  class="p-2 text-gray-400 hover:text-[#D52B1E] hover:bg-blue-50 rounded transition-colors"
                   title="แก้ไขข้อมูล"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -379,13 +379,13 @@
                 <!-- Left: Main Info -->
                 <div class="flex items-center space-x-4 flex-1">
                   <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span class="text-xs font-semibold text-blue-600">{{ vehicle?.id?.toString().slice(-2) || '--' }}</span>
+                    <span class="text-xs font-semibold text-[#D52B1E]">{{ vehicle?.id?.toString().slice(-2) || '--' }}</span>
                   </div>
 
                   <div class="min-w-0 flex-1">
                     <!-- Model (License Plate) -->
                     <div class="text-base font-bold text-gray-900">
-                      {{ vehicle.model }} <span class="text-blue-600">({{ vehicle.plateNumber || vehicle.plate_number || 'N/A' }})</span>
+                      {{ vehicle.model }} <span class="text-[#D52B1E]">({{ vehicle.plateNumber || vehicle.plate_number || 'N/A' }})</span>
                     </div>
                     <!-- Color | Year | Status -->
                     <div class="flex items-center space-x-3 mt-1 text-sm text-gray-600">
@@ -462,7 +462,7 @@
                     
                     <button 
                       @click="editVehicle(vehicle)"
-                      class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                      class="p-1.5 text-gray-400 hover:text-[#D52B1E] hover:bg-blue-50 rounded transition-colors"
                       title="แก้ไขข้อมูล"
                     >
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -497,7 +497,7 @@
         >
           <template #icon>
             <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full">
-              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
               </svg>
             </div>

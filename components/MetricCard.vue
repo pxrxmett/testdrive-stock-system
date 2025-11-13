@@ -61,9 +61,9 @@ export default {
     iconClasses() {
       const colorMap = {
         green: 'text-green-600',
-        blue: 'text-blue-600',
+        blue: 'text-[#D52B1E]',
         purple: 'text-purple-600',
-        red: 'text-red-600',
+        red: 'text-[#D52B1E]',
         gray: 'text-gray-600'
       }
       return `w-5 h-5 ${colorMap[this.color]}`
@@ -81,7 +81,7 @@ export default {
       const trendClasses = this.trend === 'up' 
         ? 'text-green-600' 
         : this.trend === 'down' 
-          ? 'text-red-600' 
+          ? 'text-[#D52B1E]' 
           : 'text-gray-600'
       return `flex items-center space-x-1 text-sm ${trendClasses}`
     }

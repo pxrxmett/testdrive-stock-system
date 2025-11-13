@@ -102,12 +102,12 @@
               <p class="text-sm font-medium text-gray-600">กำลังดำเนินการ</p>
               <p class="text-2xl font-semibold text-gray-900 mt-1">{{ eventStats.active }}</p>
               <div class="flex items-center mt-2">
-                <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                <div class="w-2 h-2 bg-[#D52B1E] rounded-full mr-2"></div>
                 <span class="text-xs text-gray-600">ดำเนินการอยู่</span>
               </div>
             </div>
             <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
@@ -353,7 +353,7 @@
                 <button 
                   v-if="isEventOverdue(event)"
                   @click="extendEvent(event)"
-                  class="p-2 text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                  class="p-2 text-[#D52B1E] hover:bg-blue-50 rounded transition-colors"
                   title="ขยายอีเวนต์"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -387,7 +387,7 @@
                 
                 <button 
                   @click="editEvent(event)"
-                  class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                  class="p-2 text-gray-400 hover:text-[#D52B1E] hover:bg-blue-50 rounded transition-colors"
                   title="แก้ไขอีเวนต์"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -669,7 +669,7 @@
                 </button>
                 <button
                   @click="extendEvent(event)"
-                  class="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700"
+                  class="text-xs bg-[#D52B1E] text-white px-2 py-1 rounded hover:bg-[#B91C1C]"
                 >
                   ขยายเวลา
                 </button>

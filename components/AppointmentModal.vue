@@ -29,7 +29,7 @@
           <div v-if="appointment" class="space-y-4">
             <!-- Customer Info -->
             <div class="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
-              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+              <div class="w-10 h-10 bg-[#D52B1E] rounded-full flex items-center justify-center">
                 <span class="text-white font-medium text-sm">
                   {{ appointment.customerName.split(' ')[1]?.charAt(0) || 'ค' }}
                 </span>
@@ -94,7 +94,7 @@
           <button 
             v-if="appointment"
             @click="editAppointment"
-            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-[#D52B1E] text-base font-medium text-white hover:bg-[#B91C1C] focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
           >
             แก้ไข
           </button>

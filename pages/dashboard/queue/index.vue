@@ -23,7 +23,7 @@
         @click="setDateFilter('today')"
         :class="[
           'px-4 py-2 rounded-lg font-medium text-sm transition-colors',
-          dateFilter === 'today' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+          dateFilter === 'today' ? 'bg-[#D52B1E] text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
         ]"
       >
         วันนี้
@@ -32,7 +32,7 @@
         @click="setDateFilter('tomorrow')"
         :class="[
           'px-4 py-2 rounded-lg font-medium text-sm transition-colors',
-          dateFilter === 'tomorrow' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+          dateFilter === 'tomorrow' ? 'bg-[#D52B1E] text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
         ]"
       >
         พรุ่งนี้
@@ -42,14 +42,14 @@
           v-model="customDate"
           type="date"
           @change="setDateFilter('custom')"
-          class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
         >
       </div>
       <button
         @click="setDateFilter('all')"
         :class="[
           'px-4 py-2 rounded-lg font-medium text-sm transition-colors',
-          dateFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+          dateFilter === 'all' ? 'bg-[#D52B1E] text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
         ]"
       >
         ดูทั้งหมด
@@ -93,7 +93,7 @@
       <div class="card p-4">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-2xl font-bold text-blue-600">{{ statsData.completed }}</p>
+            <p class="text-2xl font-bold text-[#D52B1E]">{{ statsData.completed }}</p>
             <p class="text-sm text-gray-600">เสร็จสิ้น</p>
           </div>
           <Icon name="check" icon-class="w-8 h-8 text-blue-400" />
@@ -153,7 +153,7 @@
           @click="currentView = 'list'"
           :class="[
             'px-4 py-2 rounded-md font-medium text-sm transition-colors flex items-center space-x-2',
-            currentView === 'list' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'
+            currentView === 'list' ? 'bg-[#D52B1E] text-white' : 'text-gray-700 hover:bg-gray-100'
           ]"
         >
           <Icon name="list" icon-class="w-4 h-4" />
@@ -163,7 +163,7 @@
           @click="currentView = 'group'"
           :class="[
             'px-4 py-2 rounded-md font-medium text-sm transition-colors flex items-center space-x-2',
-            currentView === 'group' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'
+            currentView === 'group' ? 'bg-[#D52B1E] text-white' : 'text-gray-700 hover:bg-gray-100'
           ]"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,7 +219,7 @@
             :class="[
               'px-3 py-1 rounded text-sm font-medium transition-colors',
               currentPage === page
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#D52B1E] text-white'
                 : 'text-gray-700 hover:bg-gray-100'
             ]"
           >

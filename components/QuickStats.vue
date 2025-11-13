@@ -3,7 +3,7 @@
     <h3 class="text-lg font-semibold text-gray-900 mb-4">สถิติด่วน</h3>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div class="text-center">
-        <div class="text-2xl font-bold text-blue-600">{{ stats.total }}</div>
+        <div class="text-2xl font-bold text-[#D52B1E]">{{ stats.total }}</div>
         <div class="text-sm text-gray-600">คิวทั้งหมด</div>
       </div>
       <div class="text-center">

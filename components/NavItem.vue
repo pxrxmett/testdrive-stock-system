@@ -72,7 +72,7 @@ export default {
     buttonClasses() {
       const baseClasses = [
         'w-full flex items-center rounded-lg transition-all duration-150 group relative',
-        'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1'
+        'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#D52B1E] focus:ring-offset-1'
       ]
 
       // Size variants
@@ -99,7 +99,7 @@ export default {
 
     iconClasses() {
       if (this.active) {
-        return 'text-blue-600'
+        return 'text-[#D52B1E]'
       }
       return 'text-gray-600 group-hover:text-gray-800 transition-colors duration-150'
     },
@@ -109,7 +109,7 @@ export default {
     },
 
     badgeClasses() {
-      return 'bg-red-100 text-red-600'
+      return 'bg-red-100 text-[#D52B1E]'
     },
 
     iconPath() {

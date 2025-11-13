@@ -44,7 +44,7 @@
           <select 
             :value="selectedStatus"
             @change="handleStatusChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           >
             <option value="all">ทุกสถานะ</option>
             <option value="in-progress">กำลังทดสอบ</option>
@@ -60,7 +60,7 @@
           <select 
             :value="selectedLocation"
             @change="handleLocationChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           >
             <option value="all">ทุกสาขา</option>
             <option v-for="location in uniqueLocations" :key="location" :value="location">
@@ -75,7 +75,7 @@
           <select 
             :value="selectedCarModel"
             @change="handleCarModelChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           >
             <option value="all">ทุกรุ่น</option>
             <option v-for="model in carModelOptions" :key="model.value" :value="model.value">
@@ -90,7 +90,7 @@
           <select 
             :value="selectedSalesRep"
             @change="handleSalesRepChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           >
             <option value="all">ทุกคน</option>
             <option v-for="rep in uniqueSalesReps" :key="rep" :value="rep">
@@ -105,7 +105,7 @@
           <select 
             :value="selectedCustomerType"
             @change="handleCustomerTypeChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           >
             <option value="all">ทุกประเภท</option>
             <option v-for="type in uniqueCustomerTypes" :key="type" :value="type">
@@ -121,7 +121,7 @@
             type="date"
             :value="dateRange.start"
             @input="handleDateRangeChange('start', $event.target.value)"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           />
         </div>
 
@@ -132,7 +132,7 @@
             type="date"
             :value="dateRange.end"
             @input="handleDateRangeChange('end', $event.target.value)"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           />
         </div>
       </div>

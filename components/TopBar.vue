@@ -232,9 +232,9 @@
 
               <button
                 @click="handleLogout"
-                class="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+                class="w-full flex items-center px-4 py-2 text-sm text-[#D52B1E] hover:bg-red-50 transition-colors text-left"
               >
-                <Icon name="logOut" icon-class="w-4 h-4 mr-3 text-red-600" />
+                <Icon name="logOut" icon-class="w-4 h-4 mr-3 text-[#D52B1E]" />
                 <span>ออกจากระบบ</span>
               </button>
             </div>

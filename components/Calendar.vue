@@ -81,7 +81,7 @@
           <div class="flex items-center justify-between mb-1">
             <span :class="[
               'text-sm font-medium',
-              date.isToday ? 'text-red-600' : date.isCurrentMonth ? 'text-gray-900' : 'text-gray-400'
+              date.isToday ? 'text-[#D52B1E]' : date.isCurrentMonth ? 'text-gray-900' : 'text-gray-400'
             ]">
               {{ date.day }}
             </span>
