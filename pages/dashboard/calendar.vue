@@ -561,8 +561,8 @@ export default {
     async fetchAppointments() {
       try {
         this.loading = true
-        // Fetch directly from API for calendar view
-        const response = await this.$api.testDrives.getAll()
+        // Fetch all test drives from admin endpoint for calendar view
+        const response = await this.$api.testDrives.admin.getAll()
 
         // Handle different response formats
         if (Array.isArray(response)) {
@@ -578,7 +578,7 @@ export default {
         console.log('✅ Fetched calendar appointments:', this.queues.length)
       } catch (error) {
         console.error('Error fetching calendar data:', error)
-        this.$toast?.error('ไม่สามารถโหลดข้อมูลปฏิทินได้')
+        console.error('ไม่สามารถโหลดข้อมูลปฏิทินได้')
         this.queues = []
       } finally {
         this.loading = false
