@@ -1,12 +1,18 @@
 <template>
   <div class="min-h-screen bg-gray-50 flex">
-    <!-- Sidebar -->
-    <Sidebar 
+    <!-- Sidebar - Using new collapsible design -->
+    <SidebarNew
+      :collapsed="sidebarCollapsed"
+      @toggle="toggleSidebar"
+    />
+
+    <!-- Legacy Sidebar (commented out) -->
+    <!-- <Sidebar
       :collapsed="sidebarCollapsed"
       :current-view="currentView"
       @toggle="toggleSidebar"
       @navigate="handleNavigation"
-    />
+    /> -->
 
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col overflow-hidden">

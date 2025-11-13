@@ -61,17 +61,31 @@ export default {
     badge: {
       type: [String, Number],
       default: null
+    },
+    size: {
+      type: String,
+      default: 'md', // sm, md, lg
+      validator: (value) => ['sm', 'md', 'lg'].includes(value)
     }
   },
   computed: {
     buttonClasses() {
       const baseClasses = [
-        'w-full flex items-center px-3 py-2.5 rounded-lg transition-all duration-150 group relative',
-        'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
+        'w-full flex items-center rounded-lg transition-all duration-150 group relative',
+        'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1'
       ]
 
+      // Size variants
+      if (this.size === 'sm') {
+        baseClasses.push('px-2 py-1.5 text-xs')
+      } else if (this.size === 'lg') {
+        baseClasses.push('px-4 py-3 text-base')
+      } else {
+        baseClasses.push('px-3 py-2.5 text-sm')
+      }
+
       if (this.active) {
-        baseClasses.push('bg-white border-l-3 border-l-red-600 shadow-sm')
+        baseClasses.push('bg-blue-50 border-l-3 border-l-blue-600 shadow-sm')
       }
 
       if (this.collapsed) {
@@ -85,13 +99,13 @@ export default {
 
     iconClasses() {
       if (this.active) {
-        return 'text-red-600'
+        return 'text-blue-600'
       }
       return 'text-gray-600 group-hover:text-gray-800 transition-colors duration-150'
     },
 
     labelClasses() {
-      return this.active ? 'text-red-600' : 'text-gray-800 group-hover:text-gray-900'
+      return this.active ? 'text-blue-700 font-semibold' : 'text-gray-700 group-hover:text-gray-900'
     },
 
     badgeClasses() {
@@ -112,7 +126,16 @@ export default {
         logOut: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9",
         package: "M16.5 9.4l-9-5.19 M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z M3.27 6.96L12 12.01l8.73-5.05 M12 22.08V12",
         fileText: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M16 13H8 M16 17H8 M10 9H8",
-        calendar: "M8 2v4 M16 2v4 M3 10h18 M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"
+        calendar: "M8 2v4 M16 2v4 M3 10h18 M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z",
+        // New icons for redesigned sidebar
+        briefcase: "M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16 M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2",
+        truck: "M16 3h3a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-3 M1 16h12M1 16a2 2 0 1 0 4 0 2 2 0 0 0-4 0z M13 16h-2 M11 16a2 2 0 1 0 4 0 2 2 0 0 0-4 0z M1 16V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v11",
+        zap: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
+        trendingUp: "M23 6l-9.5 9.5-5-5L1 18 M23 6h-7 M23 6v7",
+        shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+        database: "M12 8c4.97 0 9-1.343 9-3s-4.03-3-9-3-9 1.343-9 3 4.03 3 9 3z M21 12c0 1.66-4 3-9 3s-9-1.34-9-3 M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5",
+        archive: "M21 8v13H3V8 M1 3h22v5H1z M10 12h4",
+        plus: "M12 5v14 M5 12h14"
       }
 
       return icons[this.icon] || "M4 6h16M4 12h16M4 18h16"
