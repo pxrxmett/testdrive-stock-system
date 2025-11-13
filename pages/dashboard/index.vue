@@ -201,56 +201,54 @@ export default {
       try {
         this.loading = true
 
-        // Fetch ISUZU stats
+        // Fetch ISUZU stats (using correct API endpoints)
         if (this.$axios) {
           try {
-            const isuzuQueues = await this.$axios.get('/api/queues?brand=isuzu')
+            const isuzuQueues = await this.$axios.get('/api/isuzu/test-drives')
             this.isuzuStats.queues = isuzuQueues.data?.length || 0
           } catch (e) {
             console.log('ISUZU queues not available')
           }
 
           try {
-            const isuzuStock = await this.$axios.get('/api/stock?brand=isuzu')
+            const isuzuStock = await this.$axios.get('/api/isuzu/stock')
             this.isuzuStats.stock = isuzuStock.data?.length || 0
           } catch (e) {
             console.log('ISUZU stock not available')
           }
 
           try {
-            const isuzuStaff = await this.$axios.get('/api/staff?brand=isuzu')
+            const isuzuStaff = await this.$axios.get('/api/isuzu/staff')
             this.isuzuStats.staff = isuzuStaff.data?.length || 0
           } catch (e) {
             console.log('ISUZU staff not available')
           }
 
-          // Fetch BYD stats
+          // Fetch BYD stats (using correct API endpoints)
           try {
-            const bydQueues = await this.$axios.get('/api/queues?brand=byd')
+            const bydQueues = await this.$axios.get('/api/byd/test-drives')
             this.bydStats.queues = bydQueues.data?.length || 0
           } catch (e) {
             console.log('BYD queues not available')
           }
 
           try {
-            const bydStock = await this.$axios.get('/api/stock?brand=byd')
+            const bydStock = await this.$axios.get('/api/byd/stock')
             this.bydStats.stock = bydStock.data?.length || 0
           } catch (e) {
             console.log('BYD stock not available')
           }
 
           try {
-            const bydStaff = await this.$axios.get('/api/staff?brand=byd')
+            const bydStaff = await this.$axios.get('/api/byd/staff')
             this.bydStats.staff = bydStaff.data?.length || 0
           } catch (e) {
             console.log('BYD staff not available')
           }
         }
 
-        // Dispatch to store if available
-        if (this.$store) {
-          await this.$store.dispatch('dashboard/fetchQueues').catch(() => {})
-        }
+        // Note: No need to dispatch fetchQueues here since we're using direct axios calls
+        // Store fetchQueues is used in brand-specific pages (e.g., /dashboard/isuzu/queue)
       } catch (error) {
         console.error('Error fetching stats:', error)
       } finally {
