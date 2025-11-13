@@ -1,27 +1,27 @@
 <template>
-  <div class="space-y-6">
-    <!-- Page Header with Brand Badge -->
+  <div class="space-y-4">
+    <!-- Compact Page Header -->
     <div class="flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
           </svg>
         </div>
         <div>
           <div class="flex items-center space-x-2">
-            <h1 class="text-2xl font-bold text-gray-900">คิวทดลองขับ BYD</h1>
-            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+            <h1 class="text-xl font-bold text-gray-900">คิวทดลองขับ BYD</h1>
+            <span class="px-2.5 py-0.5 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
               รถไฟฟ้า
             </span>
           </div>
-          <p class="text-gray-600">จัดการคิวทดลองขับรถไฟฟ้า BYD</p>
+          <p class="text-sm text-gray-600 mt-0.5">จัดการคิวทดลองขับรถไฟฟ้า BYD</p>
         </div>
       </div>
       <Button
         variant="primary"
         @click="handleAddQueue"
-        class="bg-green-600 hover:bg-green-700"
+        class="bg-green-600 hover:bg-green-700 shadow-sm"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -29,19 +29,6 @@
         เพิ่มคิวใหม่
       </Button>
     </div>
-
-    <!-- Brand Info Card -->
-    <Card variant="gradient" class="bg-gradient-to-r from-green-50 to-green-100 border border-green-200">
-      <div class="flex items-center space-x-3">
-        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <p class="text-sm text-green-800">
-          <strong>แบรนด์ BYD:</strong> คุณกำลังดูคิวทดลองขับสำหรับรถยนต์ไฟฟ้า BYD เท่านั้น
-          (ATTO 3, Dolphin, Seal)
-        </p>
-      </div>
-    </Card>
 
     <!-- Loading State -->
     <LoadingSkeleton

@@ -1,27 +1,27 @@
 <template>
-  <div class="space-y-6">
-    <!-- Page Header with Brand Badge -->
+  <div class="space-y-4">
+    <!-- Compact Page Header -->
     <div class="flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-          <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
             <path d="M14 16H9m10 0h3l-3.333-5.333M21 16v5a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1M3 16h3m0 0 3.333-5.333M6 16v5a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1m-3-5L10 3h4l3 8M6 11h12"/>
           </svg>
         </div>
         <div>
           <div class="flex items-center space-x-2">
-            <h1 class="text-2xl font-bold text-gray-900">คิวทดลองขับ ISUZU</h1>
-            <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded-full">
+            <h1 class="text-xl font-bold text-gray-900">คิวทดลองขับ ISUZU</h1>
+            <span class="px-2.5 py-0.5 bg-red-100 text-red-700 text-xs font-semibold rounded-full">
               รถยนต์
             </span>
           </div>
-          <p class="text-gray-600">จัดการคิวทดลองขับรถยนต์ ISUZU</p>
+          <p class="text-sm text-gray-600 mt-0.5">จัดการคิวทดลองขับรถยนต์ ISUZU</p>
         </div>
       </div>
       <Button
         variant="primary"
         @click="handleAddQueue"
-        class="bg-red-600 hover:bg-red-700"
+        class="bg-red-600 hover:bg-red-700 shadow-sm"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -29,19 +29,6 @@
         เพิ่มคิวใหม่
       </Button>
     </div>
-
-    <!-- Brand Info Card -->
-    <Card variant="gradient" class="bg-gradient-to-r from-red-50 to-red-100 border border-red-200">
-      <div class="flex items-center space-x-3">
-        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <p class="text-sm text-red-800">
-          <strong>แบรนด์ ISUZU:</strong> คุณกำลังดูคิวทดลองขับสำหรับรถยนต์ ISUZU เท่านั้น
-          (รถกระบะ, รถบรรทุก, PPV)
-        </p>
-      </div>
-    </Card>
 
     <!-- Loading State -->
     <LoadingSkeleton
