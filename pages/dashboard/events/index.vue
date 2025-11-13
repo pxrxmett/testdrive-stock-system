@@ -410,21 +410,22 @@
         </div>
         
         <!-- Empty State -->
-        <div v-if="filteredEvents.length === 0" class="text-center py-12">
-          <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">ไม่พบอีเวนต์</h3>
-          <p class="text-gray-600 mb-4">ลองปรับเปลี่ยนเงื่อนไขการค้นหาหรือสร้างอีเวนต์ใหม่</p>
-          <nuxt-link to="/dashboard/events/add" class="inline-flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            <span>สร้างอีเวนต์ใหม่</span>
-          </nuxt-link>
-        </div>
+        <EmptyState
+          v-if="filteredEvents.length === 0"
+          title="ไม่พบอีเวนต์"
+          description="ลองปรับเปลี่ยนเงื่อนไขการค้นหาหรือสร้างอีเวนต์ใหม่เพื่อเริ่มจัดการรถยนต์สำหรับงานแสดง"
+          actionLabel="สร้างอีเวนต์ใหม่"
+          actionVariant="primary"
+          @action="() => $router.push('/dashboard/events/add')"
+        >
+          <template #icon>
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full">
+              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          </template>
+        </EmptyState>
       </section>
 
       <!-- Summary Footer -->

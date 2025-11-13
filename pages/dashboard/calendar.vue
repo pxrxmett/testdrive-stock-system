@@ -25,10 +25,11 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="card p-8 text-center">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
-      <p class="text-gray-600">กำลังโหลดข้อมูลปฏิทิน...</p>
-    </div>
+    <LoadingSkeleton
+      v-if="loading"
+      variant="card"
+      :count="1"
+    />
 
     <!-- Quick Stats -->
     <div v-else class="grid grid-cols-1 md:grid-cols-4 gap-4">
