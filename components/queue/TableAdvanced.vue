@@ -102,7 +102,7 @@
             <!-- Vehicle Column -->
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="text-sm font-medium text-gray-900">{{ queue.vehicleModel }}</div>
-              <div class="text-xs text-gray-500">รหัส: {{ queue.id.substring(0, 8).toUpperCase() }}</div>
+              <div class="text-xs text-gray-500">รหัส: {{ getQueueCode(queue.id) }}</div>
               <div class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700 mt-1">
                 {{ queue.branch || 'กรุงเทพ' }}
               </div>
@@ -253,6 +253,13 @@ export default {
         business: 'ธุรกิจ'
       }
       return labels[type] || type
+    },
+
+    getQueueCode(id) {
+      if (!id) return 'N/A'
+      // Convert to string and get first 8 characters
+      const idStr = String(id)
+      return idStr.substring(0, 8).toUpperCase()
     },
 
     getStatusButtonClass(status) {
