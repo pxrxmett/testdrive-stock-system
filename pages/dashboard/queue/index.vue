@@ -178,11 +178,19 @@
     </div>
 
     <!-- Content Views -->
-    <div v-if="displayFilteredQueues.length === 0" class="card p-8 text-center">
-      <Icon name="search" icon-class="w-12 h-12 text-gray-300 mx-auto mb-3" />
-      <h3 class="text-lg font-medium text-gray-900 mb-2">ไม่พบข้อมูลที่ค้นหา</h3>
-      <p class="text-gray-500">ลองเปลี่ยนเงื่อนไขการค้นหาหรือล้างตัวกรอง</p>
-    </div>
+    <EmptyState
+      v-if="displayFilteredQueues.length === 0"
+      title="ไม่พบข้อมูลที่ค้นหา"
+      description="ลองเปลี่ยนเงื่อนไขการค้นหาหรือล้างตัวกรองเพื่อดูคิวทั้งหมด"
+    >
+      <template #icon>
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+      </template>
+    </EmptyState>
 
     <!-- List View with Pagination -->
     <div v-else-if="currentView === 'list'">

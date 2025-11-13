@@ -43,15 +43,13 @@
 
     <main class="px-6 py-6 space-y-6">
       <!-- Loading State -->
-      <div v-if="loading" class="flex items-center justify-center py-12">
-        <div class="text-center">
-          <svg class="animate-spin h-12 w-12 text-blue-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <p class="text-gray-600">กำลังโหลดข้อมูลรถยนต์...</p>
-        </div>
-      </div>
+      <LoadingSkeleton
+        v-if="loading"
+        variant="card"
+        :count="4"
+        grid
+        :cols="2"
+      />
 
       <!-- Error State -->
       <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -489,21 +487,22 @@
         </div>
         
         <!-- Empty State -->
-        <div v-if="filteredVehicles.length === 0" class="text-center py-12">
-          <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">ไม่พบข้อมูลรถยนต์</h3>
-          <p class="text-gray-600 mb-4">ลองปรับเปลี่ยนเงื่อนไขการค้นหาหรือเพิ่มรถยนต์ใหม่</p>
-          <button @click="showAddModal = true" class="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            <span>เพิ่มรถยนต์ใหม่</span>
-          </button>
-        </div>
+        <EmptyState
+          v-if="filteredVehicles.length === 0"
+          title="ไม่พบข้อมูลรถยนต์"
+          description="ลองปรับเปลี่ยนเงื่อนไขการค้นหา หรือเพิ่มรถยนต์ใหม่เข้าสู่ระบบจัดการสต็อก"
+          actionLabel="เพิ่มรถยนต์ใหม่"
+          actionVariant="primary"
+          @action="() => $router.push('/dashboard/stock/create')"
+        >
+          <template #icon>
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+              </svg>
+            </div>
+          </template>
+        </EmptyState>
       </section>
 
       <!-- Simple Footer -->
