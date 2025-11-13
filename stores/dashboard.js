@@ -71,10 +71,11 @@ export const useDashboardStore = defineStore('dashboard', {
       try {
         this.loading = true
         this.error = null
-        
+
         const { $api } = useNuxtApp()
-        const response = await $api.testDrives.getAll()
-        
+        // Use legacy endpoint for cross-brand queries
+        const response = await $api.testDrives.getAllLegacy()
+
         // แปลงข้อมูลจาก API ให้ตรงกับ frontend
         const queues = response.map(item => ({
           id: item.id,
