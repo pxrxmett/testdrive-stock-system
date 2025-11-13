@@ -20,7 +20,7 @@
 
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#D52B1E]"></div>
       <p class="text-gray-600 mt-2">กำลังโหลดข้อมูล...</p>
     </div>
 
@@ -40,7 +40,7 @@
               v-model="formData.model"
               type="text"
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               placeholder="เช่น D-MAX, MU-X"
             />
           </div>
@@ -54,7 +54,7 @@
               v-model="formData.plate_number"
               type="text"
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               placeholder="เช่น กก-1234"
             />
           </div>
@@ -68,7 +68,7 @@
               v-model="formData.color"
               type="text"
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               placeholder="เช่น ขาว, ดำ, เงิน"
             />
           </div>
@@ -84,7 +84,7 @@
               required
               min="2000"
               max="2030"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               placeholder="เช่น 2024"
             />
           </div>
@@ -99,7 +99,7 @@
               type="number"
               min="0"
               step="1000"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               placeholder="เช่น 850000"
             />
           </div>
@@ -112,7 +112,7 @@
             <select
               v-model="formData.status"
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
             >
               <option value="">-- เลือกสถานะ --</option>
               <option value="available">พร้อมใช้</option>
@@ -138,7 +138,7 @@
             <input
               v-model="formData.vin"
               type="text"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] font-mono"
               placeholder="17 หลัก เช่น MPATFS86SJ0123456"
             />
           </div>
@@ -151,7 +151,7 @@
             <input
               v-model="formData.chassis_number"
               type="text"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] font-mono"
               placeholder="หมายเลขตัวรถ"
             />
           </div>
@@ -164,7 +164,7 @@
             <input
               v-model="formData.engine_number"
               type="text"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] font-mono"
               placeholder="หมายเลขเครื่องยนต์"
             />
           </div>
@@ -178,7 +178,7 @@
         <textarea
           v-model="formData.notes"
           rows="4"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           placeholder="บันทึกข้อมูลเพิ่มเติม..."
         ></textarea>
       </div>
@@ -204,7 +204,7 @@
           <button
             type="submit"
             :disabled="submitting"
-            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+            class="px-6 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
           >
             <svg v-if="submitting" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

@@ -72,8 +72,8 @@ export default {
           // Brand specific
           const colors = getBrandColors(brandCode)
           const brandClasses = {
-            isuzu: 'bg-red-600 text-white border-red-600',
-            byd: 'bg-blue-600 text-white border-blue-600'
+            isuzu: 'bg-[#D52B1E] text-white border-red-600',
+            byd: 'bg-green-600 text-white border-green-700'
           }
           baseClasses.push(brandClasses[brandCode] || 'bg-gray-800 text-white border-gray-800')
         }

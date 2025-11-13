@@ -44,7 +44,7 @@
           <select 
             :value="selectedStatus"
             @change="handleStatusChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           >
             <option value="all">ทุกสถานะ</option>
             <option value="in-progress">กำลังทดสอบ</option>
@@ -60,7 +60,7 @@
           <select 
             :value="selectedLocation"
             @change="handleLocationChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           >
             <option value="all">ทุกสาขา</option>
             <option v-for="location in uniqueLocations" :key="location" :value="location">
@@ -75,7 +75,7 @@
           <select 
             :value="selectedCarModel"
             @change="handleCarModelChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           >
             <option value="all">ทุกรุ่น</option>
             <option v-for="model in carModelOptions" :key="model.value" :value="model.value">
@@ -90,7 +90,7 @@
           <select 
             :value="selectedSalesRep"
             @change="handleSalesRepChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           >
             <option value="all">ทุกคน</option>
             <option v-for="rep in uniqueSalesReps" :key="rep" :value="rep">
@@ -105,7 +105,7 @@
           <select 
             :value="selectedCustomerType"
             @change="handleCustomerTypeChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           >
             <option value="all">ทุกประเภท</option>
             <option v-for="type in uniqueCustomerTypes" :key="type" :value="type">
@@ -121,7 +121,7 @@
             type="date"
             :value="dateRange.start"
             @input="handleDateRangeChange('start', $event.target.value)"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           />
         </div>
 
@@ -132,7 +132,7 @@
             type="date"
             :value="dateRange.end"
             @input="handleDateRangeChange('end', $event.target.value)"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           />
         </div>
       </div>
@@ -162,17 +162,17 @@
     </div>
 
     <!-- Active Filters Display -->
-    <div v-if="activeFilters.length > 0" class="p-3 bg-blue-50 border-b border-gray-200">
+    <div v-if="activeFilters.length > 0" class="p-3 bg-red-50 border-b border-gray-200">
       <div class="flex items-center space-x-2 flex-wrap">
-        <span class="text-sm text-blue-700 font-medium">ตัวกรองที่ใช้:</span>
+        <span class="text-sm text-[#B91C1C] font-medium">ตัวกรองที่ใช้:</span>
         <div class="flex items-center space-x-1 flex-wrap">
           <span 
             v-for="filter in activeFilters" 
             :key="filter.key"
-            class="inline-flex items-center space-x-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+            class="inline-flex items-center space-x-1 px-2 py-1 bg-red-100 text-[#991B1B] text-xs rounded-full"
           >
             <span>{{ filter.label }}</span>
-            <button @click="removeFilter(filter.key)" class="hover:text-blue-900">
+            <button @click="removeFilter(filter.key)" class="hover:text-gray-900">
               <Icon name="close" icon-class="w-3 h-3" />
             </button>
           </span>

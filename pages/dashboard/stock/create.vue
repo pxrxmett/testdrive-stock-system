@@ -32,7 +32,7 @@
             <select
               v-model="form.model"
               required
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
             >
               <option value="">-- เลือกรุ่นรถ --</option>
               <option v-for="model in vehicleModels" :key="model" :value="model">
@@ -50,7 +50,7 @@
               v-model="form.plateNumber"
               type="text"
               required
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               placeholder="เช่น 1กก 1234"
               @blur="checkPlateNumberUnique"
             >
@@ -63,7 +63,7 @@
             </label>
             <select
               v-model="form.color"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
             >
               <option value="">-- เลือกสี --</option>
               <option v-for="color in colors" :key="color" :value="color">
@@ -81,7 +81,7 @@
               type="number"
               min="2000"
               max="2025"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               placeholder="เช่น 2024"
             >
             <p v-if="errors.year" class="mt-1 text-xs text-red-500">{{ errors.year }}</p>
@@ -96,7 +96,7 @@
               type="number"
               min="0"
               step="1000"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               placeholder="เช่น 850000"
             >
             <p v-if="errors.price" class="mt-1 text-xs text-red-500">{{ errors.price }}</p>
@@ -108,7 +108,7 @@
             </label>
             <select
               v-model="form.status"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
             >
               <option value="available">Available (พร้อมใช้)</option>
               <option value="test_drive">Test Drive (ทดลองขับ)</option>
@@ -130,7 +130,7 @@
           <textarea
             v-model="form.notes"
             rows="4"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
             placeholder="กรอกหมายเหตุเพิ่มเติม..."
           ></textarea>
         </div>
@@ -148,7 +148,7 @@
         <button
           type="submit"
           :disabled="saving"
-          class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+          class="px-6 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
         >
           <svg v-if="saving" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

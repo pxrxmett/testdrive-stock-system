@@ -41,7 +41,7 @@ export default {
       } else if (this.variant === 'bordered') {
         base.push('bg-white border border-gray-200')
       } else if (this.variant === 'gradient') {
-        base.push('bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100')
+        base.push('bg-gradient-to-br from-red-50 to-red-50 border border-red-100')
       }
 
       // Padding

@@ -5,7 +5,7 @@
       <div class="px-6 py-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+            <div class="w-10 h-10 bg-[#D52B1E] rounded-lg flex items-center justify-center">
               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
@@ -47,7 +47,7 @@
         </svg>
         <h3 class="text-lg font-medium text-red-900 mb-2">เกิดข้อผิดพลาด</h3>
         <p class="text-red-700">{{ error }}</p>
-        <button @click="loadTestDrives" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+        <button @click="loadTestDrives" class="mt-4 px-4 py-2 bg-[#D52B1E] text-white rounded-lg hover:bg-[#B91C1C]">
           ลองอีกครั้ง
         </button>
       </div>
@@ -61,8 +61,8 @@
                 <p class="text-sm text-gray-600 mb-1">เอกสารทั้งหมด</p>
                 <p class="text-3xl font-bold text-gray-900">{{ totalDocuments }}</p>
               </div>
-              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
               </div>
@@ -101,10 +101,10 @@
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-sm text-gray-600 mb-1">ไม่พร้อม</p>
-                <p class="text-3xl font-bold text-red-600">{{ notReadyDocuments }}</p>
+                <p class="text-3xl font-bold text-[#D52B1E]">{{ notReadyDocuments }}</p>
               </div>
               <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
               </div>
@@ -122,7 +122,7 @@
               :class="[
                 'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                 activeQuickFilter === qf.value
-                  ? 'bg-red-600 text-white'
+                  ? 'bg-[#D52B1E] text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               ]"
             >
@@ -185,7 +185,7 @@
                 v-model="filters.search"
                 type="text"
                 placeholder="ค้นหาเลขที่เอกสาร, ชื่อ, เบอร์โทร..."
-                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
                 @input="saveRecentSearch"
               />
             </div>
@@ -196,7 +196,7 @@
                 v-model="filters.dateFrom"
                 type="date"
                 placeholder="จากวันที่"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
               />
             </div>
 
@@ -206,14 +206,14 @@
                 v-model="filters.dateTo"
                 type="date"
                 placeholder="ถึงวันที่"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
               />
             </div>
 
             <!-- Vehicle Model Filter -->
             <select
               v-model="filters.vehicleModel"
-              class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+              class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
             >
               <option value="">รุ่นรถทั้งหมด</option>
               <option v-for="model in vehicleModels" :key="model" :value="model">
@@ -224,7 +224,7 @@
             <!-- Document Status Filter -->
             <select
               v-model="filters.docStatus"
-              class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+              class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
             >
               <option value="">สถานะเอกสารทั้งหมด</option>
               <option value="ready">🟢 พร้อมพิมพ์</option>
@@ -238,7 +238,7 @@
             <span class="text-sm text-gray-600">เรียงตาม:</span>
             <select
               v-model="sortBy"
-              class="px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+              class="px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
             >
               <option value="date_desc">วันที่ (ใหม่สุด → เก่าสุด)</option>
               <option value="date_asc">วันที่ (เก่าสุด → ใหม่สุด)</option>
@@ -259,7 +259,7 @@
                   v-model="filters.idCard"
                   type="text"
                   placeholder="เช่น 1234567890123"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
                 />
               </div>
               <div>
@@ -268,7 +268,7 @@
                   v-model="filters.licenseNumber"
                   type="text"
                   placeholder="เช่น 12345678"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
                 />
               </div>
               <div>
@@ -277,7 +277,7 @@
                   v-model="filters.licensePlate"
                   type="text"
                   placeholder="เช่น 1กก1234"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
                 />
               </div>
             </div>
@@ -285,13 +285,13 @@
         </section>
 
         <!-- Bulk Actions Bar -->
-        <div v-if="selectedDocuments.length > 0" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <div v-if="selectedDocuments.length > 0" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
-              <span class="text-sm font-medium text-blue-900">เลือกแล้ว {{ selectedDocuments.length }} รายการ</span>
+              <span class="text-sm font-medium text-gray-900">เลือกแล้ว {{ selectedDocuments.length }} รายการ</span>
             </div>
             <div class="flex items-center space-x-2">
               <button
@@ -309,7 +309,7 @@
                 :class="[
                   'flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors text-sm',
                   canPrintSelected
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    ? 'bg-[#D52B1E] text-white hover:bg-[#B91C1C]'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 ]"
               >
@@ -342,7 +342,7 @@
                       type="checkbox"
                       :checked="isAllSelected"
                       @change="toggleSelectAll"
-                      class="w-4 h-4 text-red-600 rounded focus:ring-red-500"
+                      class="w-4 h-4 text-[#D52B1E] rounded focus:ring-[#D52B1E]"
                     />
                   </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เลขที่เอกสาร</th>
@@ -362,7 +362,7 @@
                       type="checkbox"
                       :checked="isSelected(testDrive.id)"
                       @change="toggleSelect(testDrive.id)"
-                      class="w-4 h-4 text-red-600 rounded focus:ring-red-500"
+                      class="w-4 h-4 text-[#D52B1E] rounded focus:ring-[#D52B1E]"
                     />
                   </td>
 
@@ -407,7 +407,7 @@
                     <div class="flex items-center justify-center space-x-2">
                       <button
                         @click="viewDocument(testDrive.id)"
-                        class="text-blue-600 hover:text-blue-900"
+                        class="text-[#D52B1E] hover:text-gray-900"
                         title="ดูเอกสาร"
                       >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -478,7 +478,7 @@
           >
             <template #icon>
               <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full">
-                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
               </div>
@@ -493,7 +493,7 @@
                 <span class="text-sm text-gray-600">แสดง</span>
                 <select
                   v-model.number="perPage"
-                  class="px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                  class="px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
                 >
                   <option :value="20">20</option>
                   <option :value="50">50</option>
@@ -532,7 +532,7 @@
                     :class="[
                       'px-3 py-1.5 border rounded-lg text-sm font-medium',
                       currentPage === page
-                        ? 'bg-red-600 text-white border-red-600'
+                        ? 'bg-[#D52B1E] text-white border-red-600'
                         : 'border-gray-300 hover:bg-gray-50'
                     ]"
                   >

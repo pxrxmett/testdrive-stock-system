@@ -32,7 +32,7 @@
     <span
       v-if="badge"
       class="ml-auto px-2 py-0.5 text-xs font-semibold rounded-full"
-      :class="badgeColor || 'bg-blue-100 text-blue-600'"
+      :class="badgeColor || 'bg-red-100 text-[#D52B1E]'"
     >
       {{ badge }}
     </span>

@@ -12,7 +12,7 @@
     <header class="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-40">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
-          <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+          <div class="w-10 h-10 bg-[#D52B1E] rounded-lg flex items-center justify-center">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
             </svg>
@@ -97,7 +97,7 @@
             </div>
             <div class="flex items-center justify-between">
               <span class="text-sm text-gray-600">เสร็จสิ้น</span>
-              <span class="font-semibold text-blue-600">{{ completedQueues }}</span>
+              <span class="font-semibold text-[#D52B1E]">{{ completedQueues }}</span>
             </div>
           </div>
         </div>
@@ -619,7 +619,7 @@ export default {
       const classes = {
         'in-progress': 'bg-green-100 text-green-800',
         'scheduled': 'bg-yellow-100 text-yellow-800',
-        'completed': 'bg-blue-100 text-blue-800',
+        'completed': 'bg-red-100 text-[#991B1B]',
         'cancelled': 'bg-red-100 text-red-800'
       }
       return classes[status] || 'bg-gray-100 text-gray-800'
@@ -639,7 +639,7 @@ export default {
       const classes = {
         'in-progress': 'bg-green-50 border border-green-200',
         'scheduled': 'bg-yellow-50 border border-yellow-200',
-        'completed': 'bg-blue-50 border border-blue-200',
+        'completed': 'bg-red-50 border border-red-200',
         'cancelled': 'bg-red-50 border border-red-200'
       }
       return classes[status] || 'bg-gray-50 border border-gray-200'

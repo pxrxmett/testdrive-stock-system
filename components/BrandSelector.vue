@@ -2,7 +2,7 @@
   <div>
     <label v-if="showLabel" :for="inputId" class="block text-sm font-medium text-gray-700 mb-2">
       {{ label }}
-      <span v-if="required" class="text-red-600">*</span>
+      <span v-if="required" class="text-[#D52B1E]">*</span>
     </label>
     <select
       :id="inputId"
@@ -24,7 +24,7 @@
     <p v-if="hint" class="mt-1 text-xs text-gray-500">
       {{ hint }}
     </p>
-    <p v-if="error" class="mt-1 text-xs text-red-600">
+    <p v-if="error" class="mt-1 text-xs text-[#D52B1E]">
       {{ error }}
     </p>
   </div>
@@ -94,12 +94,12 @@ export default {
       ]
 
       if (this.error) {
-        classes.push('border-red-300 focus:ring-red-500 focus:border-red-500')
+        classes.push('border-red-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]')
       } else if (this.value) {
         // Apply brand color when selected
         const brandClasses = {
-          isuzu: 'border-red-300 focus:ring-red-500 focus:border-red-500',
-          byd: 'border-blue-300 focus:ring-blue-500 focus:border-blue-500'
+          isuzu: 'border-red-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]',
+          byd: 'border-red-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]'
         }
         classes.push(brandClasses[this.value] || 'border-gray-300 focus:ring-gray-500 focus:border-gray-500')
       } else {

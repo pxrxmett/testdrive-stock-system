@@ -415,7 +415,7 @@ export default {
       if (status === 'พร้อมใช้' || statusLower === 'available') {
         return 'text-green-700 bg-green-50 border border-green-200'
       } else if (status === 'ใช้งานอยู่' || statusLower === 'in_use') {
-        return 'text-blue-700 bg-blue-50 border border-blue-200'
+        return 'text-[#B91C1C] bg-red-50 border border-red-200'
       } else if (status === 'ซ่อมแซม' || statusLower === 'maintenance') {
         return 'text-orange-700 bg-orange-50 border border-orange-200'
       } else {

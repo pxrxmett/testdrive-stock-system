@@ -7,7 +7,7 @@
           v-model="filters.search"
           type="text"
           placeholder="ค้นหา ชื่อลูกค้า, เบอร์โทร, รถ..."
-          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           @input="emitFilters"
         >
         <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -23,7 +23,7 @@
         <label class="block text-sm font-medium text-gray-700 mb-1">วันที่</label>
         <select
           v-model="filters.dateRange"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           @change="emitFilters"
         >
           <option value="all">ทั้งหมด</option>
@@ -39,7 +39,7 @@
         <label class="block text-sm font-medium text-gray-700 mb-1">พนักงานขาย</label>
         <select
           v-model="filters.salesId"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           @change="emitFilters"
         >
           <option value="">ทั้งหมด</option>
@@ -55,7 +55,7 @@
         <label class="block text-sm font-medium text-gray-700 mb-1">สาขา</label>
         <select
           v-model="filters.branch"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           @change="emitFilters"
         >
           <option value="">ทั้งหมด</option>
@@ -71,7 +71,7 @@
         <label class="block text-sm font-medium text-gray-700 mb-1">รุ่นรถ</label>
         <select
           v-model="filters.vehicle"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           @change="emitFilters"
         >
           <option value="">ทั้งหมด</option>
@@ -87,7 +87,7 @@
         <label class="block text-sm font-medium text-gray-700 mb-1">สถานะ</label>
         <select
           v-model="filters.status"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           @change="emitFilters"
         >
           <option value="">ทั้งหมด</option>
@@ -108,7 +108,7 @@
         <input
           v-model="filters.startDate"
           type="date"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           @change="emitFilters"
         >
       </div>
@@ -117,7 +117,7 @@
         <input
           v-model="filters.endDate"
           type="date"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] text-sm"
           @change="emitFilters"
         >
       </div>

@@ -8,7 +8,7 @@
 
     <!-- Error State -->
     <div v-else-if="error" class="text-center py-12">
-      <p class="text-red-600">{{ error }}</p>
+      <p class="text-[#D52B1E]">{{ error }}</p>
       <button @click="$router.back()" class="mt-4 px-4 py-2 bg-gray-600 text-white rounded-lg">
         กลับ
       </button>
@@ -36,7 +36,7 @@
           >
             แก้ไข
           </nuxt-link>
-          <button @click="deleteEvent" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+          <button @click="deleteEvent" class="px-4 py-2 bg-[#D52B1E] text-white rounded-lg hover:bg-[#B91C1C]">
             ลบ
           </button>
         </div>
@@ -123,7 +123,7 @@
       <div class="relative mx-auto p-8 border w-full max-w-md shadow-2xl rounded-xl bg-white">
         <!-- Icon -->
         <div class="flex items-center justify-center w-16 h-16 mx-auto bg-red-100 rounded-full mb-4">
-          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
         </div>
@@ -166,7 +166,7 @@
           <button
             @click="confirmDelete"
             :disabled="deleting"
-            class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="flex-1 px-4 py-2 bg-[#D52B1E] text-white rounded-lg hover:bg-[#B91C1C] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {{ deleting ? 'กำลังลบ...' : 'ลบอีเวนต์' }}
           </button>
@@ -298,7 +298,7 @@ export default {
       const map = {
         'planning': 'text-gray-700 bg-gray-100 border border-gray-300',
         'preparing': 'text-orange-700 bg-orange-100 border border-orange-300',
-        'in_progress': 'text-blue-700 bg-blue-100 border border-blue-300',
+        'in_progress': 'text-[#B91C1C] bg-red-100 border border-red-300',
         'completed': 'text-green-700 bg-green-100 border border-green-300',
       }
       return map[status] || 'text-gray-700 bg-gray-100'

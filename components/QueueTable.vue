@@ -21,10 +21,10 @@
             <td class="px-4 py-4">
               <div class="bg-red-50 border border-red-200 rounded-md p-3">
                 <div class="flex items-center space-x-2">
-                  <Icon name="calendar" class="w-4 h-4 text-red-600" />
+                  <Icon name="calendar" class="w-4 h-4 text-[#D52B1E]" />
                   <div>
                     <p class="text-sm font-semibold text-gray-900">{{ formatDate(queue.date) }}</p>
-                    <p class="text-sm text-red-600">{{ queue.timeSlot }} น.</p>
+                    <p class="text-sm text-[#D52B1E]">{{ queue.timeSlot }} น.</p>
                     <p class="text-xs text-gray-500">({{ queue.duration }})</p>
                   </div>
                 </div>
@@ -33,7 +33,7 @@
             
             <td class="px-4 py-4">
               <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                <div class="w-8 h-8 bg-[#D52B1E] rounded-full flex items-center justify-center">
                   <span class="text-white font-medium text-xs">
                     {{ getInitial(queue.customerName) }}
                   </span>
@@ -41,7 +41,7 @@
                 <div>
                   <p class="text-sm font-medium text-gray-900">{{ queue.customerName }}</p>
                   <p class="text-xs text-gray-500">{{ queue.phone }}</p>
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-[#991B1B]">
                     {{ queue.customerType || 'Standard' }}
                   </span>
                 </div>
@@ -78,7 +78,7 @@
               <div class="flex items-center space-x-1">
                 <button 
                   @click="$emit('view', queue.id)"
-                  class="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                  class="p-1.5 text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                   title="ดู"
                 >
                   <Icon name="eye" class="w-4 h-4" />
@@ -92,7 +92,7 @@
                 </button>
                 <button 
                   @click="$emit('delete', queue.id)"
-                  class="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+                  class="p-1.5 text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                   title="ลบ"
                 >
                   <Icon name="trash" class="w-4 h-4" />

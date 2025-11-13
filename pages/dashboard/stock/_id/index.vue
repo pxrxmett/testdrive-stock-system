@@ -19,7 +19,7 @@
       <div class="flex items-center space-x-2">
         <button
           @click="editVehicle"
-          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center space-x-2"
+          class="px-4 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors flex items-center space-x-2"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -28,7 +28,7 @@
         </button>
         <button
           @click="deleteVehicle"
-          class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+          class="px-4 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors"
         >
           ลบรถ
         </button>
@@ -37,7 +37,7 @@
 
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#D52B1E]"></div>
       <p class="text-gray-600 mt-2">กำลังโหลดข้อมูล...</p>
     </div>
 
@@ -61,7 +61,7 @@
             </div>
             <div>
               <div class="text-sm text-gray-500">ทะเบียน</div>
-              <div class="text-base font-bold text-blue-600 mt-1">{{ vehicle.plate_number || vehicle.plateNumber || 'N/A' }}</div>
+              <div class="text-base font-bold text-[#D52B1E] mt-1">{{ vehicle.plate_number || vehicle.plateNumber || 'N/A' }}</div>
             </div>
             <div>
               <div class="text-sm text-gray-500">สี</div>
@@ -94,16 +94,16 @@
       <!-- Sidebar Info -->
       <div class="space-y-6">
         <!-- Quick Info -->
-        <div class="bg-blue-50 rounded-lg border border-blue-200 p-6">
-          <h3 class="text-sm font-semibold text-blue-900 mb-3">ข้อมูลเพิ่มเติม</h3>
+        <div class="bg-red-50 rounded-lg border border-red-200 p-6">
+          <h3 class="text-sm font-semibold text-gray-900 mb-3">ข้อมูลเพิ่มเติม</h3>
           <div class="space-y-3">
             <div>
-              <div class="text-xs text-blue-600">สร้างเมื่อ</div>
-              <div class="text-sm font-medium text-blue-900">{{ formatDate(vehicle.created_at || vehicle.createdAt) }}</div>
+              <div class="text-xs text-[#D52B1E]">สร้างเมื่อ</div>
+              <div class="text-sm font-medium text-gray-900">{{ formatDate(vehicle.created_at || vehicle.createdAt) }}</div>
             </div>
             <div v-if="vehicle.updated_at || vehicle.updatedAt">
-              <div class="text-xs text-blue-600">แก้ไขล่าสุด</div>
-              <div class="text-sm font-medium text-blue-900">{{ formatDate(vehicle.updated_at || vehicle.updatedAt) }}</div>
+              <div class="text-xs text-[#D52B1E]">แก้ไขล่าสุด</div>
+              <div class="text-sm font-medium text-gray-900">{{ formatDate(vehicle.updated_at || vehicle.updatedAt) }}</div>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@
           <div class="space-y-2">
             <button
               @click="editVehicle"
-              class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+              class="w-full px-4 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors"
             >
               แก้ไขข้อมูล
             </button>
@@ -134,7 +134,7 @@
             </button>
             <button
               @click="deleteVehicle"
-              class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+              class="w-full px-4 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors"
             >
               ลบรถ
             </button>
@@ -205,7 +205,7 @@ export default {
           return 'text-green-700 bg-green-50'
         case 'in_use':
         case 'ใช้งาน':
-          return 'text-blue-700 bg-blue-50'
+          return 'text-[#B91C1C] bg-red-50'
         case 'maintenance':
         case 'บำรุงรักษา':
           return 'text-amber-700 bg-amber-50'

@@ -80,8 +80,8 @@
           @action="() => $router.push('/admin/staff/create')"
         >
           <template #icon>
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full">
-              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full">
+              <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
             </div>
@@ -134,13 +134,13 @@
                 <td class="px-6 py-4 text-right space-x-2">
                   <NuxtLink
                     :to="`/admin/staff/${member.id}/edit`"
-                    class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors duration-150"
+                    class="text-sm font-medium text-[#D52B1E] hover:text-[#991B1B] transition-colors duration-150"
                   >
                     แก้ไข
                   </NuxtLink>
                   <button
                     @click="confirmDelete(member)"
-                    class="text-sm font-medium text-red-600 hover:text-red-800 transition-colors duration-150"
+                    class="text-sm font-medium text-[#D52B1E] hover:text-red-800 transition-colors duration-150"
                   >
                     ลบ
                   </button>
@@ -167,7 +167,7 @@
               v-for="page in visiblePages"
               :key="page"
               @click="changePage(page)"
-              :class="page === currentPage ? 'bg-red-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+              :class="page === currentPage ? 'bg-[#D52B1E] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
               class="px-3 py-1 rounded border border-gray-300 text-sm"
             >
               {{ page }}

@@ -101,7 +101,7 @@
                 v-model="formData.phone"
                 type="tel"
                 :disabled="!isEditing"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] disabled:bg-gray-50 disabled:text-gray-500"
                 placeholder="กรอกเบอร์โทรศัพท์"
               />
             </div>
@@ -113,7 +113,7 @@
                 v-model="formData.department"
                 type="text"
                 :disabled="!isEditing"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] disabled:bg-gray-50 disabled:text-gray-500"
                 placeholder="กรอกแผนก"
               />
             </div>
@@ -122,7 +122,7 @@
             <div v-if="isEditing" class="pt-4">
               <button
                 type="submit"
-                class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                class="w-full px-4 py-2 bg-[#D52B1E] text-white rounded-lg hover:bg-[#B91C1C] transition-colors font-medium"
               >
                 บันทึกข้อมูล
               </button>
@@ -158,7 +158,7 @@
               <button
                 @click="handleToggle2FA"
                 class="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
-                :class="twoFactorEnabled ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-green-50 text-green-600 hover:bg-green-100'"
+                :class="twoFactorEnabled ? 'bg-red-50 text-[#D52B1E] hover:bg-red-100' : 'bg-green-50 text-green-600 hover:bg-green-100'"
               >
                 {{ twoFactorEnabled ? 'ปิดใช้งาน' : 'เปิดใช้งาน' }}
               </button>
@@ -216,7 +216,7 @@ export default {
     roleClasses() {
       const classes = {
         admin: 'bg-purple-100 text-purple-700',
-        manager: 'bg-blue-100 text-blue-700',
+        manager: 'bg-red-100 text-[#B91C1C]',
         staff: 'bg-green-100 text-green-700',
         user: 'bg-gray-100 text-gray-700'
       }

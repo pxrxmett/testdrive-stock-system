@@ -72,7 +72,7 @@ export default {
     buttonClasses() {
       const baseClasses = [
         'w-full flex items-center rounded-lg transition-all duration-150 group relative',
-        'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1'
+        'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#D52B1E] focus:ring-offset-1'
       ]
 
       // Size variants
@@ -85,7 +85,7 @@ export default {
       }
 
       if (this.active) {
-        baseClasses.push('bg-blue-50 border-l-3 border-l-blue-600 shadow-sm')
+        baseClasses.push('bg-red-50 border-l-3 border-l-[#D52B1E] shadow-sm')
       }
 
       if (this.collapsed) {
@@ -99,17 +99,17 @@ export default {
 
     iconClasses() {
       if (this.active) {
-        return 'text-blue-600'
+        return 'text-[#D52B1E]'
       }
       return 'text-gray-600 group-hover:text-gray-800 transition-colors duration-150'
     },
 
     labelClasses() {
-      return this.active ? 'text-blue-700 font-semibold' : 'text-gray-700 group-hover:text-gray-900'
+      return this.active ? 'text-[#B91C1C] font-semibold' : 'text-gray-700 group-hover:text-gray-900'
     },
 
     badgeClasses() {
-      return 'bg-red-100 text-red-600'
+      return 'bg-red-100 text-[#D52B1E]'
     },
 
     iconPath() {

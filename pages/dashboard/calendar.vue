@@ -36,10 +36,10 @@
       <div class="card p-4">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-2xl font-bold text-blue-600">{{ todayAppointments.length }}</p>
+            <p class="text-2xl font-bold text-[#D52B1E]">{{ todayAppointments.length }}</p>
             <p class="text-sm text-gray-600">นัดหมายวันนี้</p>
           </div>
-          <Icon name="calendar" icon-class="w-8 h-8 text-blue-400" />
+          <Icon name="calendar" icon-class="w-8 h-8 text-red-400" />
         </div>
       </div>
 
@@ -112,7 +112,7 @@
             <!-- Car Model Filter -->
             <select
               v-model="selectedCarModel"
-              class="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
             >
               <option value="">ทุกรุ่นรถ</option>
               <option v-for="model in carModels" :key="model" :value="model">
@@ -127,7 +127,7 @@
                 :class="[
                   'px-4 py-2 text-sm font-medium rounded-l-lg transition-colors',
                   currentView === 'month'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-[#D52B1E] text-white'
                     : 'text-gray-700 hover:bg-gray-50'
                 ]"
               >
@@ -138,7 +138,7 @@
                 :class="[
                   'px-4 py-2 text-sm font-medium border-l border-gray-300 transition-colors',
                   currentView === 'week'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-[#D52B1E] text-white'
                     : 'text-gray-700 hover:bg-gray-50'
                 ]"
               >
@@ -149,7 +149,7 @@
                 :class="[
                   'px-4 py-2 text-sm font-medium border-l border-gray-300 rounded-r-lg transition-colors',
                   currentView === 'day'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-[#D52B1E] text-white'
                     : 'text-gray-700 hover:bg-gray-50'
                 ]"
               >
@@ -167,7 +167,7 @@
             <span class="text-xs text-gray-600">รอดำเนินการ</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+            <span class="w-3 h-3 rounded-full bg-[#D52B1E]"></span>
             <span class="text-xs text-gray-600">กำลังทดลองขับ</span>
           </div>
           <div class="flex items-center gap-2">
@@ -233,11 +233,11 @@
           <div 
             v-for="appointment in todayAppointments" 
             :key="appointment.id"
-            class="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors"
+            class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg cursor-pointer hover:bg-red-100 transition-colors"
             @click="handleAppointmentSelected(appointment)"
           >
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+              <div class="w-10 h-10 bg-[#D52B1E] rounded-full flex items-center justify-center">
                 <span class="text-white font-medium text-sm">
                   {{ appointment.customerName.split(' ')[1]?.charAt(0) || 'ค' }}
                 </span>
@@ -250,7 +250,7 @@
             </div>
             
             <div class="text-right">
-              <p class="text-lg font-semibold text-blue-600">{{ appointment.timeSlot }}</p>
+              <p class="text-lg font-semibold text-[#D52B1E]">{{ appointment.timeSlot }}</p>
               <StatusBadge :status="appointment.status" />
             </div>
           </div>
@@ -261,7 +261,7 @@
       <div class="card p-6">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-semibold text-gray-900">นัดหมายที่จะมาถึง</h3>
-          <nuxt-link to="/dashboard/queue" class="text-sm text-red-600 hover:text-red-700">
+          <nuxt-link to="/dashboard/queue" class="text-sm text-[#D52B1E] hover:text-red-700">
             ดูทั้งหมด
           </nuxt-link>
         </div>

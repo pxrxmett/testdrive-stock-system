@@ -55,12 +55,12 @@
               <p class="text-sm font-medium text-gray-600">กำลังใช้งาน</p>
               <p class="text-2xl font-semibold text-gray-900 mt-1">{{ stats.inUse }}</p>
               <div class="flex items-center mt-2">
-                <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
                 <span class="text-xs text-gray-600">ใช้งานอยู่</span>
               </div>
             </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
@@ -226,13 +226,13 @@
                   </NuxtLink>
                   <NuxtLink
                     :to="`/admin/stock/${vehicle.id}/edit`"
-                    class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors duration-150"
+                    class="text-sm font-medium text-[#D52B1E] hover:text-[#991B1B] transition-colors duration-150"
                   >
                     แก้ไข
                   </NuxtLink>
                   <button
                     @click="confirmDelete(vehicle)"
-                    class="text-sm font-medium text-red-600 hover:text-red-800 transition-colors duration-150"
+                    class="text-sm font-medium text-[#D52B1E] hover:text-red-800 transition-colors duration-150"
                   >
                     ลบ
                   </button>
@@ -259,7 +259,7 @@
               v-for="page in visiblePages"
               :key="page"
               @click="changePage(page)"
-              :class="page === currentPage ? 'bg-red-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+              :class="page === currentPage ? 'bg-[#D52B1E] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
               class="px-3 py-1 rounded border border-gray-300 text-sm"
             >
               {{ page }}
@@ -402,7 +402,7 @@ export default {
     getStatusBadgeClasses(status) {
       const classMap = {
         'available': 'bg-green-50 text-green-700 border-green-200',
-        'in_use': 'bg-blue-50 text-blue-700 border-blue-200',
+        'in_use': 'bg-red-50 text-[#B91C1C] border-red-200',
         'maintenance': 'bg-amber-50 text-amber-700 border-amber-200',
         'locked': 'bg-purple-50 text-purple-700 border-purple-200',
         'unavailable': 'bg-red-50 text-red-700 border-red-200'

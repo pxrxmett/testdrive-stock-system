@@ -19,17 +19,17 @@
     </div>
 
     <!-- Download Template Section -->
-    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
       <div class="flex items-start space-x-3">
-        <svg class="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 text-[#D52B1E] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
         <div class="flex-1">
-          <h3 class="text-sm font-medium text-blue-800">ดาวน์โหลดเทมเพลต</h3>
-          <p class="text-xs text-blue-700 mt-1">ดาวน์โหลดไฟล์ตัวอย่างเพื่อให้แน่ใจว่าข้อมูลของคุณอยู่ในรูปแบบที่ถูกต้อง</p>
+          <h3 class="text-sm font-medium text-[#991B1B]">ดาวน์โหลดเทมเพลต</h3>
+          <p class="text-xs text-[#B91C1C] mt-1">ดาวน์โหลดไฟล์ตัวอย่างเพื่อให้แน่ใจว่าข้อมูลของคุณอยู่ในรูปแบบที่ถูกต้อง</p>
           <button
             @click="downloadTemplate"
-            class="mt-2 inline-flex items-center space-x-2 px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors"
+            class="mt-2 inline-flex items-center space-x-2 px-3 py-1.5 bg-[#D52B1E] text-white rounded text-sm hover:bg-[#B91C1C] transition-colors"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -49,7 +49,7 @@
         <div class="flex items-center justify-center w-full">
           <label
             class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
-            :class="{ 'border-blue-500 bg-blue-50': isDragging }"
+            :class="{ 'border-[#D52B1E] bg-red-50': isDragging }"
             @dragover.prevent="isDragging = true"
             @dragleave.prevent="isDragging = false"
             @drop.prevent="handleFileDrop"
@@ -62,7 +62,7 @@
                 <span class="font-semibold">คลิกเพื่ออัพโหลด</span> หรือลากไฟล์มาวาง
               </p>
               <p class="text-xs text-gray-500">รองรับไฟล์ .xlsx, .xls, .csv</p>
-              <p v-if="selectedFile" class="mt-2 text-sm font-medium text-blue-600">
+              <p v-if="selectedFile" class="mt-2 text-sm font-medium text-[#D52B1E]">
                 {{ selectedFile.name }}
               </p>
             </div>
@@ -81,7 +81,7 @@
           <button
             @click="parseFile"
             :disabled="parsing"
-            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center space-x-2"
+            class="px-4 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center space-x-2"
           >
             <svg v-if="parsing" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -102,7 +102,7 @@
         </div>
         <button
           @click="clearData"
-          class="text-sm text-red-600 hover:text-red-700"
+          class="text-sm text-[#D52B1E] hover:text-red-700"
         >
           ล้างข้อมูล
         </button>
@@ -131,7 +131,7 @@
                 <input
                   v-model="row.plateNumber"
                   type="text"
-                  class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                   :class="{ 'border-red-500 bg-red-50': !row.plateNumber || row.plateNumber.trim() === '' }"
                   placeholder="กรอกทะเบียน"
                 >
@@ -173,7 +173,7 @@
         </div>
 
         <div class="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div class="text-sm text-red-600 mb-1">ล้มเหลว</div>
+          <div class="text-sm text-[#D52B1E] mb-1">ล้มเหลว</div>
           <div class="text-2xl font-bold text-red-900">{{ uploadResult.failed || 0 }}</div>
         </div>
       </div>
@@ -181,7 +181,7 @@
       <div class="mt-4 flex space-x-3">
         <button
           @click="$router.push('/dashboard/stock')"
-          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+          class="px-4 py-2 bg-[#D52B1E] hover:bg-[#B91C1C] text-white rounded-lg font-medium transition-colors"
         >
           ดูรายการรถ
         </button>

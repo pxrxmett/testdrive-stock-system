@@ -55,7 +55,7 @@
                 v-model="form.customerName"
                 type="text"
                 placeholder="กรอกชื่อ-นามสกุลลูกค้า"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                 :class="{ 'border-red-300 bg-red-50': errors.customerName }"
               />
               <p v-if="errors.customerName" class="text-red-500 text-xs mt-1">{{ errors.customerName }}</p>
@@ -69,7 +69,7 @@
                 v-model="form.phone"
                 type="tel"
                 placeholder="08X-XXX-XXXX"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                 :class="{ 'border-red-300 bg-red-50': errors.phone }"
               />
               <p v-if="errors.phone" class="text-red-500 text-xs mt-1">{{ errors.phone }}</p>
@@ -81,7 +81,7 @@
                 v-model="form.email"
                 type="email"
                 placeholder="example@email.com"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                 :class="{ 'border-red-300 bg-red-50': errors.email }"
               />
               <p v-if="errors.email" class="text-red-500 text-xs mt-1">{{ errors.email }}</p>
@@ -91,7 +91,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทลูกค้า</label>
               <select
                 v-model="form.customerType"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               >
                 <option value="">เลือกประเภทลูกค้า</option>
                 <option value="บุคคล">บุคคลทั่วไป</option>
@@ -105,7 +105,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-1">ที่มาของลูกค้า</label>
               <select
                 v-model="form.leadSource"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               >
                 <option value="">เลือกที่มาของลูกค้า</option>
                 <option value="เว็บไซต์">เว็บไซต์</option>
@@ -128,7 +128,7 @@
               </label>
               <select
                 v-model="form.carModel"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                 :class="{ 'border-red-300 bg-red-50': errors.carModel }"
               >
                 <option value="">เลือกรุ่นรถ</option>
@@ -151,7 +151,7 @@
                 v-model="form.expectedRevenue"
                 type="number"
                 placeholder="0"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               />
               <p class="text-xs text-gray-500 mt-1">บาท (ประมาณการ)</p>
             </div>
@@ -170,7 +170,7 @@
                 v-model="form.date"
                 type="date"
                 :min="minDate"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                 :class="{ 'border-red-300 bg-red-50': errors.date }"
               />
               <p v-if="errors.date" class="text-red-500 text-xs mt-1">{{ errors.date }}</p>
@@ -182,7 +182,7 @@
               </label>
               <select
                 v-model="form.timeSlot"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                 :class="{ 'border-red-300 bg-red-50': errors.timeSlot }"
               >
                 <option value="">เลือกเวลา</option>
@@ -197,7 +197,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-1">ระยะเวลา (นาที)</label>
               <select
                 v-model="form.duration"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               >
                 <option value="30">30 นาที</option>
                 <option value="60" selected>60 นาที</option>
@@ -212,7 +212,7 @@
               </label>
               <select
                 v-model="form.location"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
                 :class="{ 'border-red-300 bg-red-50': errors.location }"
               >
                 <option value="">เลือกสาขา</option>
@@ -228,7 +228,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-1">เซลส์ผู้ดูแล</label>
               <select
                 v-model="form.salesRep"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               >
                 <option value="">เลือกเซลส์</option>
                 <option value="คุณจิรายุ ธนาสมบัติ">คุณจิรายุ ธนาสมบัติ</option>
@@ -242,7 +242,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-1">ลำดับความสำคัญ</label>
               <select
                 v-model="form.priority"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
               >
                 <option value="low">ต่ำ</option>
                 <option value="medium" selected>ปานกลาง</option>
@@ -259,7 +259,7 @@
             v-model="form.notes"
             rows="4"
             placeholder="กรอกข้อมูลเพิ่มเติม, ความต้องการพิเศษ, หรือหมายเหตุอื่นๆ"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-red-500 focus:border-red-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#D52B1E] focus:border-[#D52B1E]"
           ></textarea>
         </div>
       </div>
@@ -326,9 +326,9 @@
         </div>
 
         <!-- Tips -->
-        <div class="card p-6 bg-blue-50 border-blue-200">
-          <h3 class="text-sm font-semibold text-blue-900 mb-2">เคล็ดลับ</h3>
-          <ul class="text-xs text-blue-800 space-y-1">
+        <div class="card p-6 bg-red-50 border-red-200">
+          <h3 class="text-sm font-semibold text-gray-900 mb-2">เคล็ดลับ</h3>
+          <ul class="text-xs text-[#991B1B] space-y-1">
             <li>• ตรวจสอบความพร้อมของรถก่อนจองคิว</li>
             <li>• ยืนยันเบอร์โทรศัพท์ลูกค้าให้ถูกต้อง</li>
             <li>• แจ้งข้อมูลสาขาและเวลาให้ชัดเจน</li>

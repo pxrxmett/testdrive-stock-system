@@ -39,8 +39,8 @@
 
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
             </div>
@@ -61,13 +61,13 @@
               :class="[
                 'py-4 text-sm font-medium border-b-2 transition-all duration-150',
                 activeTab === 'pending'
-                  ? 'border-red-600 text-red-600'
+                  ? 'border-red-600 text-[#D52B1E]'
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               ]"
             >
               <span class="flex items-center space-x-2">
                 <span>รอเชื่อมโยง</span>
-                <span v-if="pendingUsers.length > 0" class="px-2 py-0.5 bg-red-100 text-red-600 text-xs font-semibold rounded-full">
+                <span v-if="pendingUsers.length > 0" class="px-2 py-0.5 bg-red-100 text-[#D52B1E] text-xs font-semibold rounded-full">
                   {{ pendingUsers.length }}
                 </span>
               </span>
@@ -77,7 +77,7 @@
               :class="[
                 'py-4 text-sm font-medium border-b-2 transition-all duration-150',
                 activeTab === 'linked'
-                  ? 'border-red-600 text-red-600'
+                  ? 'border-red-600 text-[#D52B1E]'
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               ]"
             >
@@ -140,7 +140,7 @@
                 <div class="mt-6">
                   <button
                     @click="openLinkModal(user)"
-                    class="w-full px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-medium rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-150 shadow-sm hover:shadow-md"
+                    class="w-full px-4 py-2.5 bg-gradient-to-r from-[#D52B1E] to-[#B91C1C] text-white text-sm font-medium rounded-lg hover:from-[#B91C1C] hover:to-[#991B1B] transition-all duration-150 shadow-sm hover:shadow-md"
                   >
                     เชื่อมโยงพนักงาน
                   </button>
@@ -224,7 +224,7 @@
                     <td class="px-6 py-4 text-right">
                       <button
                         @click="unlinkUser(user)"
-                        class="text-sm font-medium text-red-600 hover:text-red-800 transition-colors duration-150"
+                        class="text-sm font-medium text-[#D52B1E] hover:text-red-800 transition-colors duration-150"
                       >
                         ยกเลิกการเชื่อมโยง
                       </button>
@@ -279,7 +279,7 @@
             </label>
             <select
               v-model="selectedStaffId"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-150"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#D52B1E] focus:border-[#D52B1E] transition-all duration-150"
             >
               <option value="">-- เลือกพนักงาน --</option>
               <option v-for="staff in staffList" :key="staff.id" :value="staff.id">
@@ -310,7 +310,7 @@
             <button
               @click="linkUser"
               :disabled="!selectedStaffId || linking"
-              class="flex-1 px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white font-medium rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-150 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+              class="flex-1 px-4 py-2.5 bg-gradient-to-r from-[#D52B1E] to-[#B91C1C] text-white font-medium rounded-lg hover:from-[#B91C1C] hover:to-[#991B1B] transition-all duration-150 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
             >
               {{ linking ? 'กำลังเชื่อมโยง...' : 'เชื่อมโยง' }}
             </button>

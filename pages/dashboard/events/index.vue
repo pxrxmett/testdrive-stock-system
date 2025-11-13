@@ -102,12 +102,12 @@
               <p class="text-sm font-medium text-gray-600">กำลังดำเนินการ</p>
               <p class="text-2xl font-semibold text-gray-900 mt-1">{{ eventStats.active }}</p>
               <div class="flex items-center mt-2">
-                <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                <div class="w-2 h-2 bg-[#D52B1E] rounded-full mr-2"></div>
                 <span class="text-xs text-gray-600">ดำเนินการอยู่</span>
               </div>
             </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
@@ -353,7 +353,7 @@
                 <button 
                   v-if="isEventOverdue(event)"
                   @click="extendEvent(event)"
-                  class="p-2 text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                  class="p-2 text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                   title="ขยายอีเวนต์"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -387,7 +387,7 @@
                 
                 <button 
                   @click="editEvent(event)"
-                  class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                  class="p-2 text-gray-400 hover:text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                   title="แก้ไขอีเวนต์"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -397,7 +397,7 @@
                 
                 <button 
                   @click="deleteEvent(event)"
-                  class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                  class="p-2 text-gray-400 hover:text-[#D52B1E] hover:bg-red-50 rounded transition-colors"
                   title="ลบอีเวนต์"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -455,7 +455,7 @@
       <div class="relative mx-auto p-8 border w-full max-w-md shadow-2xl rounded-xl bg-white">
         <!-- Icon -->
         <div class="flex items-center justify-center w-16 h-16 mx-auto bg-red-100 rounded-full mb-4">
-          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
           </svg>
         </div>
@@ -511,7 +511,7 @@
             <button
               @click="confirmDelete"
               :disabled="deleting"
-              class="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              class="px-5 py-2.5 bg-[#D52B1E] text-white rounded-lg font-medium hover:bg-[#B91C1C] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
               <svg v-if="deleting" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -669,7 +669,7 @@
                 </button>
                 <button
                   @click="extendEvent(event)"
-                  class="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700"
+                  class="text-xs bg-[#D52B1E] text-white px-2 py-1 rounded hover:bg-[#B91C1C]"
                 >
                   ขยายเวลา
                 </button>
@@ -898,7 +898,7 @@ export default {
       switch (status) {
         case 'วางแผน': return 'text-gray-700 bg-gray-100 border border-gray-300'
         case 'เตรียมการ': return 'text-orange-700 bg-orange-100 border border-orange-300'
-        case 'กำลังดำเนินการ': return 'text-blue-700 bg-blue-100 border border-blue-300'
+        case 'กำลังดำเนินการ': return 'text-[#B91C1C] bg-red-100 border border-red-300'
         case 'เสร็จสิ้น': return 'text-green-700 bg-green-100 border border-green-300'
         case 'เลยกำหนด': return 'text-red-700 bg-red-100 border border-red-300'
         default: return 'text-gray-700 bg-gray-100 border border-gray-300'

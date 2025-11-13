@@ -103,12 +103,12 @@
     <!-- Error State -->
     <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6">
       <div class="flex items-center space-x-3">
-        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div>
           <h3 class="text-red-800 font-medium">เกิดข้อผิดพลาด</h3>
-          <p class="text-red-600 text-sm">{{ error }}</p>
+          <p class="text-[#D52B1E] text-sm">{{ error }}</p>
         </div>
       </div>
     </div>
@@ -180,7 +180,7 @@
             :class="[
               'w-12 h-12 rounded-lg flex items-center justify-center',
               metric.color === 'green' ? 'bg-green-100' :
-              metric.color === 'blue' ? 'bg-blue-100' :
+              metric.color === 'blue' ? 'bg-red-100' :
               metric.color === 'purple' ? 'bg-purple-100' :
               metric.color === 'red' ? 'bg-red-100' :
               'bg-gray-100'
@@ -217,7 +217,7 @@
             :class="[
               'py-4 px-1 border-b-2 font-medium text-sm transition-colors',
               activeChartTab === tab.id
-                ? 'border-blue-500 text-blue-600'
+                ? 'border-[#D52B1E] text-[#D52B1E]'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             ]"
           >
@@ -241,7 +241,7 @@
               :class="[
                 'px-3 py-1 rounded text-xs font-medium transition-colors',
                 revenueChartPeriod === period
-                  ? 'bg-red-600 text-white'
+                  ? 'bg-[#D52B1E] text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               ]"
             >
@@ -290,7 +290,7 @@
             <span class="text-gray-600">เป้าหมาย</span>
           </div>
           <div class="flex items-center space-x-2">
-            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
             <span class="text-gray-600">ช่วงเดียวกันปีก่อน</span>
           </div>
         </div>
@@ -320,7 +320,7 @@
                   index === 0 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600' :
                   index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
                   index === 2 ? 'bg-gradient-to-br from-orange-400 to-orange-600' :
-                  'bg-gradient-to-br from-blue-400 to-blue-600'
+                  'bg-gradient-to-br from-red-400 to-[#B91C1C]'
                 ]"
               >
                 {{ index + 1 }}
@@ -338,7 +338,7 @@
                     :class="[
                       'flex items-center text-xs font-medium',
                       car.trend === 'up' ? 'text-green-600' :
-                      car.trend === 'down' ? 'text-red-600' :
+                      car.trend === 'down' ? 'text-[#D52B1E]' :
                       'text-gray-600'
                     ]"
                   >
@@ -370,7 +370,7 @@
                       index === 0 ? 'bg-yellow-500' :
                       index === 1 ? 'bg-gray-400' :
                       index === 2 ? 'bg-orange-500' :
-                      'bg-blue-500'
+                      'bg-red-500'
                     ]"
                     :style="{ width: car.percentage + '%' }"
                   ></div>
@@ -433,20 +433,20 @@
             </div>
           </div>
 
-          <div class="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200">
+          <div class="p-6 bg-gradient-to-br from-red-50 to-red-100 rounded-lg border border-red-200">
             <div class="flex items-center justify-between mb-4">
               <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
               <div class="text-right">
-                <p class="text-3xl font-bold text-blue-900">89%</p>
-                <p class="text-sm text-blue-700">ประสิทธิภาพ</p>
+                <p class="text-3xl font-bold text-gray-900">89%</p>
+                <p class="text-sm text-[#B91C1C]">ประสิทธิภาพ</p>
               </div>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-sm text-blue-700">คะแนนรวม</span>
+              <span class="text-sm text-[#B91C1C]">คะแนนรวม</span>
               <div class="flex items-center space-x-1 text-xs text-green-600">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -477,7 +477,7 @@
                   <span class="text-sm font-medium text-gray-900">92%</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2">
-                  <div class="bg-blue-500 h-2 rounded-full" style="width: 92%"></div>
+                  <div class="bg-red-500 h-2 rounded-full" style="width: 92%"></div>
                 </div>
               </div>
               <div>
@@ -505,7 +505,7 @@
               </div>
               <div class="flex items-center justify-between">
                 <span class="text-sm text-gray-600">ว่างพร้อมใช้</span>
-                <span class="text-sm font-medium text-blue-600">6 คัน (25%)</span>
+                <span class="text-sm font-medium text-[#D52B1E]">6 คัน (25%)</span>
               </div>
               <div class="flex items-center justify-between">
                 <span class="text-sm text-gray-600">เข้าบำรุงรักษา</span>
@@ -529,7 +529,7 @@
             class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
           >
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium">
+              <div class="w-10 h-10 bg-[#D52B1E] rounded-full flex items-center justify-center text-white font-medium">
                 {{ staff.initials }}
               </div>
               <div>

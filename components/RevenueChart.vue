@@ -9,7 +9,7 @@
         <button class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs hover:bg-gray-200 transition-colors">
           6 เดือน
         </button>
-        <button class="px-2 py-1 bg-red-600 text-white rounded text-xs">
+        <button class="px-2 py-1 bg-[#D52B1E] text-white rounded text-xs">
           12 เดือน
         </button>
       </div>
@@ -22,7 +22,7 @@
         class="flex flex-col items-center space-y-1"
       >
         <div 
-          class="bg-red-600 rounded-t transition-all duration-300 hover:bg-red-700 cursor-pointer"
+          class="bg-[#D52B1E] rounded-t transition-all duration-300 hover:bg-[#B91C1C] cursor-pointer"
           :style="{ width: '16px', height: data.height + '%' }"
           @mouseover="showTooltip(index, data)"
           @mouseleave="hideTooltip"
@@ -33,7 +33,7 @@
     
     <div class="mt-4 flex items-center justify-center space-x-4 text-sm">
       <div class="flex items-center space-x-1">
-        <div class="w-2 h-2 bg-red-600 rounded-full"></div>
+        <div class="w-2 h-2 bg-[#D52B1E] rounded-full"></div>
         <span class="text-gray-600">ยอดขาย</span>
       </div>
       <div class="flex items-center space-x-1">

@@ -2,14 +2,14 @@
   <div class="bg-white rounded-lg border border-gray-200 mb-4 overflow-hidden">
     <!-- Header: Sales Info & Stats -->
     <div
-      class="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-all"
+      class="p-4 bg-gradient-to-r from-red-50 to-red-50 cursor-pointer hover:from-red-100 hover:to-red-100 transition-all"
       @click="toggleCollapse"
     >
       <div class="flex items-center justify-between">
         <!-- Left: Sales Info -->
         <div class="flex items-center space-x-4">
           <!-- Avatar -->
-          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-[#B91C1C] flex items-center justify-center text-white font-bold text-lg shadow-md">
             {{ salesInitial }}
           </div>
 
@@ -17,7 +17,7 @@
           <div>
             <div class="flex items-center space-x-2">
               <h3 class="text-lg font-bold text-gray-900">{{ salesName }}</h3>
-              <span class="px-2 py-0.5 bg-blue-600 text-white text-xs font-semibold rounded-full">
+              <span class="px-2 py-0.5 bg-[#D52B1E] text-white text-xs font-semibold rounded-full">
                 {{ queueCount }} คิว
               </span>
             </div>

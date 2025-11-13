@@ -33,7 +33,7 @@
           <!-- Employee Code -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              รหัสพนักงาน <span class="text-red-600">*</span>
+              รหัสพนักงาน <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.employeeCode"
@@ -42,13 +42,13 @@
               placeholder="เช่น ISZ001, BYD001"
               :class="inputClasses('employeeCode')"
             >
-            <p v-if="errors.employeeCode" class="mt-1 text-xs text-red-600">{{ errors.employeeCode }}</p>
+            <p v-if="errors.employeeCode" class="mt-1 text-xs text-[#D52B1E]">{{ errors.employeeCode }}</p>
           </div>
 
           <!-- Role -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              ตำแหน่ง <span class="text-red-600">*</span>
+              ตำแหน่ง <span class="text-[#D52B1E]">*</span>
             </label>
             <select
               v-model="form.role"
@@ -60,14 +60,14 @@
               <option value="manager">ผู้จัดการ</option>
               <option value="sales">พนักงานขาย</option>
             </select>
-            <p v-if="errors.role" class="mt-1 text-xs text-red-600">{{ errors.role }}</p>
+            <p v-if="errors.role" class="mt-1 text-xs text-[#D52B1E]">{{ errors.role }}</p>
           </div>
         </div>
 
         <!-- Full Name -->
         <div class="mt-6">
           <label class="block text-sm font-medium text-gray-700 mb-2">
-            ชื่อ-นามสกุล (ไทย) <span class="text-red-600">*</span>
+            ชื่อ-นามสกุล (ไทย) <span class="text-[#D52B1E]">*</span>
           </label>
           <input
             v-model="form.fullName"
@@ -76,7 +76,7 @@
             placeholder="เช่น สมชาย ใจดี"
             :class="inputClasses('fullName')"
           >
-          <p v-if="errors.fullName" class="mt-1 text-xs text-red-600">{{ errors.fullName }}</p>
+          <p v-if="errors.fullName" class="mt-1 text-xs text-[#D52B1E]">{{ errors.fullName }}</p>
         </div>
 
         <!-- Full Name EN -->
@@ -97,7 +97,7 @@
           <!-- Email -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              อีเมล <span class="text-red-600">*</span>
+              อีเมล <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.email"
@@ -106,13 +106,13 @@
               placeholder="example@noknguekotto.com"
               :class="inputClasses('email')"
             >
-            <p v-if="errors.email" class="mt-1 text-xs text-red-600">{{ errors.email }}</p>
+            <p v-if="errors.email" class="mt-1 text-xs text-[#D52B1E]">{{ errors.email }}</p>
           </div>
 
           <!-- Phone -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              เบอร์โทรศัพท์ <span class="text-red-600">*</span>
+              เบอร์โทรศัพท์ <span class="text-[#D52B1E]">*</span>
             </label>
             <input
               v-model="form.phone"
@@ -121,7 +121,7 @@
               placeholder="0812345678"
               :class="inputClasses('phone')"
             >
-            <p v-if="errors.phone" class="mt-1 text-xs text-red-600">{{ errors.phone }}</p>
+            <p v-if="errors.phone" class="mt-1 text-xs text-[#D52B1E]">{{ errors.phone }}</p>
           </div>
         </div>
 
@@ -152,7 +152,7 @@
           <button
             type="submit"
             :disabled="submitting"
-            class="flex-1 px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white font-medium rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-150 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+            class="flex-1 px-4 py-2.5 bg-gradient-to-r from-[#D52B1E] to-[#B91C1C] text-white font-medium rounded-lg hover:from-[#B91C1C] hover:to-[#991B1B] transition-all duration-150 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
           >
             {{ submitting ? 'กำลังบันทึก...' : 'บันทึก' }}
           </button>
@@ -189,8 +189,8 @@ export default {
     inputClasses(field) {
       const base = 'w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all duration-150'
       return this.errors[field]
-        ? `${base} border-red-300 focus:ring-red-500 focus:border-red-500`
-        : `${base} border-gray-300 focus:ring-red-500 focus:border-red-500`
+        ? `${base} border-red-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]`
+        : `${base} border-gray-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]`
     },
 
     validateForm() {
