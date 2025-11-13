@@ -179,7 +179,7 @@ export default {
     async loadStock() {
       this.loading = true
       try {
-        const response = await this.$api.stock.getAll('isuzu', {})
+        const response = await this.$api.stock.getAll('ISUZU', {})
         this.vehicles = (response.data || response).map(formatStockFromAPI)
         this.updateStats()
       } catch (error) {
