@@ -32,15 +32,13 @@
 
     <main class="px-6 py-6 space-y-6">
       <!-- Loading State -->
-      <div v-if="loading" class="flex items-center justify-center py-12">
-        <div class="text-center">
-          <svg class="animate-spin h-12 w-12 text-red-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <p class="text-gray-600">กำลังโหลดข้อมูล...</p>
-        </div>
-      </div>
+      <LoadingSkeleton
+        v-if="loading"
+        variant="card"
+        :count="4"
+        grid
+        :cols="1"
+      />
 
       <!-- Error State -->
       <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -473,13 +471,19 @@
           </div>
 
           <!-- Empty State -->
-          <div v-if="filteredTestDrives.length === 0" class="text-center py-12">
-            <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">ไม่พบข้อมูลเอกสาร</h3>
-            <p class="text-gray-600 mb-4">ยังไม่มีข้อมูลการทดลองขับในระบบ หรือลองปรับเปลี่ยนเงื่อนไขการค้นหา</p>
-          </div>
+          <EmptyState
+            v-if="filteredTestDrives.length === 0"
+            title="ไม่พบข้อมูลเอกสาร"
+            description="ยังไม่มีข้อมูลการทดลองขับในระบบ หรือลองปรับเปลี่ยนเงื่อนไขการค้นหาเพื่อดูเอกสารที่ต้องการ"
+          >
+            <template #icon>
+              <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full">
+                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+              </div>
+            </template>
+          </EmptyState>
 
           <!-- Pagination -->
           <div v-if="filteredTestDrives.length > 0" class="bg-white px-6 py-4 border-t border-gray-200">

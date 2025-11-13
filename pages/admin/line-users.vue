@@ -95,20 +95,29 @@
         <div class="p-6">
           <!-- Pending Users Tab -->
           <div v-if="activeTab === 'pending'">
-            <div v-if="loading" class="text-center py-12">
-              <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-              <p class="mt-2 text-gray-600">กำลังโหลด...</p>
-            </div>
+            <!-- Loading State -->
+            <LoadingSkeleton
+              v-if="loading"
+              variant="card"
+              :count="3"
+              grid
+              :cols="3"
+            />
 
-            <div v-else-if="pendingUsers.length === 0" class="text-center py-12">
-              <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </div>
-              <p class="text-gray-500 font-medium">ไม่มีผู้ใช้รอเชื่อมโยง</p>
-              <p class="text-sm text-gray-400 mt-1">ผู้ใช้ LINE ที่ยังไม่ได้เชื่อมโยงกับพนักงานจะแสดงที่นี่</p>
-            </div>
+            <!-- Empty State -->
+            <EmptyState
+              v-else-if="!loading && pendingUsers.length === 0"
+              title="ไม่มีผู้ใช้รอเชื่อมโยง"
+              description="ผู้ใช้ LINE ที่ยังไม่ได้เชื่อมโยงกับพนักงานจะแสดงที่นี่ เมื่อมีผู้ใช้ใหม่เพิ่มเข้ามา"
+            >
+              <template #icon>
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full">
+                  <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </div>
+              </template>
+            </EmptyState>
 
             <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div
@@ -142,20 +151,27 @@
 
           <!-- Linked Users Tab -->
           <div v-if="activeTab === 'linked'">
-            <div v-if="loading" class="text-center py-12">
-              <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-              <p class="mt-2 text-gray-600">กำลังโหลด...</p>
-            </div>
+            <!-- Loading State -->
+            <LoadingSkeleton
+              v-if="loading"
+              variant="table"
+              :count="5"
+            />
 
-            <div v-else-if="linkedUsers.length === 0" class="text-center py-12">
-              <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                </svg>
-              </div>
-              <p class="text-gray-500 font-medium">ยังไม่มีการเชื่อมโยง</p>
-              <p class="text-sm text-gray-400 mt-1">ผู้ใช้ที่เชื่อมโยงกับพนักงานแล้วจะแสดงที่นี่</p>
-            </div>
+            <!-- Empty State -->
+            <EmptyState
+              v-else-if="!loading && linkedUsers.length === 0"
+              title="ยังไม่มีการเชื่อมโยง"
+              description="ผู้ใช้ LINE ที่เชื่อมโยงกับพนักงานแล้วจะแสดงในตารางนี้ เริ่มต้นโดยเชื่อมโยงผู้ใช้จากแท็บรอเชื่อมโยง"
+            >
+              <template #icon>
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
+                  <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                </div>
+              </template>
+            </EmptyState>
 
             <div v-else class="overflow-x-auto -mx-6">
               <table class="min-w-full">
