@@ -9,7 +9,7 @@
         </div>
         <NuxtLink
           to="/admin/stock/create"
-          class="px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-medium rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-150 shadow-sm hover:shadow-md"
+          class="px-4 py-2.5 bg-gradient-to-r from-[#D52B1E] to-[#B91C1C] text-white text-sm font-medium rounded-lg hover:from-[#B91C1C] hover:to-[#991B1B] transition-all duration-150 shadow-sm hover:shadow-md"
         >
           + เพิ่มรถใหม่
         </NuxtLink>

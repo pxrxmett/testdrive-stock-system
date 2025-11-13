@@ -6,7 +6,7 @@
 export const BRANDS = {
   ISUZU: {
     id: 'isuzu',
-    code: 'isuzu',              // API path code
+    code: 'ISUZU',              // API path code (uppercase required by backend)
     dbId: 1,                     // Database brand_id
     name: 'ISUZU',
     fullName: 'ISUZU รถยนต์',
@@ -64,7 +64,7 @@ export const BRANDS = {
 
   BYD: {
     id: 'byd',
-    code: 'byd',                 // API path code
+    code: 'BYD',                 // API path code (uppercase required by backend)
     dbId: 2,                     // Database brand_id
     name: 'BYD',
     fullName: 'BYD รถยนต์ไฟฟ้า',

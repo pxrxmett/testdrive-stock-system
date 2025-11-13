@@ -3,8 +3,8 @@
     <!-- Compact Page Header -->
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-2.5">
-        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
           </svg>
         </div>
@@ -103,8 +103,8 @@
       @action="handleAddStock"
     >
       <template #icon>
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full">
-          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-red-50 rounded-full">
+          <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
           </svg>
         </div>
@@ -179,7 +179,7 @@ export default {
     async loadStock() {
       this.loading = true
       try {
-        const response = await this.$api.stock.getAll('isuzu', {})
+        const response = await this.$api.stock.getAll('ISUZU', {})
         this.vehicles = (response.data || response).map(formatStockFromAPI)
         this.updateStats()
       } catch (error) {

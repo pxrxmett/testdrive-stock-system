@@ -9,18 +9,21 @@ import { BRANDS, getBrand } from '~/config/brands'
  * Brand to Database ID mapping
  */
 export const BRAND_IDS = {
+  ISUZU: 1,
+  BYD: 2,
+  // Lowercase aliases for backward compatibility
   isuzu: 1,
   byd: 2
 }
 
 /**
  * Get brand database ID from brand code
- * @param {string} brandCode - Brand code (isuzu, byd)
+ * @param {string} brandCode - Brand code (ISUZU, BYD or isuzu, byd)
  * @returns {number|null} Brand database ID
  */
 export function getBrandId(brandCode) {
   if (!brandCode) return null
-  const code = brandCode.toLowerCase()
+  const code = brandCode.toUpperCase()
   return BRAND_IDS[code] || null
 }
 
@@ -36,7 +39,7 @@ export function getBrandCode(brandId) {
 
 /**
  * Generate brand-specific API path
- * @param {string} brandCode - Brand code (isuzu, byd)
+ * @param {string} brandCode - Brand code (ISUZU, BYD or isuzu, byd)
  * @param {string} resource - Resource name (staff, stock, test-drives, events)
  * @returns {string} API path
  */
@@ -44,7 +47,7 @@ export function getBrandPath(brandCode, resource) {
   if (!brandCode || !resource) {
     throw new Error('brandCode and resource are required')
   }
-  const code = brandCode.toLowerCase()
+  const code = brandCode.toUpperCase()
   return `/${code}/${resource}`
 }
 
@@ -68,8 +71,8 @@ export function getAdminPath(resource, subPath = 'all') {
  */
 export function isValidBrandCode(brandCode) {
   if (!brandCode) return false
-  const code = brandCode.toLowerCase()
-  return Object.keys(BRAND_IDS).includes(code)
+  const code = brandCode.toUpperCase()
+  return ['ISUZU', 'BYD'].includes(code)
 }
 
 /**
@@ -84,10 +87,10 @@ export function getBrandDisplayName(brandCode) {
 
 /**
  * Get all available brand codes
- * @returns {string[]} Array of brand codes
+ * @returns {string[]} Array of brand codes (uppercase)
  */
 export function getAllBrandCodes() {
-  return Object.keys(BRAND_IDS)
+  return ['ISUZU', 'BYD']
 }
 
 /**

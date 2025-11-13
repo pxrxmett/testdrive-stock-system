@@ -3,15 +3,15 @@
     <!-- Compact Page Header -->
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-2.5">
-        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+        <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-[#D52B1E]" fill="currentColor" viewBox="0 0 24 24">
             <path d="M14 16H9m10 0h3l-3.333-5.333M21 16v5a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1M3 16h3m0 0 3.333-5.333M6 16v5a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1m-3-5L10 3h4l3 8M6 11h12"/>
           </svg>
         </div>
         <div>
           <div class="flex items-center space-x-2">
             <h1 class="text-xl font-bold text-gray-900">คิวทดลองขับ ISUZU</h1>
-            <span class="px-2.5 py-0.5 bg-red-100 text-red-700 text-xs font-semibold rounded-full">
+            <span class="px-2.5 py-0.5 bg-red-50 text-[#D52B1E] text-xs font-semibold rounded-full">
               รถยนต์
             </span>
           </div>
@@ -21,7 +21,6 @@
       <Button
         variant="primary"
         @click="handleAddQueue"
-        class="bg-red-600 hover:bg-red-700 shadow-sm"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -50,8 +49,8 @@
       @action="handleAddQueue"
     >
       <template #icon>
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full">
-          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-red-50 rounded-full">
+          <svg class="w-8 h-8 text-[#D52B1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
         </div>
@@ -68,8 +67,8 @@
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-              <span class="text-red-600 font-bold">{{ queue.number }}</span>
+            <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center">
+              <span class="text-[#D52B1E] font-bold">{{ queue.number }}</span>
             </div>
             <div>
               <h3 class="font-semibold text-gray-900">{{ queue.customerName }}</h3>
