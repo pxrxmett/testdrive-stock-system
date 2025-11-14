@@ -201,56 +201,52 @@ export default {
       try {
         this.loading = true
 
-        // Fetch ISUZU stats (using correct API endpoints with uppercase brand code)
-        if (this.$axios) {
-          try {
-            const isuzuQueues = await this.$axios.get('/ISUZU/test-drives')
-            this.isuzuStats.queues = isuzuQueues.data?.length || 0
-          } catch (e) {
-            console.log('ISUZU queues not available')
-          }
+        // ใช้ admin endpoints เพื่อดึงข้อมูลทุกแบรนด์พร้อมกัน
+        try {
+          // Fetch all test drives
+          const queuesResponse = await this.$api.testDrives.admin.getAll()
+          const allQueues = Array.isArray(queuesResponse) ? queuesResponse : (queuesResponse.data || queuesResponse.testDrives || [])
 
-          try {
-            const isuzuStock = await this.$axios.get('/ISUZU/stock')
-            this.isuzuStats.stock = isuzuStock.data?.length || 0
-          } catch (e) {
-            console.log('ISUZU stock not available')
-          }
-
-          try {
-            const isuzuStaff = await this.$axios.get('/ISUZU/staff')
-            this.isuzuStats.staff = isuzuStaff.data?.length || 0
-          } catch (e) {
-            console.log('ISUZU staff not available')
-          }
-
-          // Fetch BYD stats (using correct API endpoints with uppercase brand code)
-          try {
-            const bydQueues = await this.$axios.get('/BYD/test-drives')
-            this.bydStats.queues = bydQueues.data?.length || 0
-          } catch (e) {
-            console.log('BYD queues not available')
-          }
-
-          try {
-            const bydStock = await this.$axios.get('/BYD/stock')
-            this.bydStats.stock = bydStock.data?.length || 0
-          } catch (e) {
-            console.log('BYD stock not available')
-          }
-
-          try {
-            const bydStaff = await this.$axios.get('/BYD/staff')
-            this.bydStats.staff = bydStaff.data?.length || 0
-          } catch (e) {
-            console.log('BYD staff not available')
-          }
+          // แยกตาม brand
+          this.isuzuStats.queues = allQueues.filter(q => (q.brand_code || q.brandCode || q.brand || '').toUpperCase() === 'ISUZU').length
+          this.bydStats.queues = allQueues.filter(q => (q.brand_code || q.brandCode || q.brand || '').toUpperCase() === 'BYD').length
+        } catch (e) {
+          console.error('Error fetching queues:', e)
+          this.isuzuStats.queues = 0
+          this.bydStats.queues = 0
         }
 
-        // Note: No need to dispatch fetchQueues here since we're using direct axios calls
-        // Store fetchQueues is used in brand-specific pages (e.g., /dashboard/isuzu/queue)
+        try {
+          // Fetch all stock
+          const stockResponse = await this.$api.stock.admin.getAll()
+          const allStock = Array.isArray(stockResponse) ? stockResponse : (stockResponse.data || stockResponse.vehicles || [])
+
+          // แยกตาม brand
+          this.isuzuStats.stock = allStock.filter(v => (v.brand_code || v.brandCode || v.brand || '').toUpperCase() === 'ISUZU').length
+          this.bydStats.stock = allStock.filter(v => (v.brand_code || v.brandCode || v.brand || '').toUpperCase() === 'BYD').length
+        } catch (e) {
+          console.error('Error fetching stock:', e)
+          this.isuzuStats.stock = 0
+          this.bydStats.stock = 0
+        }
+
+        try {
+          // Fetch all staff
+          const staffResponse = await this.$api.staffs.admin.getAll()
+          const allStaff = Array.isArray(staffResponse) ? staffResponse : (staffResponse.data || staffResponse.staffs || [])
+
+          // แยกตาม brand
+          this.isuzuStats.staff = allStaff.filter(s => (s.brand_code || s.brandCode || s.brand || '').toUpperCase() === 'ISUZU').length
+          this.bydStats.staff = allStaff.filter(s => (s.brand_code || s.brandCode || s.brand || '').toUpperCase() === 'BYD').length
+        } catch (e) {
+          console.error('Error fetching staff:', e)
+          this.isuzuStats.staff = 0
+          this.bydStats.staff = 0
+        }
+
       } catch (error) {
         console.error('Error fetching stats:', error)
+        this.$toast?.error('ไม่สามารถโหลดข้อมูลสถิติได้')
       } finally {
         this.loading = false
       }
