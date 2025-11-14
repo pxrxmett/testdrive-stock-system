@@ -2,6 +2,9 @@
 .nuxt
 dist
 
+# PWA auto-generated files
+static/sw.js
+
 # Dependency directories
 node_modules/
 
