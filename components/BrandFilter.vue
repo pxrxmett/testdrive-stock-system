@@ -69,13 +69,13 @@ export default {
           // All filter
           baseClasses.push('bg-gray-800 text-white border-gray-800')
         } else {
-          // Brand specific
-          const colors = getBrandColors(brandCode)
+          // Brand specific - normalize to lowercase for comparison
+          const brandLower = brandCode.toLowerCase()
           const brandClasses = {
             isuzu: 'bg-[#D52B1E] text-white border-red-600',
             byd: 'bg-green-600 text-white border-green-700'
           }
-          baseClasses.push(brandClasses[brandCode] || 'bg-gray-800 text-white border-gray-800')
+          baseClasses.push(brandClasses[brandLower] || 'bg-gray-800 text-white border-gray-800')
         }
       } else {
         baseClasses.push('bg-white text-gray-700 border-gray-300 hover:bg-gray-50')

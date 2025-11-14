@@ -220,7 +220,8 @@ export default {
   data() {
     return {
       queue: null,
-      loading: false
+      loading: false,
+      brandCode: null
     }
   },
   computed: {
@@ -292,8 +293,14 @@ export default {
     async fetchQueue() {
       try {
         this.loading = true
-        const response = await this.$api.testDrives.getById(this.queueId)
+
+        // Use admin endpoint that doesn't require brandCode
+        const response = await this.$api.testDrives.admin.getById(this.queueId)
         this.queue = response
+
+        // Extract brandCode from response for update/delete operations
+        this.brandCode = response.brand_code || response.brandCode || response.brand || 'ISUZU'
+
       } catch (error) {
         console.error('Error fetching queue:', error)
         this.$toast?.error('ไม่สามารถโหลดข้อมูลคิวได้')
@@ -308,7 +315,7 @@ export default {
     async confirmQueue() {
       if (confirm('ยืนยันคิวนี้หรือไม่?')) {
         try {
-          await this.$api.testDrives.update(this.queueId, { status: 'confirmed' })
+          await this.$api.testDrives.update(this.brandCode, this.queueId, { status: 'confirmed' })
           this.$toast?.success('ยืนยันคิวสำเร็จ')
           await this.fetchQueue()
         } catch (error) {
@@ -320,7 +327,7 @@ export default {
     async startTestDrive() {
       if (confirm('เริ่มทดลองขับหรือไม่?')) {
         try {
-          await this.$api.testDrives.update(this.queueId, { status: 'in_progress' })
+          await this.$api.testDrives.update(this.brandCode, this.queueId, { status: 'in_progress' })
           this.$toast?.success('เริ่มทดลองขับแล้ว')
           await this.fetchQueue()
         } catch (error) {
@@ -332,7 +339,7 @@ export default {
     async completeTestDrive() {
       if (confirm('ทดลองขับเสร็จสิ้นหรือไม่?')) {
         try {
-          await this.$api.testDrives.update(this.queueId, { status: 'completed' })
+          await this.$api.testDrives.update(this.brandCode, this.queueId, { status: 'completed' })
           this.$toast?.success('ทดลองขับเสร็จสิ้น')
           await this.fetchQueue()
         } catch (error) {
@@ -344,7 +351,7 @@ export default {
     async cancelQueue() {
       if (confirm('ยกเลิกคิวนี้หรือไม่? การดำเนินการนี้ไม่สามารถย้อนกลับได้')) {
         try {
-          await this.$api.testDrives.update(this.queueId, { status: 'cancelled' })
+          await this.$api.testDrives.update(this.brandCode, this.queueId, { status: 'cancelled' })
           this.$toast?.success('ยกเลิกคิวสำเร็จ')
           this.$router.push('/dashboard/queue')
         } catch (error) {
