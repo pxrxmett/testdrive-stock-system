@@ -346,6 +346,7 @@ export default {
   layout: 'dashboard',
   data() {
     return {
+      brandCode: null,
       form: {
         customerName: '',
         phone: '',
@@ -449,8 +450,13 @@ export default {
 
         console.log('📤 Creating test drive:', testDriveData)
 
-        // Call real API
-        const response = await this.$api.testDrives.create(testDriveData)
+        // Validate brandCode
+        if (!this.brandCode) {
+          throw new Error('ไม่พบข้อมูลแบรนด์ กรุณาระบุแบรนด์')
+        }
+
+        // Call real API with brandCode
+        const response = await this.$api.testDrives.create(this.brandCode, testDriveData)
 
         console.log('✅ Test drive created:', response)
 
@@ -557,6 +563,17 @@ export default {
   },
   
   mounted() {
+    // Get brandCode from query parameter (?brand=isuzu or ?brand=byd)
+    const brand = this.$route.query.brand
+    if (brand) {
+      this.brandCode = brand.toUpperCase()
+      console.log('📍 Brand from query:', this.brandCode)
+    } else {
+      // Default to ISUZU if not specified
+      this.brandCode = 'ISUZU'
+      console.log('⚠️ No brand in query, defaulting to ISUZU')
+    }
+
     this.loadDraft()
   }
 }

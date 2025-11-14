@@ -487,7 +487,8 @@ export default {
       this.$toast?.success('ล้างตัวกรองเรียบร้อย')
     },
     handleAddQueue() {
-      this.$router.push('/dashboard/queue/add')
+      // Default to ISUZU if no specific brand context
+      this.$router.push('/dashboard/queue/add?brand=isuzu')
     },
     handleView(queueId) {
       this.$router.push(`/dashboard/queue/${queueId}`)
@@ -495,15 +496,26 @@ export default {
     handleEdit(queueId) {
       this.$router.push(`/dashboard/queue/${queueId}/edit`)
     },
-    async handleDelete(queueId) {
+    async handleDelete(queue) {
+      const queueId = typeof queue === 'object' ? queue.id : queue
+      const brandCode = typeof queue === 'object' ? queue.brandCode : 'ISUZU'
+
       if (confirm('คุณต้องการลบคิวนี้หรือไม่?')) {
-        this.$store.commit('dashboard/deleteQueue', queueId)
+        try {
+          await this.$api.testDrives.delete(brandCode, queueId)
+          this.$toast?.success('ลบคิวสำเร็จ')
+          await this.$store.dispatch('dashboard/fetchQueues')
+        } catch (error) {
+          console.error('Error deleting queue:', error)
+          this.$toast?.error('ไม่สามารถลบคิวได้')
+        }
       }
     },
     async confirmQueue(queue) {
       if (confirm(`ยืนยันคิวของ ${queue.customerName || queue.customer_name}?`)) {
         try {
-          await this.$api.testDrives.update(queue.id, { status: 'confirmed' })
+          const brandCode = queue.brandCode || 'ISUZU'
+          await this.$api.testDrives.update(brandCode, queue.id, { status: 'confirmed' })
           this.$toast?.success('ยืนยันคิวสำเร็จ')
           await this.$store.dispatch('dashboard/fetchQueues')
         } catch (error) {

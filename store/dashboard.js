@@ -78,13 +78,13 @@ export const actions = {
       commit('setLoading', true)
       commit('setError', null)
 
-      // เรียก API จริง
-      const response = await this.$api.testDrives.getAll()
+      // ใช้ admin endpoint เพื่อดึงคิวทุกแบรนด์
+      const response = await this.$api.testDrives.admin.getAll()
 
       // แปลงข้อมูลจาก API ให้ตรงกับ frontend
       // Note: ตรวจสอบว่า API response มีโครงสร้างแบบไหน
       // อาจจะเป็น response.data หรือ response โดยตรง
-      const apiData = Array.isArray(response) ? response : (response.data || [])
+      const apiData = Array.isArray(response) ? response : (response.data || response.testDrives || [])
 
       const queues = apiData.map(item => {
         // Helper function to get value from multiple possible field names
@@ -104,6 +104,7 @@ export const actions = {
 
         return {
           id: item.id,
+          brandCode: item.brand_code || item.brandCode || item.brand || 'ISUZU', // เก็บ brandCode สำหรับ update/delete
           customerName: getValue(item.customer_name, item.customerName) || 'ไม่ระบุชื่อ',
           phone: getValue(item.customer_phone, item.customerPhone, item.phone) || 'ไม่ระบุเบอร์',
           email: getValue(item.customer_email, item.customerEmail, item.email) || '',
