@@ -53,7 +53,7 @@ export default {
   },
 
   serverMiddleware: [
-    '~/server/api/line-users.js'
+    '~/server/api/index.js'
   ],
 
   server: {
