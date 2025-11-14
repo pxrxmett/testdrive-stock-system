@@ -227,6 +227,7 @@ export default {
     return {
       loading: false,
       saving: false,
+      brandCode: null,
       availableVehicles: [],
       salesList: [],
       form: {
@@ -276,7 +277,12 @@ export default {
 
     async fetchQueue() {
       try {
-        const response = await this.$api.testDrives.getById(this.queueId)
+        // Use admin endpoint that doesn't require brandCode
+        const response = await this.$api.testDrives.admin.getById(this.queueId)
+
+        // Extract brandCode from response for update operations
+        this.brandCode = response.brand_code || response.brandCode || response.brand || 'ISUZU'
+
         return response
       } catch (error) {
         console.error('Error fetching queue:', error)
@@ -375,7 +381,7 @@ export default {
 
         console.log('📤 Updating queue with data:', JSON.stringify(updateData, null, 2))
 
-        await this.$api.testDrives.update(this.queueId, updateData)
+        await this.$api.testDrives.update(this.brandCode, this.queueId, updateData)
 
         this.$toast?.success('บันทึกข้อมูลสำเร็จ')
 

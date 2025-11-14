@@ -288,7 +288,7 @@
 </template>
 
 <script>
-import { formatStockFromAPI, formatStockForAPI } from '~/utils/brand'
+import { formatStockFromAPI, formatStockForUpdate } from '~/utils/brand'
 
 export default {
   name: 'AdminStockEditPage',
@@ -419,7 +419,7 @@ export default {
       this.submitting = true
       try {
         const brandCode = this.form.brandCode
-        const data = formatStockForAPI(this.form)
+        const data = formatStockForUpdate(this.form)
 
         await this.$api.stock.update(brandCode, this.vehicleData.id, data)
 

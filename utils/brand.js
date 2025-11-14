@@ -255,7 +255,7 @@ export function formatStockFromAPI(vehicle) {
 }
 
 /**
- * Format stock/vehicle data for API request
+ * Format stock/vehicle data for API CREATE request
  * Excludes brandId (comes from URL path)
  * @param {object} vehicle - Vehicle object to format
  * @returns {object} Formatted vehicle object for API
@@ -285,6 +285,39 @@ export function formatStockForAPI(vehicle) {
   return data
 }
 
+/**
+ * Format stock/vehicle data for API UPDATE request
+ * Backend UPDATE endpoint has stricter validation - excludes plateNumber, year, type, fuelType
+ * @param {object} vehicle - Vehicle object to format
+ * @returns {object} Formatted vehicle object for API update
+ */
+export function formatStockForUpdate(vehicle) {
+  if (!vehicle) return null
+
+  const data = {
+    model: vehicle.model,
+    color: vehicle.color,
+    status: vehicle.status || 'available'
+  }
+
+  // Add optional fields that are allowed on UPDATE
+  if (vehicle.price) data.price = Number(vehicle.price)
+  if (vehicle.vin) data.vin = vehicle.vin
+  if (vehicle.chassisNumber) data.chassisNumber = vehicle.chassisNumber
+  if (vehicle.engineNumber) data.engineNumber = vehicle.engineNumber
+  if (vehicle.motorNumber) data.motorNumber = vehicle.motorNumber
+  if (vehicle.notes) data.notes = vehicle.notes
+
+  // Fields excluded from UPDATE (backend validation):
+  // - plateNumber (cannot be changed after creation)
+  // - year (cannot be changed after creation)
+  // - type (cannot be changed after creation)
+  // - fuelType (cannot be changed after creation)
+
+  // NEVER include brandId - it comes from URL path
+  return data
+}
+
 export default {
   BRAND_IDS,
   getBrandId,
@@ -299,6 +332,7 @@ export default {
   formatStaffForAPI,
   formatStockFromAPI,
   formatStockForAPI,
+  formatStockForUpdate,
   getBrandBadgeClasses,
   getStatusBadgeClasses,
   getRoleDisplayName,
