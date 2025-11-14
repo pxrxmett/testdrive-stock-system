@@ -55,7 +55,7 @@ export default {
   },
 
   serverMiddleware: [
-    '~/server/api/index.js'
+    // '~/server/api/index.js' // Disabled - using real Backend API at port 3000
   ],
 
   server: {
