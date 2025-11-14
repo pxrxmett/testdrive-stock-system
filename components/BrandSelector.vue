@@ -96,12 +96,13 @@ export default {
       if (this.error) {
         classes.push('border-red-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]')
       } else if (this.value) {
-        // Apply brand color when selected
+        // Apply brand color when selected - normalize to lowercase
+        const brandLower = this.value.toLowerCase()
         const brandClasses = {
           isuzu: 'border-red-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]',
-          byd: 'border-red-300 focus:ring-[#D52B1E] focus:border-[#D52B1E]'
+          byd: 'border-green-300 focus:ring-green-600 focus:border-green-600'
         }
-        classes.push(brandClasses[this.value] || 'border-gray-300 focus:ring-gray-500 focus:border-gray-500')
+        classes.push(brandClasses[brandLower] || 'border-gray-300 focus:ring-gray-500 focus:border-gray-500')
       } else {
         classes.push('border-gray-300 focus:ring-gray-500 focus:border-gray-500')
       }
