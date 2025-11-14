@@ -46,6 +46,7 @@ export default {
   },
 
   pwa: {
+    workbox: false, // Disable service worker for now
     manifest: {
       name: 'Isuzu Test Drive Queue System',
       short_name: 'Isuzu Queue'
