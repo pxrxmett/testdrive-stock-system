@@ -7,8 +7,10 @@ export default function ({ store, redirect, route, app }) {
   const token = app.$cookies.get('auth-token')
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/login']
+  const publicRoutes = ['/login', '/', '/testdrive', '/stock']
   const isPublicRoute = publicRoutes.includes(route.path) ||
+                        route.path.startsWith('/testdrive/') ||
+                        route.path.startsWith('/stock/') ||
                         route.path.startsWith('/dashboard/isuzu/') ||
                         route.path.startsWith('/dashboard/byd/')
 
