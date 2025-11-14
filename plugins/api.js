@@ -57,8 +57,14 @@ export default function ({ $axios, app }, inject) {
       return api.$delete(`/${brandCode}/test-drives/${id}`)
     },
 
-    assignStaff(brandCode, id, staffId) {
-      return api.$patch(`/${brandCode}/test-drives/${id}/assign`, { staffId })
+    // ✅ PDPA consent - ตาม API Spec
+    submitPdpaConsent(brandCode, id, data) {
+      return api.$post(`/${brandCode}/test-drives/${id}/pdpa-consent`, data)
+    },
+
+    // ✅ Signature - ตาม API Spec
+    submitSignature(brandCode, id, data) {
+      return api.$post(`/${brandCode}/test-drives/${id}/signature`, data)
     },
 
     // Admin cross-brand endpoints
@@ -69,6 +75,11 @@ export default function ({ $axios, app }, inject) {
 
       getById(id) {
         return api.$get(`/admin/test-drives/${id}`)
+      },
+
+      // ✅ Export report - ตาม API Spec
+      export(params = {}) {
+        return api.$get('/admin/test-drives/export', { params })
       }
     },
 
@@ -91,6 +102,14 @@ export default function ({ $axios, app }, inject) {
 
     deleteLegacy(id) {
       return api.$delete(`/test-drives/${id}`)
+    },
+
+    submitPdpaConsentLegacy(id, data) {
+      return api.$post(`/test-drives/${id}/pdpa-consent`, data)
+    },
+
+    submitSignatureLegacy(id, data) {
+      return api.$post(`/test-drives/${id}/signature`, data)
     }
   }
 
@@ -113,8 +132,29 @@ export default function ({ $axios, app }, inject) {
       return api.$patch(`/${brandCode}/stock/${vehicleCode}`, data)
     },
 
+    // ✅ แก้ไขตาม API Spec: DELETE /api/{brandCode}/stock/vehicles/{id}
     delete(brandCode, vehicleCode) {
-      return api.$delete(`/${brandCode}/stock/${vehicleCode}`)
+      return api.$delete(`/${brandCode}/stock/vehicles/${vehicleCode}`)
+    },
+
+    updateStatus(brandCode, id, status) {
+      return api.$patch(`/${brandCode}/stock/vehicles/${id}/status`, { status })
+    },
+
+    // Bulk upload from Excel file (brand-specific)
+    upload(brandCode, file, data) {
+      const formData = new FormData()
+      formData.append('file', file)
+      if (data) {
+        Object.keys(data).forEach(key => {
+          formData.append(key, data[key])
+        })
+      }
+      return api.$post(`/${brandCode}/stock/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
     },
 
     // Admin cross-brand endpoints
@@ -123,8 +163,20 @@ export default function ({ $axios, app }, inject) {
         return api.$get('/admin/stock/all', { params })
       },
 
-      compare(params = {}) {
-        return api.$get('/admin/stock/compare', { params })
+      getById(id) {
+        return api.$get(`/admin/stock/${id}`)
+      },
+
+      getSummary(params = {}) {
+        return api.$get('/admin/stock/summary', { params })
+      },
+
+      search(params = {}) {
+        return api.$get('/admin/stock/search', { params })
+      },
+
+      getAnalyticsByBrand(params = {}) {
+        return api.$get('/admin/stock/analytics/by-brand', { params })
       }
     },
 
@@ -149,7 +201,7 @@ export default function ({ $axios, app }, inject) {
       return api.$patch(`/stock/${id}`, data)
     },
 
-    updateStatus(id, status) {
+    updateStatusLegacy(id, status) {
       return api.$patch(`/stock/vehicles/${id}/status`, { status })
     },
 
@@ -157,8 +209,8 @@ export default function ({ $axios, app }, inject) {
       return api.$delete(`/stock/vehicles/${id}`)
     },
 
-    // Bulk upload from Excel file
-    upload(file, data) {
+    // Legacy upload
+    uploadLegacy(file, data) {
       const formData = new FormData()
       formData.append('file', file)
       if (data) {
@@ -197,6 +249,32 @@ export default function ({ $axios, app }, inject) {
       return api.$delete(`/${brandCode}/events/${id}`)
     },
 
+    // ✅ Calendar view (brand-specific) - ตาม API Spec
+    getCalendarView(brandCode, params = {}) {
+      return api.$get(`/${brandCode}/events/calendar/view`, { params })
+    },
+
+    // Vehicle management for events (brand-specific)
+    assignVehicle(brandCode, eventId, vehicleData) {
+      return api.$post(`/${brandCode}/events/${eventId}/vehicles`, vehicleData)
+    },
+
+    getVehicles(brandCode, eventId) {
+      return api.$get(`/${brandCode}/events/${eventId}/vehicles`)
+    },
+
+    assignVehiclesBatch(brandCode, eventId, vehicleIds) {
+      return api.$post(`/${brandCode}/events/${eventId}/vehicles/batch`, { vehicleIds })
+    },
+
+    unassignVehicle(brandCode, eventId, vehicleId) {
+      return api.$delete(`/${brandCode}/events/${eventId}/vehicles/${vehicleId}`)
+    },
+
+    updateStatus(brandCode, eventId, status) {
+      return api.$patch(`/${brandCode}/events/${eventId}/status`, { status })
+    },
+
     // Admin cross-brand endpoints
     admin: {
       getAll(params = {}) {
@@ -205,6 +283,23 @@ export default function ({ $axios, app }, inject) {
 
       getById(id) {
         return api.$get(`/admin/events/${id}`)
+      },
+
+      create(data) {
+        return api.$post('/admin/events', data)
+      },
+
+      update(id, data) {
+        return api.$patch(`/admin/events/${id}`, data)
+      },
+
+      delete(id) {
+        return api.$delete(`/admin/events/${id}`)
+      },
+
+      // ✅ Calendar view (cross-brand) - ตาม API Spec
+      getCalendarView(params = {}) {
+        return api.$get('/admin/events/calendar/view', { params })
       }
     },
 
@@ -229,48 +324,28 @@ export default function ({ $axios, app }, inject) {
       return api.$delete(`/events/${id}`)
     },
 
-    // Vehicle management for events
-    assignVehicle(eventId, vehicleData) {
+    // Legacy vehicle management
+    assignVehicleLegacy(eventId, vehicleData) {
       return api.$post(`/events/${eventId}/vehicles`, vehicleData)
     },
 
-    getVehicles(eventId) {
+    getVehiclesLegacy(eventId) {
       return api.$get(`/events/${eventId}/vehicles`)
     },
 
-    assignVehiclesBatch(eventId, vehicleIds) {
+    assignVehiclesBatchLegacy(eventId, vehicleIds) {
       return api.$post(`/events/${eventId}/vehicles/batch`, { vehicleIds })
     },
 
-    // Alias for assignVehiclesBatch
-    assignVehicles(eventId, data) {
-      return api.$post(`/events/${eventId}/vehicles/batch`, data)
-    },
-
-    unassignVehicle(eventId, vehicleId) {
+    unassignVehicleLegacy(eventId, vehicleId) {
       return api.$delete(`/events/${eventId}/vehicles/${vehicleId}`)
     },
 
-    updateStatus(eventId, status) {
+    updateStatusLegacy(eventId, status) {
       return api.$patch(`/events/${eventId}/status`, { status })
     },
 
-    // Return vehicles from event
-    returnVehicles(eventId) {
-      return api.$post(`/events/${eventId}/return-vehicles`)
-    },
-
-    // Extend event duration
-    extendEvent(eventId, days) {
-      return api.$patch(`/events/${eventId}/extend`, { days })
-    },
-
-    // Auto return overdue vehicles
-    autoReturnOverdue() {
-      return api.$post('/events/auto-return-overdue')
-    },
-
-    getCalendarView(params = {}) {
+    getCalendarViewLegacy(params = {}) {
       return api.$get('/events/calendar/view', { params })
     }
   }
@@ -403,6 +478,21 @@ export default function ({ $axios, app }, inject) {
     }
   }
 
+  // ✅ Brands API - ตาม API Spec
+  const brands = {
+    getAll() {
+      return api.$get('/brands')
+    },
+
+    getById(id) {
+      return api.$get(`/brands/${id}`)
+    },
+
+    getByCode(code) {
+      return api.$get(`/brands/code/${code}`)
+    }
+  }
+
   // Inject structured API with methods
   inject('api', {
     // Keep raw axios instance for backwards compatibility
@@ -415,6 +505,7 @@ export default function ({ $axios, app }, inject) {
     staffs,
     lineIntegration,
     users,
-    analytics
+    analytics,
+    brands
   })
 }
