@@ -182,6 +182,9 @@ module.exports = {
     const { id } = ctx.params
     const updates = ctx.body
 
+    // Log incoming request for debugging
+    console.log('📝 Update vehicle request:', { id, updates })
+
     const vehicleIndex = vehicles.findIndex(v => v.id === id || v.vehicleCode === id)
 
     if (vehicleIndex === -1) {
@@ -190,12 +193,22 @@ module.exports = {
 
     const vehicle = vehicles[vehicleIndex]
 
-    // Update allowed fields
+    // Update allowed fields (note: chassisNumber and engineNumber are allowed, but not vin)
     const allowedFields = [
       'model', 'variant', 'year', 'color', 'licensePlate', 'chassisNumber',
       'engineNumber', 'status', 'purchasePrice', 'sellingPrice', 'mileage',
       'fuelType', 'transmission', 'batteryCapacity', 'range', 'notes', 'images'
     ]
+
+    // Check for disallowed fields
+    const disallowedFields = Object.keys(updates).filter(key => !allowedFields.includes(key))
+    if (disallowedFields.length > 0) {
+      console.warn('⚠️ Disallowed fields in request:', disallowedFields)
+      return ctx.sendError(
+        `The following fields are not allowed: ${disallowedFields.join(', ')}. Allowed fields: ${allowedFields.join(', ')}`,
+        400
+      )
+    }
 
     for (const field of allowedFields) {
       if (updates[field] !== undefined) {
@@ -206,6 +219,8 @@ module.exports = {
     vehicle.updatedAt = new Date().toISOString()
 
     vehicles[vehicleIndex] = vehicle
+
+    console.log('✅ Vehicle updated successfully:', vehicle.vehicleCode)
 
     ctx.sendJSON({
       success: true,
