@@ -759,7 +759,7 @@ export default {
       this.error = null
 
       try {
-        const response = await this.$api.testDrives.getAll()
+        const response = await this.$api.testDrives.admin.getAll()
         this.testDrives = Array.isArray(response) ? response : (response.data || [])
       } catch (error) {
         console.error('Error loading test drives:', error)
