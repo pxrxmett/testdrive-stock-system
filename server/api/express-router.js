@@ -179,6 +179,26 @@ router.post('/line-integration/admin-link', wrap(lineIntegrationController.admin
 router.delete('/line-integration/unlink/:lineUserId', wrap(lineIntegrationController.unlink))
 
 // ========================================
+// LEGACY ENDPOINTS (for backward compatibility)
+// ========================================
+
+// Legacy LINE users endpoints
+router.get('/line-users/pending', wrap(lineIntegrationController.getPendingUsers))
+router.get('/line-users/linked', wrap(lineIntegrationController.getLinkedUsers))
+router.post('/line-users/:id/link', (req, res) => {
+  // Map old endpoint to new one
+  req.body.lineUserId = req.params.id
+  wrap(lineIntegrationController.adminLink)(req, res)
+})
+router.post('/line-users/:id/unlink', (req, res) => {
+  req.params.lineUserId = req.params.id
+  wrap(lineIntegrationController.unlink)(req, res)
+})
+
+// Legacy staff endpoint (returns all staff)
+router.get('/staff', wrap(staffController.adminGetAll))
+
+// ========================================
 // EVENTS (NON-SCOPED)
 // ========================================
 router.post('/events', wrap(eventsController.create))
