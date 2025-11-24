@@ -403,6 +403,7 @@ module.exports = {
 
   // GET /api/admin/test-drives/all
   adminGetAll(ctx) {
+    console.log('✅ adminGetAll called')
     return this.getAll(ctx)
   },
 
@@ -463,6 +464,7 @@ module.exports = {
 
   // GET /api/admin/test-drives/:id
   adminGetById(ctx) {
+    console.log('🆔 adminGetById called with id:', ctx.params.id)
     const { id } = ctx.params
 
     const testDrive = testDrives.find(td => td.id === id || td.queueNumber === id)
