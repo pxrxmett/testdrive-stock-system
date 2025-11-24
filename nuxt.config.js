@@ -25,8 +25,8 @@ export default {
   ],
 
   plugins: [
-    '~/plugins/api.js'
-    // '~/plugins/auth-init.js' // Temporarily disabled
+    '~/plugins/api.js',
+    '~/plugins/auth-init.js'
   ],
 
   components: true,
