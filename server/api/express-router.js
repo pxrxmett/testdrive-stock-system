@@ -89,6 +89,36 @@ router.get('/brands/code/:code', wrap(brandsController.getByCode))
 router.get('/brands/:id', wrap(brandsController.getById))
 
 // ========================================
+// ADMIN ENDPOINTS (Must be before /:brandCode/* routes!)
+// ========================================
+
+// ADMIN - STOCK MANAGEMENT
+router.get('/admin/stock/all', wrap(stockController.adminGetAll))
+router.get('/admin/stock/summary', wrap(stockController.adminGetSummary))
+router.get('/admin/stock/search', wrap(stockController.adminSearch))
+router.get('/admin/stock/analytics/by-brand', wrap(stockController.adminGetAnalyticsByBrand))
+router.get('/admin/stock/:id', wrap(stockController.adminGetById))
+
+// ADMIN - TEST DRIVES
+router.get('/admin/test-drives/all', wrap(testDrivesController.adminGetAll.bind(testDrivesController)))
+router.get('/admin/test-drives/export', wrap(testDrivesController.adminExport.bind(testDrivesController)))
+router.get('/admin/test-drives/:id', wrap(testDrivesController.adminGetById.bind(testDrivesController)))
+
+// ADMIN - STAFF
+router.get('/admin/staff/all', wrap(staffController.adminGetAll))
+router.get('/admin/staff/summary', wrap(staffController.adminGetSummary))
+router.get('/admin/staff/performance', wrap(staffController.adminGetPerformance))
+router.get('/admin/staff/:id', wrap(staffController.adminGetById))
+
+// ADMIN - EVENTS
+router.post('/admin/events', wrap(eventsController.adminCreate.bind(eventsController)))
+router.get('/admin/events/all', wrap(eventsController.adminGetAll.bind(eventsController)))
+router.get('/admin/events/calendar/view', wrap(eventsController.adminGetCalendarView.bind(eventsController)))
+router.get('/admin/events/:id', wrap(eventsController.adminGetById.bind(eventsController)))
+router.patch('/admin/events/:id', wrap(eventsController.adminUpdate.bind(eventsController)))
+router.delete('/admin/events/:id', wrap(eventsController.adminDelete.bind(eventsController)))
+
+// ========================================
 // STOCK MANAGEMENT (NON-SCOPED)
 // ========================================
 router.post('/stock', wrap(stockController.create))
@@ -99,35 +129,6 @@ router.get('/stock/:id', wrap(stockController.getById))
 router.patch('/stock/:id', wrap(stockController.update))
 router.patch('/stock/vehicles/:id/status', wrap(stockController.updateStatus))
 router.delete('/stock/vehicles/:id', wrap(stockController.deleteVehicle))
-
-// Middleware to prevent "admin" from being treated as a brandCode
-router.use('/:brandCode', (req, res, next) => {
-  if (req.params.brandCode === 'admin') {
-    return next('route') // Skip to next route handler
-  }
-  next()
-})
-
-// ========================================
-// STOCK MANAGEMENT (BRAND-SCOPED)
-// ========================================
-router.post('/:brandCode/stock', wrap(stockController.createBrandScoped))
-router.get('/:brandCode/stock/vehicles', wrap(stockController.getVehiclesBrandScoped))
-router.post('/:brandCode/stock/upload', wrap(stockController.uploadBrandScoped))
-router.get('/:brandCode/stock/:id', wrap(stockController.getByIdBrandScoped))
-router.patch('/:brandCode/stock/:id', wrap(stockController.updateBrandScoped))
-router.patch('/:brandCode/stock/vehicles/:id/status', wrap(stockController.updateStatusBrandScoped))
-router.delete('/:brandCode/stock/vehicles/:id', wrap(stockController.deleteVehicleBrandScoped))
-router.get('/:brandCode/stock', wrap(stockController.getAllBrandScoped))
-
-// ========================================
-// ADMIN - STOCK MANAGEMENT
-// ========================================
-router.get('/admin/stock/all', wrap(stockController.adminGetAll))
-router.get('/admin/stock/summary', wrap(stockController.adminGetSummary))
-router.get('/admin/stock/search', wrap(stockController.adminSearch))
-router.get('/admin/stock/analytics/by-brand', wrap(stockController.adminGetAnalyticsByBrand))
-router.get('/admin/stock/:id', wrap(stockController.adminGetById))
 
 // ========================================
 // TEST DRIVES (NON-SCOPED)
@@ -141,8 +142,20 @@ router.post('/test-drives/:id/pdpa-consent', wrap(testDrivesController.pdpaConse
 router.post('/test-drives/:id/signature', wrap(testDrivesController.submitSignature))
 
 // ========================================
-// TEST DRIVES (BRAND-SCOPED)
+// BRAND-SCOPED ROUTES (Must be after /admin/* routes!)
 // ========================================
+
+// STOCK MANAGEMENT (BRAND-SCOPED)
+router.post('/:brandCode/stock', wrap(stockController.createBrandScoped))
+router.get('/:brandCode/stock/vehicles', wrap(stockController.getVehiclesBrandScoped))
+router.post('/:brandCode/stock/upload', wrap(stockController.uploadBrandScoped))
+router.get('/:brandCode/stock/:id', wrap(stockController.getByIdBrandScoped))
+router.patch('/:brandCode/stock/:id', wrap(stockController.updateBrandScoped))
+router.patch('/:brandCode/stock/vehicles/:id/status', wrap(stockController.updateStatusBrandScoped))
+router.delete('/:brandCode/stock/vehicles/:id', wrap(stockController.deleteVehicleBrandScoped))
+router.get('/:brandCode/stock', wrap(stockController.getAllBrandScoped))
+
+// TEST DRIVES (BRAND-SCOPED)
 router.post('/:brandCode/test-drives', wrap(testDrivesController.createBrandScoped.bind(testDrivesController)))
 router.get('/:brandCode/test-drives', wrap(testDrivesController.getAllBrandScoped.bind(testDrivesController)))
 router.get('/:brandCode/test-drives/:id', wrap(testDrivesController.getByIdBrandScoped.bind(testDrivesController)))
@@ -151,36 +164,13 @@ router.delete('/:brandCode/test-drives/:id', wrap(testDrivesController.deleteTes
 router.post('/:brandCode/test-drives/:id/pdpa-consent', wrap(testDrivesController.pdpaConsentBrandScoped.bind(testDrivesController)))
 router.post('/:brandCode/test-drives/:id/signature', wrap(testDrivesController.submitSignatureBrandScoped.bind(testDrivesController)))
 
-// ========================================
-// ADMIN - TEST DRIVES
-// ========================================
-router.get('/admin/test-drives/all', (req, res) => {
-  console.log('🟢 MATCHED: /admin/test-drives/all')
-  wrap(testDrivesController.adminGetAll.bind(testDrivesController))(req, res)
-})
-router.get('/admin/test-drives/export', wrap(testDrivesController.adminExport.bind(testDrivesController)))
-router.get('/admin/test-drives/:id', (req, res) => {
-  console.log('🔵 MATCHED: /admin/test-drives/:id with id=', req.params.id)
-  wrap(testDrivesController.adminGetById.bind(testDrivesController))(req, res)
-})
-
-// ========================================
 // STAFF (BRAND-SCOPED)
-// ========================================
 router.post('/:brandCode/staff', wrap(staffController.create))
 router.get('/:brandCode/staff/available-sales', wrap(staffController.getAvailableSales))
 router.get('/:brandCode/staff/:id', wrap(staffController.getById))
 router.patch('/:brandCode/staff/:id', wrap(staffController.update))
 router.delete('/:brandCode/staff/:id', wrap(staffController.deleteStaff))
 router.get('/:brandCode/staff', wrap(staffController.getAll))
-
-// ========================================
-// ADMIN - STAFF
-// ========================================
-router.get('/admin/staff/all', wrap(staffController.adminGetAll))
-router.get('/admin/staff/summary', wrap(staffController.adminGetSummary))
-router.get('/admin/staff/performance', wrap(staffController.adminGetPerformance))
-router.get('/admin/staff/:id', wrap(staffController.adminGetById))
 
 // ========================================
 // LINE INTEGRATION
@@ -229,9 +219,7 @@ router.patch('/events/:id', wrap(eventsController.update))
 router.delete('/events/:id', wrap(eventsController.deleteEvent))
 router.get('/events', wrap(eventsController.getAll))
 
-// ========================================
 // EVENTS (BRAND-SCOPED)
-// ========================================
 router.post('/:brandCode/events', wrap(eventsController.createBrandScoped))
 router.get('/:brandCode/events/calendar/view', wrap(eventsController.getCalendarViewBrandScoped))
 router.get('/:brandCode/events/:id/vehicles', wrap(eventsController.getEventVehiclesBrandScoped))
@@ -243,15 +231,5 @@ router.get('/:brandCode/events/:id', wrap(eventsController.getByIdBrandScoped))
 router.patch('/:brandCode/events/:id', wrap(eventsController.updateBrandScoped))
 router.delete('/:brandCode/events/:id', wrap(eventsController.deleteEventBrandScoped))
 router.get('/:brandCode/events', wrap(eventsController.getAllBrandScoped))
-
-// ========================================
-// ADMIN - EVENTS
-// ========================================
-router.post('/admin/events', wrap(eventsController.adminCreate))
-router.get('/admin/events/all', wrap(eventsController.adminGetAll))
-router.get('/admin/events/calendar/view', wrap(eventsController.adminGetCalendarView))
-router.get('/admin/events/:id', wrap(eventsController.adminGetById))
-router.patch('/admin/events/:id', wrap(eventsController.adminUpdate))
-router.delete('/admin/events/:id', wrap(eventsController.adminDelete))
 
 module.exports = router
