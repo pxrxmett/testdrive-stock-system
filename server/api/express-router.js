@@ -39,9 +39,11 @@ function createContext(req, res) {
 function wrap(controllerFn) {
   return (req, res, next) => {
     try {
+      console.log(`📥 ${req.method} ${req.originalUrl || req.url}`)
       const ctx = createContext(req, res)
       controllerFn(ctx)
     } catch (error) {
+      console.error('❌ Error in controller:', error)
       next(error)
     }
   }
@@ -98,6 +100,14 @@ router.patch('/stock/:id', wrap(stockController.update))
 router.patch('/stock/vehicles/:id/status', wrap(stockController.updateStatus))
 router.delete('/stock/vehicles/:id', wrap(stockController.deleteVehicle))
 
+// Middleware to prevent "admin" from being treated as a brandCode
+router.use('/:brandCode', (req, res, next) => {
+  if (req.params.brandCode === 'admin') {
+    return next('route') // Skip to next route handler
+  }
+  next()
+})
+
 // ========================================
 // STOCK MANAGEMENT (BRAND-SCOPED)
 // ========================================
@@ -133,20 +143,26 @@ router.post('/test-drives/:id/signature', wrap(testDrivesController.submitSignat
 // ========================================
 // TEST DRIVES (BRAND-SCOPED)
 // ========================================
-router.post('/:brandCode/test-drives', wrap(testDrivesController.createBrandScoped))
-router.get('/:brandCode/test-drives', wrap(testDrivesController.getAllBrandScoped))
-router.get('/:brandCode/test-drives/:id', wrap(testDrivesController.getByIdBrandScoped))
-router.patch('/:brandCode/test-drives/:id', wrap(testDrivesController.updateBrandScoped))
-router.delete('/:brandCode/test-drives/:id', wrap(testDrivesController.deleteTestDriveBrandScoped))
-router.post('/:brandCode/test-drives/:id/pdpa-consent', wrap(testDrivesController.pdpaConsentBrandScoped))
-router.post('/:brandCode/test-drives/:id/signature', wrap(testDrivesController.submitSignatureBrandScoped))
+router.post('/:brandCode/test-drives', wrap(testDrivesController.createBrandScoped.bind(testDrivesController)))
+router.get('/:brandCode/test-drives', wrap(testDrivesController.getAllBrandScoped.bind(testDrivesController)))
+router.get('/:brandCode/test-drives/:id', wrap(testDrivesController.getByIdBrandScoped.bind(testDrivesController)))
+router.patch('/:brandCode/test-drives/:id', wrap(testDrivesController.updateBrandScoped.bind(testDrivesController)))
+router.delete('/:brandCode/test-drives/:id', wrap(testDrivesController.deleteTestDriveBrandScoped.bind(testDrivesController)))
+router.post('/:brandCode/test-drives/:id/pdpa-consent', wrap(testDrivesController.pdpaConsentBrandScoped.bind(testDrivesController)))
+router.post('/:brandCode/test-drives/:id/signature', wrap(testDrivesController.submitSignatureBrandScoped.bind(testDrivesController)))
 
 // ========================================
 // ADMIN - TEST DRIVES
 // ========================================
-router.get('/admin/test-drives/all', wrap(testDrivesController.adminGetAll))
-router.get('/admin/test-drives/export', wrap(testDrivesController.adminExport))
-router.get('/admin/test-drives/:id', wrap(testDrivesController.adminGetById))
+router.get('/admin/test-drives/all', (req, res) => {
+  console.log('🟢 MATCHED: /admin/test-drives/all')
+  wrap(testDrivesController.adminGetAll.bind(testDrivesController))(req, res)
+})
+router.get('/admin/test-drives/export', wrap(testDrivesController.adminExport.bind(testDrivesController)))
+router.get('/admin/test-drives/:id', (req, res) => {
+  console.log('🔵 MATCHED: /admin/test-drives/:id with id=', req.params.id)
+  wrap(testDrivesController.adminGetById.bind(testDrivesController))(req, res)
+})
 
 // ========================================
 // STAFF (BRAND-SCOPED)

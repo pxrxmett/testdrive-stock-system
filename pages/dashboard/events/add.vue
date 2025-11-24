@@ -367,7 +367,8 @@ export default {
         console.log('📤 Creating event:', JSON.stringify(eventData, null, 2))
         console.log('👤 Creating as user:', currentUser.username, '(ID:', currentUser.id, ')')
 
-        const response = await this.$api.events.create(eventData)
+        // Use admin endpoint for cross-brand event creation
+        const response = await this.$api.events.admin.create(eventData)
         console.log('✅ Event created:', response)
 
         // Assign selected vehicles to the event
